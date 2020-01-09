@@ -1,0 +1,11 @@
+.idea/
+/*/test_video/
+/*/test_image/
+/*/valid_Graph/
+/*/modelparam/
+/*/mxboard/
+/*/weights/
+/*/mlruns/
+/*/weights/
+/*/exportweights/
+__pycache__

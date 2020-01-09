@@ -1,0 +1,26 @@
+<annotation>
+	<folder>pomeranian</folder>
+	<filename>31. 8ad5aef5bc1388bef352f5ee08406bf8.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\pomeranian\31. 8ad5aef5bc1388bef352f5ee08406bf8.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>540</width>
+		<height>538</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>89</xmin>
+			<ymin>9</ymin>
+			<xmax>385</xmax>
+			<ymax>524</ymax>
+		</bndbox>
+	</object>
+</annotation>

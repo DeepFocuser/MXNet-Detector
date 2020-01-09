@@ -1,0 +1,50 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>25. 2014-11-01_lif_4341720_i3.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\25. 2014-11-01_lif_4341720_i3.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>620</width>
+		<height>342</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>20</xmin>
+			<ymin>64</ymin>
+			<xmax>120</xmax>
+			<ymax>342</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>217</xmin>
+			<ymin>15</ymin>
+			<xmax>316</xmax>
+			<ymax>342</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>410</xmin>
+			<ymin>18</ymin>
+			<xmax>529</xmax>
+			<ymax>342</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,38 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>21. n-panda-a-20170919-870x567.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\21. n-panda-a-20170919-870x567.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>870</width>
+		<height>567</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>487</xmin>
+			<ymin>100</ymin>
+			<xmax>838</xmax>
+			<ymax>506</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>15</xmin>
+			<ymin>47</ymin>
+			<xmax>375</xmax>
+			<ymax>479</ymax>
+		</bndbox>
+	</object>
+</annotation>

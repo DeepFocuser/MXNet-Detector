@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>82. panda%20meng%20meng_zoo%20berlin%20%283%29_dl_ppt_1.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\82. panda%20meng%20meng_zoo%20berlin%20%283%29_dl_ppt_1.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>460</width>
+		<height>602</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>32</xmin>
+			<ymin>50</ymin>
+			<xmax>396</xmax>
+			<ymax>538</ymax>
+		</bndbox>
+	</object>
+</annotation>

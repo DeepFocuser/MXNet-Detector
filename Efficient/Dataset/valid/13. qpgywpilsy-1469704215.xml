@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>13. qpgywpilsy-1469704215.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\13. qpgywpilsy-1469704215.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>528</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>67</xmin>
+			<ymin>14</ymin>
+			<xmax>769</xmax>
+			<ymax>528</ymax>
+		</bndbox>
+	</object>
+</annotation>

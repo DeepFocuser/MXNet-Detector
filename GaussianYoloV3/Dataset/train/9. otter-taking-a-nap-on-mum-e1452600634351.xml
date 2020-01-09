@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>9. otter-taking-a-nap-on-mum-e1452600634351.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\9. otter-taking-a-nap-on-mum-e1452600634351.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>711</width>
+		<height>354</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>15</xmin>
+			<ymin>3</ymin>
+			<xmax>711</xmax>
+			<ymax>338</ymax>
+		</bndbox>
+	</object>
+</annotation>

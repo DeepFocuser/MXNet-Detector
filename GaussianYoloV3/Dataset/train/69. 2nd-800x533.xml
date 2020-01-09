@@ -1,0 +1,38 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>69. 2nd-800x533.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\69. 2nd-800x533.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>533</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>301</xmin>
+			<ymin>185</ymin>
+			<xmax>460</xmax>
+			<ymax>426</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>466</xmin>
+			<ymin>53</ymin>
+			<xmax>785</xmax>
+			<ymax>296</ymax>
+		</bndbox>
+	</object>
+</annotation>

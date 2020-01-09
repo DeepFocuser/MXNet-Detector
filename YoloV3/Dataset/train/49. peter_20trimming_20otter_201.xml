@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>49. peter%20trimming%20otter%201.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\49. peter%20trimming%20otter%201.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>385</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>38</xmin>
+			<ymin>7</ymin>
+			<xmax>470</xmax>
+			<ymax>337</ymax>
+		</bndbox>
+	</object>
+</annotation>

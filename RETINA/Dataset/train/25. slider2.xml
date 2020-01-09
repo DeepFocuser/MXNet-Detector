@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>25. slider2.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\25. slider2.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>447</width>
+		<height>300</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>55</xmin>
+			<ymin>16</ymin>
+			<xmax>426</xmax>
+			<ymax>271</ymax>
+		</bndbox>
+	</object>
+</annotation>

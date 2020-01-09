@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>201604072207365687_t.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\201604072207365687_t.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1280</width>
+		<height>720</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>474</xmin>
+			<ymin>90</ymin>
+			<xmax>1163</xmax>
+			<ymax>544</ymax>
+		</bndbox>
+	</object>
+</annotation>

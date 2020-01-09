@@ -1,0 +1,50 @@
+<annotation>
+	<folder>pomeranian</folder>
+	<filename>82. fronts1.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\pomeranian\82. fronts1.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>534</width>
+		<height>552</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>18</xmin>
+			<ymin>284</ymin>
+			<xmax>161</xmax>
+			<ymax>503</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>380</xmin>
+			<ymin>288</ymin>
+			<xmax>534</xmax>
+			<ymax>488</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>203</xmin>
+			<ymin>264</ymin>
+			<xmax>337</xmax>
+			<ymax>498</ymax>
+		</bndbox>
+	</object>
+</annotation>

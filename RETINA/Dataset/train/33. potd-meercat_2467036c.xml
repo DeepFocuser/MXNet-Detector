@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>33. potd-meercat_2467036c.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\33. potd-meercat_2467036c.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>460</width>
+		<height>287</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>190</xmin>
+			<ymin>26</ymin>
+			<xmax>460</xmax>
+			<ymax>281</ymax>
+		</bndbox>
+	</object>
+</annotation>

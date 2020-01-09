@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>64. otter.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\64. otter.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>365</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>57</xmin>
+			<ymin>47</ymin>
+			<xmax>499</xmax>
+			<ymax>285</ymax>
+		</bndbox>
+	</object>
+</annotation>

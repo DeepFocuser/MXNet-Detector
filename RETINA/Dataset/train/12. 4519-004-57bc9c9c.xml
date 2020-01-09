@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>12. 4519-004-57bc9c9c.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\12. 4519-004-57bc9c9c.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>293</width>
+		<height>450</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>99</xmin>
+			<ymin>28</ymin>
+			<xmax>247</xmax>
+			<ymax>443</ymax>
+		</bndbox>
+	</object>
+</annotation>

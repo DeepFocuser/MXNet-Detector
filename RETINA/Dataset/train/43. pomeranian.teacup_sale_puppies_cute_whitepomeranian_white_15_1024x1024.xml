@@ -1,0 +1,26 @@
+<annotation>
+	<folder>pomeranian</folder>
+	<filename>43. pomeranian.teacup_sale_puppies_cute_whitepomeranian_white_15_1024x1024.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\pomeranian\43. pomeranian.teacup_sale_puppies_cute_whitepomeranian_white_15_1024x1024.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1024</width>
+		<height>683</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>285</xmin>
+			<ymin>84</ymin>
+			<xmax>643</xmax>
+			<ymax>592</ymax>
+		</bndbox>
+	</object>
+</annotation>

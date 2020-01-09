@@ -1,0 +1,26 @@
+<annotation>
+	<folder>pomeranian</folder>
+	<filename>45. aid1784999-v4-728px-take-care-of-a-pomeranian-step-6-version-3.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\pomeranian\45. aid1784999-v4-728px-take-care-of-a-pomeranian-step-6-version-3.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>728</width>
+		<height>546</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>127</ymin>
+			<xmax>372</xmax>
+			<ymax>513</ymax>
+		</bndbox>
+	</object>
+</annotation>

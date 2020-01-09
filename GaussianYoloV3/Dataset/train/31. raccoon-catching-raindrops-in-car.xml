@@ -1,0 +1,38 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>31. raccoon-catching-raindrops-in-car.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\31. raccoon-catching-raindrops-in-car.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>494</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>47</xmin>
+			<ymin>92</ymin>
+			<xmax>320</xmax>
+			<ymax>494</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>416</xmin>
+			<ymin>16</ymin>
+			<xmax>640</xmax>
+			<ymax>480</ymax>
+		</bndbox>
+	</object>
+</annotation>

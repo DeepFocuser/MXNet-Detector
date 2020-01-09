@@ -1,0 +1,26 @@
+<annotation>
+	<folder>pomeranian</folder>
+	<filename>69. img_how_to_take_care_of_a_pomeranian_puppy_and_adult_2383_600.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\pomeranian\69. img_how_to_take_care_of_a_pomeranian_puppy_and_adult_2383_600.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>600</width>
+		<height>400</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>230</xmin>
+			<ymin>61</ymin>
+			<xmax>470</xmax>
+			<ymax>372</ymax>
+		</bndbox>
+	</object>
+</annotation>

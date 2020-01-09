@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>39. mezzanine_649-1280x600.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\39. mezzanine_649-1280x600.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1280</width>
+		<height>600</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>794</xmin>
+			<ymin>184</ymin>
+			<xmax>1105</xmax>
+			<ymax>530</ymax>
+		</bndbox>
+	</object>
+</annotation>

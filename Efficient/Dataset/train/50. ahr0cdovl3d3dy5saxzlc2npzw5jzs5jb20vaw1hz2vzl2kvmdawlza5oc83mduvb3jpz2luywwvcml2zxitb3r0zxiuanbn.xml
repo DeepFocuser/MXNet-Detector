@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>50. ahr0cdovl3d3dy5saxzlc2npzw5jzs5jb20vaw1hz2vzl2kvmdawlza5oc83mduvb3jpz2luywwvcml2zxitb3r0zxiuanbn.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\50. ahr0cdovl3d3dy5saxzlc2npzw5jzs5jb20vaw1hz2vzl2kvmdawlza5oc83mduvb3jpz2luywwvcml2zxitb3r0zxiuanbn.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>660</width>
+		<height>430</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>69</xmin>
+			<ymin>37</ymin>
+			<xmax>404</xmax>
+			<ymax>396</ymax>
+		</bndbox>
+	</object>
+</annotation>

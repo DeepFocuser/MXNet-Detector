@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>2. kcd_mdsl_400x400.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\2. kcd_mdsl_400x400.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>400</width>
+		<height>400</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>10</xmin>
+			<ymin>3</ymin>
+			<xmax>396</xmax>
+			<ymax>400</ymax>
+		</bndbox>
+	</object>
+</annotation>

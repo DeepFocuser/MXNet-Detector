@@ -1,0 +1,26 @@
+<annotation>
+	<folder>pomeranian</folder>
+	<filename>21. pomeranianpurebreddogredcolorjazzyjames10yearsoldtim1.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\pomeranian\21. pomeranianpurebreddogredcolorjazzyjames10yearsoldtim1.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>450</width>
+		<height>449</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>24</xmin>
+			<ymin>14</ymin>
+			<xmax>432</xmax>
+			<ymax>425</ymax>
+		</bndbox>
+	</object>
+</annotation>

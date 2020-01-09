@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>15. river-otters-lead-photo.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\15. river-otters-lead-photo.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>638</width>
+		<height>424</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>129</xmin>
+			<ymin>1</ymin>
+			<xmax>636</xmax>
+			<ymax>424</ymax>
+		</bndbox>
+	</object>
+</annotation>

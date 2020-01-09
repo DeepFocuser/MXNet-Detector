@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>57. meerkat-mz-animal-profile-web620_0.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\57. meerkat-mz-animal-profile-web620_0.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>620</width>
+		<height>380</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>143</xmin>
+			<ymin>22</ymin>
+			<xmax>465</xmax>
+			<ymax>380</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>10. raccoon_1496936031134_60853081_ver1.0_640_480.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\10. raccoon_1496936031134_60853081_ver1.0_640_480.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>425</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>71</xmin>
+			<ymin>21</ymin>
+			<xmax>483</xmax>
+			<ymax>407</ymax>
+		</bndbox>
+	</object>
+</annotation>

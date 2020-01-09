@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>3. animal-hero-panda3.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\3. animal-hero-panda3.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1020</width>
+		<height>582</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>230</xmin>
+			<ymin>10</ymin>
+			<xmax>867</xmax>
+			<ymax>582</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>89. 8a1df934ce45584456a5611b0f5cb3d4-so-tired-cute-panda.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\89. 8a1df934ce45584456a5611b0f5cb3d4-so-tired-cute-panda.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>736</width>
+		<height>615</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>74</xmin>
+			<ymin>54</ymin>
+			<xmax>735</xmax>
+			<ymax>567</ymax>
+		</bndbox>
+	</object>
+</annotation>

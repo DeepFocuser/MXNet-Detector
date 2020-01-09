@@ -1,0 +1,26 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>15. sub-buzz-4713-1518339402-3.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\15. sub-buzz-4713-1518339402-3.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>715</width>
+		<height>953</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>119</ymin>
+			<xmax>650</xmax>
+			<ymax>847</ymax>
+		</bndbox>
+	</object>
+</annotation>

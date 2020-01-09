@@ -1,0 +1,26 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>87. img_2420%20baby%20raccoon%205-21-2014%20stanford%20quad%20canon%20eos%2050d.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\87. img_2420%20baby%20raccoon%205-21-2014%20stanford%20quad%20canon%20eos%2050d.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>776</width>
+		<height>517</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>139</xmin>
+			<ymin>64</ymin>
+			<xmax>654</xmax>
+			<ymax>478</ymax>
+		</bndbox>
+	</object>
+</annotation>

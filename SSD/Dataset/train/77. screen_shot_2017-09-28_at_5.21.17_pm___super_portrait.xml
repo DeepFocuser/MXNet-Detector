@@ -1,0 +1,38 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>77. screen_shot_2017-09-28_at_5.21.17_pm___super_portrait.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\77. screen_shot_2017-09-28_at_5.21.17_pm___super_portrait.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>834</width>
+		<height>417</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>55</xmin>
+			<ymin>54</ymin>
+			<xmax>545</xmax>
+			<ymax>383</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>564</xmin>
+			<ymin>4</ymin>
+			<xmax>762</xmax>
+			<ymax>293</ymax>
+		</bndbox>
+	</object>
+</annotation>

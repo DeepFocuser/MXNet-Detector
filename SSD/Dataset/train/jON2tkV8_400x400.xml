@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>jON2tkV8_400x400.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\jON2tkV8_400x400.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>336</width>
+		<height>336</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>22</xmin>
+			<ymin>65</ymin>
+			<xmax>326</xmax>
+			<ymax>336</ymax>
+		</bndbox>
+	</object>
+</annotation>

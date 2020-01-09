@@ -1,0 +1,38 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>70. lutracanadensis_fullres.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\70. lutracanadensis_fullres.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>884</width>
+		<height>800</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>427</xmin>
+			<ymin>53</ymin>
+			<xmax>884</xmax>
+			<ymax>783</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>53</xmin>
+			<ymin>153</ymin>
+			<xmax>525</xmax>
+			<ymax>495</ymax>
+		</bndbox>
+	</object>
+</annotation>

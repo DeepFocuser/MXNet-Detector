@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>46. nintchdbpict000277673156-e1477526912789.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\46. nintchdbpict000277673156-e1477526912789.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>960</width>
+		<height>641</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>20</xmin>
+			<ymin>102</ymin>
+			<xmax>618</xmax>
+			<ymax>461</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>74. main-qimg-d976eadeb82569dfd08e84a410fe6b3d-c.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\74. main-qimg-d976eadeb82569dfd08e84a410fe6b3d-c.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>480</width>
+		<height>319</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>38</ymin>
+			<xmax>428</xmax>
+			<ymax>269</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,38 @@
+<annotation>
+	<folder>pomeranian</folder>
+	<filename>91. pomeranian-dogs-mating-stock-images_csp22765358.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\pomeranian\91. pomeranian-dogs-mating-stock-images_csp22765358.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>450</width>
+		<height>320</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>181</xmin>
+			<ymin>22</ymin>
+			<xmax>383</xmax>
+			<ymax>146</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>81</xmin>
+			<ymin>94</ymin>
+			<xmax>253</xmax>
+			<ymax>288</ymax>
+		</bndbox>
+	</object>
+</annotation>

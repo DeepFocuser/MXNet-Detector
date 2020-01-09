@@ -1,0 +1,50 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>82. raccoon-removal-tcf.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\82. raccoon-removal-tcf.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>450</width>
+		<height>300</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>29</xmin>
+			<ymin>44</ymin>
+			<xmax>161</xmax>
+			<ymax>246</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>146</xmin>
+			<ymin>107</ymin>
+			<xmax>300</xmax>
+			<ymax>283</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>276</xmin>
+			<ymin>64</ymin>
+			<xmax>415</xmax>
+			<ymax>229</ymax>
+		</bndbox>
+	</object>
+</annotation>

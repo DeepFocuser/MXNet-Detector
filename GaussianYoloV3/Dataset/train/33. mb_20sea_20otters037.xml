@@ -1,0 +1,38 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>33. mb%20sea%20otters037.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\33. mb%20sea%20otters037.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1140</width>
+		<height>641</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>85</xmin>
+			<ymin>34</ymin>
+			<xmax>698</xmax>
+			<ymax>601</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>690</xmin>
+			<ymin>93</ymin>
+			<xmax>1113</xmax>
+			<ymax>634</ymax>
+		</bndbox>
+	</object>
+</annotation>

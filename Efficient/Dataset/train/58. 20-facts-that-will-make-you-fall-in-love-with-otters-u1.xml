@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>58. 20-facts-that-will-make-you-fall-in-love-with-otters-u1.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\58. 20-facts-that-will-make-you-fall-in-love-with-otters-u1.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>817</width>
+		<height>427</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>192</xmin>
+			<ymin>3</ymin>
+			<xmax>586</xmax>
+			<ymax>427</ymax>
+		</bndbox>
+	</object>
+</annotation>

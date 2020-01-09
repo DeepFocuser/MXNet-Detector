@@ -1,0 +1,26 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>6. fotolia_4191773_xs.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\6. fotolia_4191773_xs.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>750</width>
+		<height>428</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>264</xmin>
+			<ymin>41</ymin>
+			<xmax>613</xmax>
+			<ymax>428</ymax>
+		</bndbox>
+	</object>
+</annotation>

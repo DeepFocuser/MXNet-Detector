@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>31. captivemeerk.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\31. captivemeerk.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>662</width>
+		<height>992</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>83</xmin>
+			<ymin>64</ymin>
+			<xmax>660</xmax>
+			<ymax>992</ymax>
+		</bndbox>
+	</object>
+</annotation>

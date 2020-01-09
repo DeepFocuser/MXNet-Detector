@@ -1,0 +1,38 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>94. a-baby-panda-fell-off-a-stage-but-dont-worry-hes-2-25672-1475256931-0_dblbig-1ujgosm.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\94. a-baby-panda-fell-off-a-stage-but-dont-worry-hes-2-25672-1475256931-0_dblbig-1ujgosm.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>625</width>
+		<height>415</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>352</xmin>
+			<ymin>5</ymin>
+			<xmax>612</xmax>
+			<ymax>391</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>120</ymin>
+			<xmax>294</xmax>
+			<ymax>352</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>83. raccoon-road.ngsversion.1396530745521.adapt.945.1.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\83. raccoon-road.ngsversion.1396530745521.adapt.945.1.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>945</width>
+		<height>531</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>103</xmin>
+			<ymin>6</ymin>
+			<xmax>733</xmax>
+			<ymax>531</ymax>
+		</bndbox>
+	</object>
+</annotation>

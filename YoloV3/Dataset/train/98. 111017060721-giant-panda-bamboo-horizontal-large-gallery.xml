@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>98. 111017060721-giant-panda-bamboo-horizontal-large-gallery.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\98. 111017060721-giant-panda-bamboo-horizontal-large-gallery.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>980</width>
+		<height>552</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>194</xmin>
+			<ymin>14</ymin>
+			<xmax>799</xmax>
+			<ymax>552</ymax>
+		</bndbox>
+	</object>
+</annotation>

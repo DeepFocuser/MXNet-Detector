@@ -1,0 +1,77 @@
+Dataset:
+  train: Dataset/train
+  valid: Dataset/valid
+  test: Dataset/test
+  test_weight_path: weights
+
+  # Test
+  save_flag: True
+  save_path: result
+  show_flag: False
+  decode_number: -1 # decode할 개수
+  multiperclass: True
+  nms_thresh: 0.45
+  nms_topk: 200 # 전체 다하면(-1) 너무 오래걸림.
+  except_class_thresh: 0.01
+  plot_class_thresh: 0.5 # 그릴때 score_thresh 보다 큰 것들만 그린다.
+  test_graph_path: test_Graph
+
+model:
+  training: True
+  load_name: 512_512_ADAM_PVGG16_512 # training = False
+
+  save_period: 20
+  load_period: 100
+  input_size: [512, 512] # height, width
+  base: VGG16_512 # or VGG16_300
+  pretrained_base: True
+  pretrained_path: modelparam
+  graphviz: False
+
+hyperparameters:
+
+  # model 관련
+  image_mean: [0.485, 0.456, 0.406] # R G B
+  image_std:  [0.229, 0.224, 0.225] # R G B
+  anchor_alloc_size: [256, 256] # height, width / 입력사이즈 최대크기 2048 X 2048(h,w)에 대비
+  box_sizes300: [21, 45, 101.25, 157.5, 213.75, 270, 326.25]
+  box_ratios300: "[[1, 2, 0.5]] + [[1, 2, 0.5, 3, 1.0 / 3]] * 3 + [[1, 2, 0.5]] * 2"
+  box_sizes512: [21, 51.2, 133.12, 215.04, 296.96, 378.88, 460.8, 542.72]
+  box_ratios512: "[[1, 2, 0.5]] + [[1, 2, 0.5, 3, 1.0 / 3]] * 4 + [[1, 2, 0.5]] * 2"
+  anchor_box_clip: False
+
+  # 학습 관련
+  epoch: 100
+  batch_log: 10
+  batch_size: 4
+  batch_interval: 10 # multiscale을 몇 배치마다 할껀지?
+  subdivision: 1
+  multiscale: False
+  factor_scale: [8, 6] # input_size(height, width)를 8으로 나눈 값에, 5, 6, 7, 8, 9, 10, 11 7개를 곱한 값을 width height로 사용
+  foreground_iou_thresh: 0.5
+  data_augmentation: True
+  num_workers: 4 # the number of multiprocessing workers to use for data preprocessing.
+  optimizer: ADAM # ADAM, RMSPROP, SGD
+  classHardNegativeMining: True
+  boxHardNegativeMining: False
+  learning_rate: 0.0001
+  decay_lr: 0.999
+  decay_step: 100 # 몇 epoch이 지난후 decay_lr을 적용할지
+  # AMP -> float32로 weight가 저장되고, 계산은 float16으로 함
+  AMP: True # https://mxnet.apache.org/api/python/docs/tutorials/performance/backend/amp.html#
+context:
+  using_cuda: True
+validation:
+  valid_size: 8
+  eval_period: 20
+  tensorboard: True
+  valid_graph_path: valid_Graph # mAP 그리기
+mlflow:
+  using_mlflow: True
+  run_name: Animal
+
+
+
+
+
+

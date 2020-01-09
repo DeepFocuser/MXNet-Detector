@@ -1,0 +1,26 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>9. diyraccoonremoval.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\9. diyraccoonremoval.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>417</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>30</xmin>
+			<ymin>6</ymin>
+			<xmax>494</xmax>
+			<ymax>417</ymax>
+		</bndbox>
+	</object>
+</annotation>

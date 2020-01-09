@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>97. otter-in-seaweed-isle-of-harris-wildlife.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\97. otter-in-seaweed-isle-of-harris-wildlife.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>578</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>160</xmin>
+			<ymin>220</ymin>
+			<xmax>678</xmax>
+			<ymax>478</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>pomeranian</folder>
+	<filename>88. micro-teacup-pomeranian-for-sale-1.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\pomeranian\88. micro-teacup-pomeranian-for-sale-1.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>601</width>
+		<height>408</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>176</xmin>
+			<ymin>110</ymin>
+			<xmax>371</xmax>
+			<ymax>330</ymax>
+		</bndbox>
+	</object>
+</annotation>

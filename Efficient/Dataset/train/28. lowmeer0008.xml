@@ -1,0 +1,50 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>28. lowmeer0008.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\28. lowmeer0008.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>600</width>
+		<height>449</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>50</xmin>
+			<ymin>25</ymin>
+			<xmax>165</xmax>
+			<ymax>386</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>221</xmin>
+			<ymin>60</ymin>
+			<xmax>329</xmax>
+			<ymax>382</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>469</xmin>
+			<ymin>132</ymin>
+			<xmax>567</xmax>
+			<ymax>394</ymax>
+		</bndbox>
+	</object>
+</annotation>

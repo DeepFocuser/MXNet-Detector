@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>92. panda-teeth-ss-1920-800x450.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\92. panda-teeth-ss-1920-800x450.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>450</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>144</xmin>
+			<ymin>9</ymin>
+			<xmax>785</xmax>
+			<ymax>443</ymax>
+		</bndbox>
+	</object>
+</annotation>

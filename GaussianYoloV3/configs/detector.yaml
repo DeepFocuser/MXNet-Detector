@@ -1,0 +1,68 @@
+Dataset:
+  train: Dataset/train
+  valid: Dataset/valid
+  test: Dataset/test
+  test_weight_path: weights
+
+  # Test
+  save_flag: True
+  save_path: result
+  show_flag: False
+  multiperclass: True
+  nms_thresh: 0.5
+  nms_topk: 100 # 전체 다하면(-1) 너무 오래걸림.
+  except_class_thresh: 0.01 #0.05
+  plot_class_thresh: 0.5 # 그릴때 score_thresh 보다 큰 것들만 그린다.
+  test_graph_path: test_Graph
+
+model:
+  training: True
+  load_name: 608_608_ADAM_PDark_53 # training = False,
+  save_period: 20
+  load_period: 100
+  input_size: [608, 608] # height, width
+  Darknetlayer: 53 # only 53
+  pretrained_base: True
+  pretrained_path: modelparam
+  graphviz: False
+
+hyperparameters:
+
+  # model 관련
+  image_mean: [0.485, 0.456, 0.406] # R G B
+  image_std:  [0.229, 0.224, 0.225] # R G B
+  offset_alloc_size: [64, 64] # height, width / 1 -> 2 -> 3 진행 될때 마다 2배씩 증가 / 입력사이즈 최대크기 2048 X 2048(h,w)에 대비
+  anchors: '{"shallow": [(10, 13), (16, 30), (33, 23)],
+            "middle": [(30, 61), (62, 45), (59, 119)],
+            "deep": [(116, 90), (156, 198), (373, 326)]}'
+  # 학습 관련
+  epoch: 100
+  batch_log: 10
+  batch_size: 4
+  batch_interval: 10 # multiscale을 몇 배치마다 할껀지?
+  subdivision: 1
+  multiscale: True
+  factor_scale: [10, 9] # (10 ~ 19)*32 / 직사각형 데이터 학습시 dataloader.py 에가서 multiscale전략을 바꿔야한다.
+  ignore_threshold: 0.7
+  dynamic: True
+  data_augmentation: True
+  num_workers: 4 # the number of multiprocessing workers to use for data preprocessing.
+  optimizer: SGD # ADAM, RMSPROP, SGD
+  learning_rate: 0.00001
+  decay_lr: 0.999
+  decay_step: 100 # 몇 epoch이 지난후 decay_lr을 적용할지
+  AMP: True # https://mxnet.apache.org/api/python/docs/tutorials/performance/backend/amp.html# / available on new Volta and Turing GPUs
+context:
+  using_cuda: True
+validation:
+  valid_size: 8
+  eval_period: 20
+  tensorboard: True
+  valid_graph_path: valid_Graph
+mlflow:
+  using_mlflow: True
+  run_name: Animal
+
+
+
+

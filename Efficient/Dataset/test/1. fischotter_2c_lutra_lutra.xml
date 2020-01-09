@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>1. fischotter%2c_lutra_lutra.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\1. fischotter%2c_lutra_lutra.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>908</width>
+		<height>497</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>51</xmin>
+			<ymin>33</ymin>
+			<xmax>851</xmax>
+			<ymax>486</ymax>
+		</bndbox>
+	</object>
+</annotation>

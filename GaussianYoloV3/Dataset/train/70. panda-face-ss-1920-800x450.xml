@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>70. panda-face-ss-1920-800x450.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\70. panda-face-ss-1920-800x450.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>450</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>169</xmin>
+			<ymin>22</ymin>
+			<xmax>770</xmax>
+			<ymax>450</ymax>
+		</bndbox>
+	</object>
+</annotation>

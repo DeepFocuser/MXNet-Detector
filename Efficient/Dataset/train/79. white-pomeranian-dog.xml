@@ -1,0 +1,26 @@
+<annotation>
+	<folder>pomeranian</folder>
+	<filename>79. white-pomeranian-dog.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\pomeranian\79. white-pomeranian-dog.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>680</width>
+		<height>450</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>37</xmin>
+			<ymin>7</ymin>
+			<xmax>494</xmax>
+			<ymax>450</ymax>
+		</bndbox>
+	</object>
+</annotation>

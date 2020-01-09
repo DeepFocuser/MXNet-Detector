@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>72. meerkat-on-lookout-duty.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\72. meerkat-on-lookout-duty.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>346</width>
+		<height>520</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>81</xmin>
+			<ymin>71</ymin>
+			<xmax>239</xmax>
+			<ymax>481</ymax>
+		</bndbox>
+	</object>
+</annotation>

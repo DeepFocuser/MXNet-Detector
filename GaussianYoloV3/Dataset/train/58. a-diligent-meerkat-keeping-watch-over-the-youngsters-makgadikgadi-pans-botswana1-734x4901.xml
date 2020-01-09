@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>58. a-diligent-meerkat-keeping-watch-over-the-youngsters-makgadikgadi-pans-botswana1-734x4901.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\58. a-diligent-meerkat-keeping-watch-over-the-youngsters-makgadikgadi-pans-botswana1-734x4901.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>734</width>
+		<height>490</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>363</xmin>
+			<ymin>62</ymin>
+			<xmax>506</xmax>
+			<ymax>403</ymax>
+		</bndbox>
+	</object>
+</annotation>

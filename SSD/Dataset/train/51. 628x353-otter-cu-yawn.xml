@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>51. 628x353-otter-cu-yawn.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\51. 628x353-otter-cu-yawn.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>628</width>
+		<height>353</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>53</xmin>
+			<ymin>25</ymin>
+			<xmax>498</xmax>
+			<ymax>332</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>3. sea_otter_cropped.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\3. sea_otter_cropped.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>714</width>
+		<height>555</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>54</xmin>
+			<ymin>68</ymin>
+			<xmax>714</xmax>
+			<ymax>471</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>56. meerkat-teeth.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\56. meerkat-teeth.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>900</width>
+		<height>477</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>190</xmin>
+			<ymin>25</ymin>
+			<xmax>766</xmax>
+			<ymax>477</ymax>
+		</bndbox>
+	</object>
+</annotation>

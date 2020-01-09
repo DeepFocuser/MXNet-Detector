@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>36. ap-bao-bao-ml-170221_mn_4x3_992.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\36. ap-bao-bao-ml-170221_mn_4x3_992.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>992</width>
+		<height>744</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>244</xmin>
+			<ymin>103</ymin>
+			<xmax>724</xmax>
+			<ymax>741</ymax>
+		</bndbox>
+	</object>
+</annotation>

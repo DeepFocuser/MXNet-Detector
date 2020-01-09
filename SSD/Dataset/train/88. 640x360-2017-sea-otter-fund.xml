@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>88. 640x360-2017-sea-otter-fund.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\88. 640x360-2017-sea-otter-fund.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>640</width>
+		<height>360</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>86</xmin>
+			<ymin>56</ymin>
+			<xmax>608</xmax>
+			<ymax>306</ymax>
+		</bndbox>
+	</object>
+</annotation>

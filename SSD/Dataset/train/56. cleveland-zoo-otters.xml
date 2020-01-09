@@ -1,0 +1,38 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>56. cleveland-zoo-otters.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\56. cleveland-zoo-otters.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>482</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>55</xmin>
+			<ymin>14</ymin>
+			<xmax>355</xmax>
+			<ymax>379</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>480</xmin>
+			<ymin>11</ymin>
+			<xmax>800</xmax>
+			<ymax>351</ymax>
+		</bndbox>
+	</object>
+</annotation>

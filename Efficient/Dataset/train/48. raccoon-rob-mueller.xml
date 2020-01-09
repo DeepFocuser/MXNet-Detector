@@ -1,0 +1,38 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>48. raccoon-rob-mueller.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\48. raccoon-rob-mueller.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>800</width>
+		<height>533</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>326</xmin>
+			<ymin>319</ymin>
+			<xmax>564</xmax>
+			<ymax>490</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>185</xmin>
+			<ymin>31</ymin>
+			<xmax>545</xmax>
+			<ymax>227</ymax>
+		</bndbox>
+	</object>
+</annotation>

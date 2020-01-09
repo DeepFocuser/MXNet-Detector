@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>35. denzil-the-dog-and-a-meerkat.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\35. denzil-the-dog-and-a-meerkat.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1200</width>
+		<height>630</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>786</xmin>
+			<ymin>2</ymin>
+			<xmax>1025</xmax>
+			<ymax>630</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>pomeranian</folder>
+	<filename>63. pizzapug11.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\pomeranian\63. pizzapug11.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>750</width>
+		<height>333</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>143</xmin>
+			<ymin>9</ymin>
+			<xmax>668</xmax>
+			<ymax>333</ymax>
+		</bndbox>
+	</object>
+</annotation>

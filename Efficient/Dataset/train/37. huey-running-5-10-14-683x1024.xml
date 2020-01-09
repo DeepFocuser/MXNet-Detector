@@ -1,0 +1,26 @@
+<annotation>
+	<folder>pomeranian</folder>
+	<filename>37. huey-running-5-10-14-683x1024.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\pomeranian\37. huey-running-5-10-14-683x1024.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>683</width>
+		<height>1024</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>118</xmin>
+			<ymin>353</ymin>
+			<xmax>535</xmax>
+			<ymax>810</ymax>
+		</bndbox>
+	</object>
+</annotation>

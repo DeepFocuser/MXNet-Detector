@@ -1,0 +1,38 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>78. kgalagadi-suricate-meerkat-billy-steenkamp-3-1140x660.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\78. kgalagadi-suricate-meerkat-billy-steenkamp-3-1140x660.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1140</width>
+		<height>660</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>718</xmin>
+			<ymin>82</ymin>
+			<xmax>980</xmax>
+			<ymax>511</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>303</xmin>
+			<ymin>236</ymin>
+			<xmax>534</xmax>
+			<ymax>660</ymax>
+		</bndbox>
+	</object>
+</annotation>

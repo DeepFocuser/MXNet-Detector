@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>45. tdy_news_otter_151221.today-vid-canonical-featured-desktop.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\45. tdy_news_otter_151221.today-vid-canonical-featured-desktop.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1042</width>
+		<height>586</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>151</xmin>
+			<ymin>24</ymin>
+			<xmax>988</xmax>
+			<ymax>540</ymax>
+		</bndbox>
+	</object>
+</annotation>

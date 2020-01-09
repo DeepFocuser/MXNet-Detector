@@ -1,0 +1,26 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>7. raccoon-2015-marie-kraus-1-1024x683-e1461547070661.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\7. raccoon-2015-marie-kraus-1-1024x683-e1461547070661.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>911</width>
+		<height>683</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>74</xmin>
+			<ymin>2</ymin>
+			<xmax>845</xmax>
+			<ymax>682</ymax>
+		</bndbox>
+	</object>
+</annotation>

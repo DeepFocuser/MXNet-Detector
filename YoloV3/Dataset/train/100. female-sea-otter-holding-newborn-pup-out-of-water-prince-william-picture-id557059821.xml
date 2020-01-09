@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>100. female-sea-otter-holding-newborn-pup-out-of-water-prince-william-picture-id557059821.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\100. female-sea-otter-holding-newborn-pup-out-of-water-prince-william-picture-id557059821.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1024</width>
+		<height>683</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>3</xmin>
+			<ymin>36</ymin>
+			<xmax>837</xmax>
+			<ymax>683</ymax>
+		</bndbox>
+	</object>
+</annotation>

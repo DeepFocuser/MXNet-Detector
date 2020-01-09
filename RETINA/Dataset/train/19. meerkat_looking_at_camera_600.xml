@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>19. meerkat_looking_at_camera_600.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\19. meerkat_looking_at_camera_600.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>412</width>
+		<height>600</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>49</xmin>
+			<ymin>21</ymin>
+			<xmax>398</xmax>
+			<ymax>573</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,38 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>61. _59823448_cimg2880.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\61. _59823448_cimg2880.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>624</width>
+		<height>351</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>116</xmin>
+			<ymin>34</ymin>
+			<xmax>422</xmax>
+			<ymax>351</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>509</xmin>
+			<ymin>168</ymin>
+			<xmax>624</xmax>
+			<ymax>325</ymax>
+		</bndbox>
+	</object>
+</annotation>

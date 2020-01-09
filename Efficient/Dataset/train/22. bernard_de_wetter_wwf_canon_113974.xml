@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>22. bernard_de_wetter_wwf_canon_113974.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\22. bernard_de_wetter_wwf_canon_113974.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1000</width>
+		<height>600</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>39</xmin>
+			<ymin>31</ymin>
+			<xmax>984</xmax>
+			<ymax>600</ymax>
+		</bndbox>
+	</object>
+</annotation>

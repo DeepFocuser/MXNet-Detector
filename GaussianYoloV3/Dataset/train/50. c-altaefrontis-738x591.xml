@@ -1,0 +1,26 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>50. c-altaefrontis-738x591.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\50. c-altaefrontis-738x591.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>738</width>
+		<height>591</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>104</xmin>
+			<ymin>121</ymin>
+			<xmax>722</xmax>
+			<ymax>453</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>7. sea_otter_%28enhydra_lutris%29_%2825169790524%29_crop.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\7. sea_otter_%28enhydra_lutris%29_%2825169790524%29_crop.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>922</width>
+		<height>843</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>126</xmin>
+			<ymin>89</ymin>
+			<xmax>823</xmax>
+			<ymax>843</ymax>
+		</bndbox>
+	</object>
+</annotation>

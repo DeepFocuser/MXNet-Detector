@@ -1,0 +1,76 @@
+Dataset:
+  train: Dataset/train
+  valid: Dataset/valid
+  test: Dataset/test
+  test_weight_path: weights
+
+  # Test
+  save_flag: True
+  save_path: result
+  show_flag: False
+  decode_number: -1 # decode할 개수
+  multiperclass: True
+  nms_thresh: 0.45 # 0.5
+  nms_topk: 200 # 전체 다하면(-1) 너무 오래걸림.
+  except_class_thresh: 0.01 #0.05
+  plot_class_thresh: 0.5 # 그릴때 score_thresh 보다 큰 것들만 그린다.
+  test_graph_path: test_Graph
+
+model:
+  training: True
+  load_name: 512_512_ADAM_PEFF_0 # training = False,
+  save_period: 100
+  load_period: 100
+  input_size: [512, 512] # height, width
+  # Efficientbase : 0 -> 512
+  # Efficientbase : 1 -> 640
+  # Efficientbase : 2 -> 768 ####### 여기까지는 쓸만 할 듯.
+  # Efficientbase : 3 -> 896
+  # Efficientbase : 4 -> 1024
+  # Efficientbase : 5 -> 1408
+  # Efficientbase : 6 -> 1536
+  Efficientbase: 0 # Efficientbase version : 0, 1, 2, ..., 7
+  graphviz: False
+
+hyperparameters:
+
+  # model 관련
+  image_mean: [0.485, 0.456, 0.406] # R G B
+  image_std:  [0.229, 0.224, 0.225] # R G B
+  anchor_alloc_size: [256, 256] # height, width / 1 -> 2 -> 3 -> 4 -> 5 진행 될때 마다 2배씩 감소 / 입력사이즈 최대크기 2048 X 2048(h,w)에 대비
+  anchor_sizes: [32, 64, 128, 256, 512]
+  anchor_size_ratios: "[1, pow(2, 1 / 3), pow(2, 2 / 3)]"
+  anchor_aspect_ratios: [0.5, 1, 2]
+  anchor_box_clip: False
+
+  # 학습 관련
+  epoch: 500
+  batch_log: 10
+  batch_size: 4
+  batch_interval: 10
+  subdivision: 1
+  multiscale: False
+  factor_scale: [8, 6] # input_size(height, width)를 8으로 나눈 값에, 5, 6, 7, 8, 9, 10, 11 7개를 곱한 값을 width height로 사용
+  foreground_iou_thresh: 0.5
+  background_iou_thresh: 0.4
+  data_augmentation: True
+  num_workers: 4 # the number of multiprocessing workers to use for data preprocessing.
+  optimizer: SGD # ADAM, RMSPROP, SGD
+  learning_rate: 0.0001
+  decay_lr: 0.5
+  decay_step: 100 # 몇 epoch이 지난후 decay_lr을 적용할지
+  AMP: True # https://mxnet.apache.org/api/python/docs/tutorials/performance/backend/amp.html# / available on new Volta and Turing GPUs
+context:
+  using_cuda: True
+validation:
+  valid_size: 8
+  eval_period: 100
+  tensorboard: True
+  valid_graph_path: valid_Graph
+mlflow:
+  using_mlflow: True
+  run_name: Animal
+
+
+
+

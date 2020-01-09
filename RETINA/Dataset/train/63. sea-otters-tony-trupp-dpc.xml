@@ -1,0 +1,38 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>63. sea-otters-tony-trupp-dpc.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\63. sea-otters-tony-trupp-dpc.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>498</width>
+		<height>272</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>133</xmin>
+			<ymin>77</ymin>
+			<xmax>433</xmax>
+			<ymax>272</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>96</xmin>
+			<ymin>8</ymin>
+			<xmax>270</xmax>
+			<ymax>118</ymax>
+		</bndbox>
+	</object>
+</annotation>

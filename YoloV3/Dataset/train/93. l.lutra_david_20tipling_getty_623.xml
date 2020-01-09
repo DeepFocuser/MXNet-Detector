@@ -1,0 +1,38 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>93. l.lutra_david%20tipling_getty_623.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\93. l.lutra_david%20tipling_getty_623.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>623</width>
+		<height>430</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>148</xmin>
+			<ymin>122</ymin>
+			<xmax>347</xmax>
+			<ymax>304</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>373</xmin>
+			<ymin>201</ymin>
+			<xmax>512</xmax>
+			<ymax>355</ymax>
+		</bndbox>
+	</object>
+</annotation>

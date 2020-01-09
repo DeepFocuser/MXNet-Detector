@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>64. __sold__hand_made_poseable_baby_panda__by_wood_splitter_lee-d796hy6.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\64. __sold__hand_made_poseable_baby_panda__by_wood_splitter_lee-d796hy6.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>600</width>
+		<height>638</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>109</xmin>
+			<ymin>38</ymin>
+			<xmax>510</xmax>
+			<ymax>632</ymax>
+		</bndbox>
+	</object>
+</annotation>

@@ -1,0 +1,62 @@
+Dataset:
+  train: Dataset/train
+  valid: Dataset/valid
+  test: Dataset/test
+  test_weight_path: weights
+
+  # Test
+  save_flag: True
+  save_path: result
+  show_flag: False
+  topk: 100
+  plot_class_thresh: 0.5 # 그릴때 score_thresh 보다 큰 것들만 그린다.
+  test_graph_path: test_Graph
+
+model:
+  training: True
+  load_name: 512_512_ADAM_PCENTER_RES34 # training = False,
+  save_period: 10
+  load_period: 100
+  input_size: [512, 512] # height, width
+  ResNetbase: 34 # resnet base version : 18, 34, 50, 101, 152
+  pretrained_base: True
+  pretrained_path: modelparam
+  graphviz: False
+
+hyperparameters:
+
+  # model 관련
+  image_mean: [0.485, 0.456, 0.406] # R G B
+  image_std:  [0.229, 0.224, 0.225] # R G B
+
+  # 학습 관련
+  epoch: 100
+  batch_size: 16
+  batch_log: 50
+  batch_interval: 100
+  subdivision: 1
+  multiscale: False
+  factor_scale: [8, 6] # input_size(height, width)를 8으로 나눈 값에, 5, 6, 7, 8, 9, 10, 11 7개를 곱한 값을 width height로 사용
+  data_augmentation: False
+  num_workers: 4 # the number of multiprocessing workers to use for data preprocessing.
+  optimizer: ADAM # ADAM, RMSPROP
+  lambda_off: 1
+  lambda_size: 0.1
+  learning_rate: 0.0001
+  decay_lr: 0.9
+  decay_step: 10 # 몇 epoch이 지난후 decay_lr을 적용할지
+  AMP: False # https://mxnet.apache.org/api/python/docs/tutorials/performance/backend/amp.html# / available on new Volta and Turing GPUs
+context:
+  using_cuda: True
+validation:
+  valid_size: 8
+  eval_period: 1
+  tensorboard: True
+  valid_graph_path: valid_Graph
+mlflow:
+  using_mlflow: True
+  run_name: RoadObjectDetection
+
+
+
+

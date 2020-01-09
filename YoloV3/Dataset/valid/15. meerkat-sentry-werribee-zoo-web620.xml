@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>15. meerkat-sentry-werribee-zoo-web620.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\15. meerkat-sentry-werribee-zoo-web620.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>620</width>
+		<height>380</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>342</xmin>
+			<ymin>41</ymin>
+			<xmax>502</xmax>
+			<ymax>366</ymax>
+		</bndbox>
+	</object>
+</annotation>

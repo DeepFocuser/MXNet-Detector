@@ -1,0 +1,50 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>21. https%3a%2f%2fblueprint-api-production.s3.amazonaws.com%2fuploads%2fcard%2fimage%2f601870%2f547b71c5-3c06-4fcd-a92b-9d352a9fac8f.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\21. https%3a%2f%2fblueprint-api-production.s3.amazonaws.com%2fuploads%2fcard%2fimage%2f601870%2f547b71c5-3c06-4fcd-a92b-9d352a9fac8f.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>950</width>
+		<height>534</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>496</xmin>
+			<ymin>104</ymin>
+			<xmax>666</xmax>
+			<ymax>530</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>651</xmin>
+			<ymin>142</ymin>
+			<xmax>851</xmax>
+			<ymax>502</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>315</xmin>
+			<ymin>102</ymin>
+			<xmax>500</xmax>
+			<ymax>521</ymax>
+		</bndbox>
+	</object>
+</annotation>

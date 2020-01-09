@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>77. 45f052d200000578-5057521-meng_meng_seemed_to_be_enjoying_the_cold_weather_as_she_played_w-a-3_1510051007124.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\77. 45f052d200000578-5057521-meng_meng_seemed_to_be_enjoying_the_cold_weather_as_she_played_w-a-3_1510051007124.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>962</width>
+		<height>713</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>165</xmin>
+			<ymin>170</ymin>
+			<xmax>763</xmax>
+			<ymax>676</ymax>
+		</bndbox>
+	</object>
+</annotation>

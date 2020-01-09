@@ -1,0 +1,26 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>1. raccoon-grass.adapt.945.1.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\1. raccoon-grass.adapt.945.1.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>945</width>
+		<height>531</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>227</xmin>
+			<ymin>35</ymin>
+			<xmax>878</xmax>
+			<ymax>508</ymax>
+		</bndbox>
+	</object>
+</annotation>

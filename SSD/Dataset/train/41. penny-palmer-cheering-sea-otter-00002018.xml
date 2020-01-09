@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>41. penny-palmer-cheering-sea-otter-00002018.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\41. penny-palmer-cheering-sea-otter-00002018.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>620</width>
+		<height>337</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>129</xmin>
+			<ymin>83</ymin>
+			<xmax>520</xmax>
+			<ymax>262</ymax>
+		</bndbox>
+	</object>
+</annotation>

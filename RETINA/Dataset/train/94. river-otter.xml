@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>94. river-otter.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\94. river-otter.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1046</width>
+		<height>698</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>99</xmin>
+			<ymin>29</ymin>
+			<xmax>924</xmax>
+			<ymax>698</ymax>
+		</bndbox>
+	</object>
+</annotation>

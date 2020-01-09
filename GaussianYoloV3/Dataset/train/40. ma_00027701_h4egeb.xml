@@ -1,0 +1,26 @@
+<annotation>
+	<folder>raccoon</folder>
+	<filename>40. ma_00027701_h4egeb.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\raccoon\40. ma_00027701_h4egeb.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>960</width>
+		<height>530</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>raccoon</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>35</xmin>
+			<ymin>16</ymin>
+			<xmax>940</xmax>
+			<ymax>522</ymax>
+		</bndbox>
+	</object>
+</annotation>

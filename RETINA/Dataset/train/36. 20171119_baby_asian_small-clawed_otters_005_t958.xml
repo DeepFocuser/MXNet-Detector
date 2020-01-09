@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>36. 20171119_baby_asian_small-clawed_otters_005_t958.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\36. 20171119_baby_asian_small-clawed_otters_005_t958.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>958</width>
+		<height>617</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>138</xmin>
+			<ymin>3</ymin>
+			<xmax>738</xmax>
+			<ymax>475</ymax>
+		</bndbox>
+	</object>
+</annotation>

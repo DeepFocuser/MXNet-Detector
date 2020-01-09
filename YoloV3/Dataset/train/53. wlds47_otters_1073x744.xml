@@ -1,0 +1,50 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>53. wlds47_otters_1073x744.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\53. wlds47_otters_1073x744.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>634</width>
+		<height>440</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>81</xmin>
+			<ymin>126</ymin>
+			<xmax>174</xmax>
+			<ymax>274</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>170</xmin>
+			<ymin>161</ymin>
+			<xmax>352</xmax>
+			<ymax>291</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>363</xmin>
+			<ymin>162</ymin>
+			<xmax>501</xmax>
+			<ymax>305</ymax>
+		</bndbox>
+	</object>
+</annotation>

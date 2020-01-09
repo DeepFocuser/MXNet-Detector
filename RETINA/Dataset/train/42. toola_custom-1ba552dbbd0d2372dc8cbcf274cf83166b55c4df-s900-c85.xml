@@ -1,0 +1,38 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>42. toola_custom-1ba552dbbd0d2372dc8cbcf274cf83166b55c4df-s900-c85.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\42. toola_custom-1ba552dbbd0d2372dc8cbcf274cf83166b55c4df-s900-c85.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>500</width>
+		<height>359</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>39</xmin>
+			<ymin>30</ymin>
+			<xmax>227</xmax>
+			<ymax>359</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>226</xmin>
+			<ymin>49</ymin>
+			<xmax>348</xmax>
+			<ymax>181</ymax>
+		</bndbox>
+	</object>
+</annotation>

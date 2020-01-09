@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>12. 030718-otter-attack-1280x720.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\12. 030718-otter-attack-1280x720.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>969</width>
+		<height>546</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>380</xmin>
+			<ymin>83</ymin>
+			<xmax>950</xmax>
+			<ymax>546</ymax>
+		</bndbox>
+	</object>
+</annotation>

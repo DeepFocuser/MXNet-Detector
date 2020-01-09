@@ -1,0 +1,26 @@
+<annotation>
+	<folder>pomeranian</folder>
+	<filename>97. skippy_photo-2-600x600.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\pomeranian\97. skippy_photo-2-600x600.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>600</width>
+		<height>600</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>pomeranian</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>41</xmin>
+			<ymin>60</ymin>
+			<xmax>544</xmax>
+			<ymax>566</ymax>
+		</bndbox>
+	</object>
+</annotation>

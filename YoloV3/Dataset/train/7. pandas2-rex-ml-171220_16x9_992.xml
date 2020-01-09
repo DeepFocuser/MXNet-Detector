@@ -1,0 +1,26 @@
+<annotation>
+	<folder>panda</folder>
+	<filename>7. pandas2-rex-ml-171220_16x9_992.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\panda\7. pandas2-rex-ml-171220_16x9_992.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>992</width>
+		<height>558</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>panda</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>324</xmin>
+			<ymin>24</ymin>
+			<xmax>739</xmax>
+			<ymax>558</ymax>
+		</bndbox>
+	</object>
+</annotation>

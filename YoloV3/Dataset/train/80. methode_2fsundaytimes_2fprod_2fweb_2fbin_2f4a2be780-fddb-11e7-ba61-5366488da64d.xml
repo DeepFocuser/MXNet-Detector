@@ -1,0 +1,26 @@
+<annotation>
+	<folder>meerkat</folder>
+	<filename>80. methode%2fsundaytimes%2fprod%2fweb%2fbin%2f4a2be780-fddb-11e7-ba61-5366488da64d.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\meerkat\80. methode%2fsundaytimes%2fprod%2fweb%2fbin%2f4a2be780-fddb-11e7-ba61-5366488da64d.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>685</width>
+		<height>385</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>meerkat</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>276</xmin>
+			<ymin>7</ymin>
+			<xmax>559</xmax>
+			<ymax>385</ymax>
+		</bndbox>
+	</object>
+</annotation>

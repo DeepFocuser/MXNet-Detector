@@ -1,0 +1,26 @@
+<annotation>
+	<folder>otter</folder>
+	<filename>47. 20150918_093333_otter.jpg</filename>
+	<path>C:\Users\5taku\Desktop\images\otter\47. 20150918_093333_otter.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>431</width>
+		<height>350</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>otter</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>32</xmin>
+			<ymin>14</ymin>
+			<xmax>401</xmax>
+			<ymax>321</ymax>
+		</bndbox>
+	</object>
+</annotation>
