@@ -34,9 +34,12 @@ class Prediction(HybridBlock):
         # 상위 self._topk개만 뽑아내기
         scores, indices = heatmap.reshape((0, -1)).topk(k=self._topk, axis=-1, ret_typ='both',
                                                         is_ascend=False)  # (batch, channel * height * width)
+        scores = scores.expand_dims(-1)
+
         indices = F.cast(indices, dtype='int64')
         ids = F.broadcast_div(indices, (height * width))  # 정수/정수 는 정수 = // 연산
         ids = F.cast(ids, floatdtype) # c++에서 float으로 받아오기 때문에!!! 형 변환 필요
+        ids = ids.expand_dims(-1)
 
         '''
         박스 복구
@@ -80,6 +83,8 @@ class Prediction(HybridBlock):
         bboxes = [topk_xs - half_w, topk_ys - half_h, topk_xs + half_w, topk_ys + half_h]  # 각각 (batch, self._topk)
         bboxes = F.concat(*[bbox.expand_dims(-1) for bbox in bboxes],
                           dim=-1)  # (batch, self._topk, 1) ->  (batch, self._topk, 4)
+
+
 
         return ids, scores, bboxes * self._scale
 
@@ -125,7 +130,7 @@ if __name__ == "__main__":
     print(f"topk box predictions shape : {bboxes.shape}")
     '''
     < input size(height, width) : (512, 512) >
-    topk class id shape : (1, 100)
-    topk class scores shape : (1, 100)
-    topk box predictions shape : (1, 100, 4)
+    topk class id shape : (2, 100, 1)
+    topk class scores shape : (2, 100, 1)
+    topk box predictions shape : (2, 100, 4)
     '''
