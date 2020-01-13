@@ -24,9 +24,9 @@ class Prediction(HybridBlock):
 
         if self._amp:
             floatdtype = "float16"
-            heatmap = F.cast(heatmap, dtype=floatdtype)  # topk는 float32에서 동작
-            offset = F.cast(heatmap, dtype=floatdtype)  # topk는 float32에서 동작
-            wh = F.cast(heatmap, dtype=floatdtype)  # topk는 float32에서 동작
+            heatmap = F.cast(heatmap, dtype=floatdtype)
+            offset = F.cast(offset, dtype=floatdtype)
+            wh = F.cast(wh, dtype=floatdtype)
         else:
             floatdtype = "float32"
 
@@ -36,7 +36,7 @@ class Prediction(HybridBlock):
                                                         is_ascend=False)  # (batch, channel * height * width)
         indices = F.cast(indices, dtype='int64')
         ids = F.broadcast_div(indices, (height * width))  # 정수/정수 는 정수 = // 연산
-        ids = F.cast(ids, 'float32') # c++에서 float으로 받아오기 때문에!!! 형 변환 필요
+        ids = F.cast(ids, floatdtype) # c++에서 float으로 받아오기 때문에!!! 형 변환 필요
 
         '''
         박스 복구
@@ -109,7 +109,7 @@ if __name__ == "__main__":
                         ('wh', {'num_output': 2})
                     ]),
                     head_conv_channel=64,
-                    pretrained=True,
+                    pretrained=False,
                     root=os.path.join(root, 'models'),
                     use_dcnv2=False, ctx=mx.cpu())
 
@@ -118,6 +118,7 @@ if __name__ == "__main__":
     heatmap, offset, wh = net(
         mx.nd.random_uniform(low=0, high=1, shape=(2, 3, input_size[0], input_size[1]), ctx=mx.cpu()))
     ids, scores, bboxes = prediction(heatmap, offset, wh)
+
     print(f"< input size(height, width) : {input_size} >")
     print(f"topk class id shape : {ids.shape}")
     print(f"topk class scores shape : {scores.shape}")

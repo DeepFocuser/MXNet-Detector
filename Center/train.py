@@ -520,7 +520,9 @@ def run(mean=[0.485, 0.456, 0.406],
                         heatmap = cv2.resize(heatmap, dsize=(input_size[1], input_size[0]))  # 사이즈 원복
                         heatmap = heatmap.astype("uint8")  # float32 -> uint8
                         heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+                        heatmap[:, :, (0, 1, 2)] = heatmap[:, :, (2, 1, 0)] # BGR -> RGB
                         heatmap = np.transpose(heatmap, axes=(2, 0, 1))  # (channel=3, height, width)
+
 
                         # ground truth box 그리기
                         ground_truth = plot_bbox(ig, gt_box * scale_factor, scores=None, labels=gt_id, thresh=None,
@@ -583,7 +585,7 @@ def run(mean=[0.485, 0.456, 0.406],
             else:
                 context = mx.cpu(0)
 
-            auxnet = Prediction(batch_size=valid_size, topk=topk, scale=scale_factor)  # amp 없애기 위함
+            auxnet = Prediction(topk=topk, scale=scale_factor)  # amp 없애기 위함
             postnet = PostNet(net=net, auxnet=auxnet)
             try:
                 net.export(os.path.join(weight_path, f"{model}"), epoch=i, remove_amp_cast=True)

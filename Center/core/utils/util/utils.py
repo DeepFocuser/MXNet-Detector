@@ -150,8 +150,8 @@ def plot_bbox(img, bboxes, scores=None, labels=None, thresh=0.5,
 
         result = cv2.addWeighted(img, 0.5, copied_img, 0.5, 0)
 
-        if heatmap != None:
-            result = np.concatenate([np.array(result), np.array(heatmap)], axis=-1)
+        if heatmap is not None:
+            result = np.concatenate([result, heatmap], axis=1)
         if image_save:
             cv2.imwrite(os.path.join(image_save_path, image_name + ".jpg"), result)
         if image_show:
