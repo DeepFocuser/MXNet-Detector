@@ -5,9 +5,8 @@ import random
 
 import mxnet as mx
 import numpy as np
-from mxnet.gluon.data import Dataset
-
 from core.utils.util.utils import plot_bbox
+from mxnet.gluon.data import Dataset
 
 '''
 데이터셋 출처
@@ -122,7 +121,8 @@ class DetectionDataset_V1(Dataset):
                 return np.array(json_list, dtype="float32")  # 반드시 numpy여야함.
             except Exception:
                 print("real 이상 파일 : " + path)
-                exit(0)
+                json_list.append((-1, -1, -1, -1, -1))
+                return np.array(json_list, dtype="float32")  # 반드시 numpy여야함.
 
     @property
     def classes(self):
@@ -243,7 +243,8 @@ class DetectionDataset(Dataset):
                 return np.array(json_list, dtype="float32")  # 반드시 numpy여야함.
             except Exception:
                 print("real 이상 파일 : " + path)
-                exit(0)
+                json_list.append((-1, -1, -1, -1, -1))
+                return np.array(json_list, dtype="float32")  # 반드시 numpy여야함.
 
     @property
     def classes(self):

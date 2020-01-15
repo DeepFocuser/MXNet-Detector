@@ -5,9 +5,8 @@ from xml.etree.ElementTree import parse
 # import json
 import mxnet as mx
 import numpy as np
-from mxnet.gluon.data import Dataset
-
 from core.utils.util.box_utils import box_resize
+from mxnet.gluon.data import Dataset
 
 
 # multiscale training 용
@@ -90,10 +89,10 @@ class DetectionDataset_V0(Dataset):
                     print(f"{path} : Image는 있는데, labeling 이 없어요")
                     xml_list.append((-1, -1, -1, -1, -1))
 
-
         except Exception:
             print("이상 파일 : " + path)
-            exit(0)
+            xml_list.append((-1, -1, -1, -1, -1))
+            return np.array(xml_list, dtype="float32")  # 반드시 numpy여야함.
         else:
             return np.array(xml_list, dtype="float32")  # 반드시 numpy여야함.
 
@@ -246,7 +245,8 @@ class DetectionDataset(Dataset):
 
         except Exception:
             print("이상 파일 : " + path)
-            exit(0)
+            xml_list.append((-1, -1, -1, -1, -1))
+            return np.array(xml_list, dtype="float32")  # 반드시 numpy여야함.
         else:
             return np.array(xml_list, dtype="float32")  # 반드시 numpy여야함.
 
@@ -379,7 +379,8 @@ class DetectionDataset_V1(Dataset):
 
         except Exception:
             print("이상 파일 : " + path)
-            exit(0)
+            xml_list.append((-1, -1, -1, -1, -1))
+            return np.array(xml_list, dtype="float32")  # 반드시 numpy여야함.
         else:
             return np.array(xml_list, dtype="float32")  # 반드시 numpy여야함.
 
