@@ -10,7 +10,7 @@ Dataset:
   show_flag: False
   multiperclass: True
   nms_thresh: 0.5
-  nms_topk: 100 # 전체 다하면(-1) 너무 오래걸림.
+  nms_topk: 200 # 전체 다하면(-1) 너무 오래걸림.
   except_class_thresh: 0.01 #0.05
   plot_class_thresh: 0.5 # 그릴때 score_thresh 보다 큰 것들만 그린다.
   test_graph_path: test_Graph
@@ -37,18 +37,18 @@ hyperparameters:
             "deep": [(116, 90), (156, 198), (373, 326)]}'
   # 학습 관련
   epoch: 100
-  batch_log: 100
-  batch_size: 12
-  batch_interval: 100 # multiscale을 몇 배치마다 할껀지?
-  subdivision: 2
+  batch_log: 10
+  batch_size: 4
+  batch_interval: 10 # multiscale을 몇 배치마다 할껀지?
+  subdivision: 1
   multiscale: True
   factor_scale: [10, 9] # (10 ~ 19)*32 / 직사각형 데이터 학습시 dataloader.py 에가서 multiscale전략을 바꿔야한다.
   ignore_threshold: 0.7
   dynamic: True
-  data_augmentation: False
-  num_workers: 8 # the number of multiprocessing workers to use for data preprocessing.
+  data_augmentation: True
+  num_workers: 4 # the number of multiprocessing workers to use for data preprocessing.
   optimizer: ADAM # ADAM, RMSPROP, SGD
-  learning_rate: 0.001
+  learning_rate: 0.0001
   decay_lr: 0.999
   decay_step: 100 # 몇 epoch이 지난후 decay_lr을 적용할지
   AMP: True # https://mxnet.apache.org/api/python/docs/tutorials/performance/backend/amp.html# / available on new Volta and Turing GPUs
@@ -62,7 +62,6 @@ validation:
 mlflow:
   using_mlflow: True
   run_name: Animal
-
 
 
 
