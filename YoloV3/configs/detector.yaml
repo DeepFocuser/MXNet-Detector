@@ -18,7 +18,7 @@ Dataset:
 model:
   training: True
   load_name: 608_608_ADAM_PDark_53 # training = False,
-  save_period: 20
+  save_period: 50
   load_period: 100
   input_size: [608, 608] # height, width
   Darknetlayer: 53 # only 53
@@ -36,27 +36,27 @@ hyperparameters:
             "middle": [(30, 61), (62, 45), (59, 119)],
             "deep": [(116, 90), (156, 198), (373, 326)]}'
   # 학습 관련
-  epoch: 100
-  batch_log: 10
-  batch_size: 4
-  batch_interval: 10 # multiscale을 몇 배치마다 할껀지?
+  epoch: 300
+  batch_log: 100
+  batch_size: 6
+  batch_interval: 30 # multiscale을 몇 배치마다 할껀지?
   subdivision: 1
   multiscale: True
   factor_scale: [10, 9] # (10 ~ 19)*32 / 직사각형 데이터 학습시 dataloader.py 에가서 multiscale전략을 바꿔야한다.
-  ignore_threshold: 0.7
-  dynamic: True
-  data_augmentation: True
+  ignore_threshold: 0.5
+  dynamic: False
+  data_augmentation: False
   num_workers: 4 # the number of multiprocessing workers to use for data preprocessing.
-  optimizer: ADAM # ADAM, RMSPROP, SGD
+  optimizer: SGD # ADAM, RMSPROP, SGD
   learning_rate: 0.0001
-  decay_lr: 0.999
-  decay_step: 100 # 몇 epoch이 지난후 decay_lr을 적용할지
+  decay_lr: 0.5
+  decay_step: 20 # 몇 epoch이 지난후 decay_lr을 적용할지
   AMP: True # https://mxnet.apache.org/api/python/docs/tutorials/performance/backend/amp.html# / available on new Volta and Turing GPUs
 context:
   using_cuda: True
 validation:
-  valid_size: 8
-  eval_period: 20
+  valid_size: 4
+  eval_period: 50
   tensorboard: True
   valid_graph_path: valid_Graph
 mlflow:
