@@ -12,4 +12,5 @@
 * mxnet-1.6.0 
 
 >## ***Author*** 
-medical18@naver.com
+
+* medical18@naver.com / JONGGON
