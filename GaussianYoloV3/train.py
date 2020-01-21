@@ -420,10 +420,10 @@ def run(mean=[0.485, 0.456, 0.406],
                 logging.info(f'[Epoch {i}][Batch {batch_count}/{train_update_number_per_epoch}],'
                              f'[Speed {td_batch_size / (time.time() - time_stamp):.3f} samples/sec],'
                              f'[Lr = {trainer.learning_rate}]'
-                             f'[xcyc loss = {np.divide(xcyc_loss_sum, batch_count):.3f}]'
-                             f'[wh loss = {np.divide(wh_loss_sum, batch_count):.3f}]'
-                             f'[obj loss = {np.divide(object_loss_sum, batch_count):.3f}]'
-                             f'[class loss = {np.divide(class_loss_sum, batch_count):.3f}]')
+                             f'[xcyc loss = {sum(xcyc_all_losses) / td_batch_size:.3f}]'
+                             f'[wh loss = {sum(wh_all_losses) / td_batch_size:.3f}]'
+                             f'[obj loss = {sum(object_all_losses) / td_batch_size:.3f}]'
+                             f'[class loss = {sum(class_all_losses) / td_batch_size:.3f}]')
             time_stamp = time.time()
 
         train_xcyc_loss_mean = np.divide(xcyc_loss_sum, train_update_number_per_epoch)

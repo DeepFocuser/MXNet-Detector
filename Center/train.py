@@ -387,9 +387,9 @@ def run(mean=[0.485, 0.456, 0.406],
                 logging.info(f'[Epoch {i}][Batch {batch_count}/{train_update_number_per_epoch}],'
                              f'[Speed {td_batch_size / (time.time() - time_stamp):.3f} samples/sec],'
                              f'[Lr = {trainer.learning_rate}]'
-                             f'[heatmap loss = {np.divide(heatmap_loss_sum, batch_count):.3f}]'
-                             f'[offset loss = {np.divide(offset_loss_sum, batch_count):.3f}]'
-                             f'[wh loss = {np.divide(wh_loss_sum, batch_count):.3f}]')
+                             f'[heatmap loss = {sum(heatmap_all_losses) / td_batch_size:.3f}]'
+                             f'[offset loss = {sum(offset_all_losses) / td_batch_size:.3f}]'
+                             f'[wh loss = {sum(wh_all_losses) / td_batch_size:.3f}]')
             time_stamp = time.time()
 
         train_heatmap_loss_mean = np.divide(heatmap_loss_sum, train_update_number_per_epoch)
@@ -520,9 +520,8 @@ def run(mean=[0.485, 0.456, 0.406],
                         heatmap = cv2.resize(heatmap, dsize=(input_size[1], input_size[0]))  # 사이즈 원복
                         heatmap = heatmap.astype("uint8")  # float32 -> uint8
                         heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
-                        heatmap[:, :, (0, 1, 2)] = heatmap[:, :, (2, 1, 0)] # BGR -> RGB
+                        heatmap[:, :, (0, 1, 2)] = heatmap[:, :, (2, 1, 0)]  # BGR -> RGB
                         heatmap = np.transpose(heatmap, axes=(2, 0, 1))  # (channel=3, height, width)
-
 
                         # ground truth box 그리기
                         ground_truth = plot_bbox(ig, gt_box * scale_factor, scores=None, labels=gt_id, thresh=None,

@@ -492,8 +492,8 @@ def run(mean=[0.485, 0.456, 0.406],
                 logging.info(f'[Epoch {i}][Batch {batch_count}/{train_update_number_per_epoch}],'
                              f'[Speed {td_batch_size / (time.time() - time_stamp):.3f} samples/sec],'
                              f'[Lr = {trainer.learning_rate}]'
-                             f'[confidence loss = {np.divide(conf_loss_sum, batch_count):.3f}]'
-                             f'[localization loss = {np.divide(loc_loss_sum, batch_count):.3f}]')
+                             f'[confidence loss = {sum(cls_all_losses) / td_batch_size:.3f}]'
+                             f'[localization loss = {sum(box_all_losses) / td_batch_size:.3f}]')
             time_stamp = time.time()
 
         train_conf_loss_mean = np.divide(conf_loss_sum, train_update_number_per_epoch)
