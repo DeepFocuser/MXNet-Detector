@@ -19,6 +19,7 @@ if os.path.isfile(logfilepath):
     os.remove(logfilepath)
 logging.basicConfig(filename=logfilepath, level=logging.INFO)
 
+
 def run(mean=[0.485, 0.456, 0.406],
         std=[0.229, 0.224, 0.225],
         load_name="512_512_ADAM_PRES_18", load_period=10, GPU_COUNT=0,
@@ -185,9 +186,10 @@ def run(mean=[0.485, 0.456, 0.406],
     # epoch 당 평균 loss
     test_conf_loss_mean = np.divide(conf_loss_sum, test_update_number_per_epoch)
     test_loc_loss_mean = np.divide(loc_loss_sum, test_update_number_per_epoch)
+    test_total_loss_mean = test_conf_loss_mean + test_loc_loss_mean
 
     logging.info(
-        f"test confidence loss : {test_conf_loss_mean} / test localization loss : {test_loc_loss_mean}")
+        f"test confidence loss : {test_conf_loss_mean} / test localization loss : {test_loc_loss_mean} / test total loss : {test_total_loss_mean}")
 
     AP_appender = []
     round_position = 2

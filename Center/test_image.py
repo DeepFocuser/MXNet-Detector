@@ -10,13 +10,14 @@ from tqdm import tqdm
 
 from core import Prediction
 from core import box_resize
-from core import plot_bbox
+from core import plot_bbox, export_block_for_cplusplus
 from core import testdataloader
 
 logfilepath = ""  # 따로 지정하지 않으면 terminal에 뜸
 if os.path.isfile(logfilepath):
     os.remove(logfilepath)
 logging.basicConfig(filename=logfilepath, level=logging.INFO)
+
 
 def run(image_list=True,  # True일 때, 폴더에 있는 이미지(jpg)들 전부다 평가 / False일 때, 한장 평가
         # image_path='Dataset/test/2. csm_meng_meng_baby_1_88cad0f74f.jpg',
@@ -70,20 +71,28 @@ def run(image_list=True,  # True일 때, 폴더에 있는 이미지(jpg)들 전�
         exit(0)
 
     weight_path = os.path.join(weight_path, load_name)
-    sym = os.path.join(weight_path, f'{load_name}_pre-symbol.json')
-    params = os.path.join(weight_path, f'{load_name}_pre-{load_period:04d}.params')
+    sym = os.path.join(weight_path, f'{load_name}-symbol.json')
+    params = os.path.join(weight_path, f'{load_name}-{load_period:04d}.params')
 
     logging.info("symbol model test")
-    try:
+    if os.path.exists(sym) and os.path.exists(params):
+        logging.info(f"loading {os.path.basename(params)} weights\n")
         net = gluon.SymbolBlock.imports(sym,
                                         ['data'],
                                         params, ctx=ctx)
-    except Exception:
-        # DEBUG, INFO, WARNING, ERROR, CRITICAL 의 5가지 등급
-        logging.info("loading symbol weights 실패")
-        exit(0)
     else:
-        logging.info("loading symbol weights 성공")
+        raise FileExistsError
+
+    try:
+        net = export_block_for_cplusplus(block=net,
+                                         data_shape=tuple((netheight, netwidth)) + tuple((3,)),
+                                         preprocess=True,  # c++ 에서 inference시 opencv에서 읽은 이미지 그대로 넣으면 됨
+                                         layout='HWC',
+                                         ctx=ctx)
+    except Exception as E:
+        logging.error(f"adding preprocessing layer 실패 : {E}")
+    else:
+        logging.info(f"adding preprocessing layer 성공 ")
 
     net.hybridize(active=True, static_alloc=True, static_shape=True)
 

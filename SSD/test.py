@@ -19,6 +19,7 @@ if os.path.isfile(logfilepath):
     os.remove(logfilepath)
 logging.basicConfig(filename=logfilepath, level=logging.INFO)
 
+
 def run(mean=[0.485, 0.456, 0.406],
         std=[0.229, 0.224, 0.225],
         load_name="512_512_ADAM_PVGG16_512",
@@ -74,7 +75,7 @@ def run(mean=[0.485, 0.456, 0.406],
                                                        box_normalization=False,
                                                        input_size=(netheight, netwidth),
                                                        num_workers=num_workers,
-                                                       mean=mean , std = std)
+                                                       mean=mean, std=std)
     except Exception:
         logging.info("The dataset does not exist")
         exit(0)
@@ -188,9 +189,10 @@ def run(mean=[0.485, 0.456, 0.406],
     # epoch 당 평균 loss
     test_conf_loss_mean = np.divide(conf_loss_sum, test_update_number_per_epoch)
     test_loc_loss_mean = np.divide(loc_loss_sum, test_update_number_per_epoch)
+    test_total_loss_mean = test_conf_loss_mean + test_loc_loss_mean
 
     logging.info(
-        f"test confidence loss : {test_conf_loss_mean} / test localization loss : {test_loc_loss_mean}")
+        f"test confidence loss : {test_conf_loss_mean} / test localization loss : {test_loc_loss_mean} / test total loss : {test_total_loss_mean}")
 
     AP_appender = []
     round_position = 2
@@ -227,4 +229,4 @@ if __name__ == "__main__":
         nms_thresh=0.45,
         nms_topk=500,
         except_class_thresh=0.01,
-        plot_class_thresh=0.5) # make_anchor는 사실 test.py에서는 필요 없는 기능이다.
+        plot_class_thresh=0.5)  # make_anchor는 사실 test.py에서는 필요 없는 기능이다.

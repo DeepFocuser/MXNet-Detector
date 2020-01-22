@@ -184,14 +184,14 @@ def run(mean=[0.485, 0.456, 0.406],
     train_wh_loss_mean = np.divide(wh_loss_sum, test_update_number_per_epoch)
     train_object_loss_mean = np.divide(object_loss_sum, test_update_number_per_epoch)
     train_class_loss_mean = np.divide(class_loss_sum, test_update_number_per_epoch)
-    train_total_loss = train_xcyc_loss_mean + train_wh_loss_mean + train_object_loss_mean + train_class_loss_mean
+    train_total_loss_mean = train_xcyc_loss_mean + train_wh_loss_mean + train_object_loss_mean + train_class_loss_mean
 
     logging.info(
         f"train xcyc loss : {train_xcyc_loss_mean} / "
         f"train wh loss : {train_wh_loss_mean} / "
         f"train object loss : {train_object_loss_mean} / "
         f"train class loss : {train_class_loss_mean} / "
-        f"train total loss : {train_total_loss}"
+        f"train total loss : {train_total_loss_mean}"
     )
 
     AP_appender = []

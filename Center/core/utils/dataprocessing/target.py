@@ -40,8 +40,8 @@ def gaussian_2d(shape=(10, 10), sigma=1):
     h = np.exp(-(x * x + y * y) / (2 * sigma * sigma))
     return h
 
-def draw_gaussian(heatmap, center_x, center_y, radius, k=1):
 
+def draw_gaussian(heatmap, center_x, center_y, radius, k=1):
     diameter = 2 * radius + 1  # 홀수
     gaussian = gaussian_2d(shape=(diameter, diameter), sigma=diameter / 6)
 
@@ -50,8 +50,8 @@ def draw_gaussian(heatmap, center_x, center_y, radius, k=1):
     left, right = min(center_x, radius), min(width - center_x, radius + 1)
     top, bottom = min(center_y, radius), min(height - center_y, radius + 1)
 
-    masked_heatmap = heatmap[center_y - top : center_y + bottom, center_x - left : center_x + right]
-    masked_gaussian = gaussian[radius - top : radius + bottom, radius - left : radius + right]
+    masked_heatmap = heatmap[center_y - top: center_y + bottom, center_x - left: center_x + right]
+    masked_gaussian = gaussian[radius - top: radius + bottom, radius - left: radius + right]
     '''
     https://rfriend.tistory.com/290
     Python Numpy의 배열 indexing, slicing에서 유의해야할 것이 있다. 
@@ -62,6 +62,7 @@ def draw_gaussian(heatmap, center_x, center_y, radius, k=1):
     '''
     # inplace 연산
     np.maximum(masked_heatmap, masked_gaussian * k, out=masked_heatmap)
+
 
 # https://github.com/xingyizhou/CenterNet/blob/master/src/lib/utils/image.py
 class TargetGenerator(gluon.Block):
@@ -98,8 +99,8 @@ class TargetGenerator(gluon.Block):
                 center_int = center.astype(np.int32)
                 center_x, center_y = center_int
                 # data augmentation으로 인해 범위가 넘어갈수 가 있음.
-                center_x = np.clip(center_x, 0, output_width-1)
-                center_y = np.clip(center_y, 0, output_height-1)
+                center_x = np.clip(center_x, 0, output_width - 1)
+                center_y = np.clip(center_y, 0, output_height - 1)
 
                 # heatmap
                 # C:\ProgramData\Anaconda3\Lib\site-packages\gluoncv\model_zoo\center_net\target_generator.py
@@ -121,6 +122,7 @@ class TargetGenerator(gluon.Block):
 
         return tuple([nd.array(ele, ctx=ctx) for ele in (heatmap, offset_target, wh_target, mask_target)])
 
+
 # test
 if __name__ == "__main__":
     from core import CenterTrainTransform, DetectionDataset
@@ -141,7 +143,9 @@ if __name__ == "__main__":
     label = np.expand_dims(label, axis=0)
     gt_boxes = label[:, :, :4]
     gt_ids = label[:, :, 4:5]
-    heatmap_target, offset_target, wh_target, mask_target = targetgenerator(gt_boxes, gt_ids, input_size[1] // scale_factor, input_size[0] // scale_factor, mx.cpu())
+    heatmap_target, offset_target, wh_target, mask_target = targetgenerator(gt_boxes, gt_ids,
+                                                                            input_size[1] // scale_factor,
+                                                                            input_size[0] // scale_factor, mx.cpu())
 
     print(f"heatmap_targets shape : {heatmap_target.shape}")
     print(f"offset_targets shape : {offset_target.shape}")

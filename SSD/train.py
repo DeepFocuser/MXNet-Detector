@@ -498,9 +498,10 @@ def run(mean=[0.485, 0.456, 0.406],
 
         train_conf_loss_mean = np.divide(conf_loss_sum, train_update_number_per_epoch)
         train_loc_loss_mean = np.divide(loc_loss_sum, train_update_number_per_epoch)
+        train_total_loss_mean = train_conf_loss_mean + train_loc_loss_mean
 
         logging.info(
-            f"train confidence loss : {train_conf_loss_mean} / train localization loss : {train_loc_loss_mean}")
+            f"train confidence loss : {train_conf_loss_mean} / train localization loss : {train_loc_loss_mean} / train total loss : {train_total_loss_mean}")
 
         if i % eval_period == 0 and valid_list:
 
@@ -570,9 +571,10 @@ def run(mean=[0.485, 0.456, 0.406],
 
             valid_conf_loss_mean = np.divide(conf_loss_sum, valid_update_number_per_epoch)
             valid_loc_loss_mean = np.divide(loc_loss_sum, valid_update_number_per_epoch)
+            valid_total_loss_mean = valid_conf_loss_mean + valid_loc_loss_mean
 
             logging.info(
-                f"valid confidence loss : {valid_conf_loss_mean} / valid localization loss : {valid_loc_loss_mean}")
+                f"valid confidence loss : {valid_conf_loss_mean} / valid localization loss : {valid_loc_loss_mean} / valid total loss : {valid_total_loss_mean}")
 
             AP_appender = []
             round_position = 2
@@ -643,8 +645,8 @@ def run(mean=[0.485, 0.456, 0.406],
                                    value={"train_loc_loss": train_loc_loss_mean, "valid_loc_loss": valid_loc_loss_mean},
                                    global_step=i)
                 summary.add_scalar(tag="total_loss", value={
-                    "train_total_loss": train_conf_loss_mean + train_loc_loss_mean,
-                    "valid_total_loss": valid_conf_loss_mean + valid_loc_loss_mean}, global_step=i)
+                    "train_total_loss": train_total_loss_mean,
+                    "valid_total_loss": valid_total_loss_mean}, global_step=i)
 
                 params = net.collect_params().values()
                 if GPU_COUNT > 1:
@@ -676,15 +678,6 @@ def run(mean=[0.485, 0.456, 0.406],
             try:
                 net.export(os.path.join(weight_path, f"{model}"), epoch=i, remove_amp_cast=True)
                 net.save_parameters(os.path.join(weight_path, f"{i}.params"))  # onnx 추출용
-                export_block_for_cplusplus(path=os.path.join(weight_path, f"{model}_pre"),
-                                           block=net,
-                                           data_shape=tuple(input_size) + tuple((3,)),
-                                           epoch=i,
-                                           preprocess=True,  # c++ 에서 inference시 opencv에서 읽은 이미지 그대로 넣으면 됨
-                                           layout='HWC',
-                                           ctx=context,
-                                           remove_amp_cast=True)
-
                 # network inference, decoder, nms까지 처리됨 - mxnet c++에서 편리함 / onnx로는 추출 못함.
                 export_block_for_cplusplus(path=os.path.join(weight_path, f"{model}_prepost"),
                                            block=postnet,

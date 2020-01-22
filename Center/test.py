@@ -156,10 +156,13 @@ def run(mean=[0.485, 0.456, 0.406],
         plot_bbox(ground_truth, bbox, scores=scores[0], labels=ids[0], thresh=plot_class_thresh,
                   reverse_rgb=False,
                   class_names=test_dataset.classes, absolute_coordinates=True,
-                  image_show=show_flag, image_save=save_flag, image_save_path=test_save_path, image_name=name[0], heatmap=heatmap)
+                  image_show=show_flag, image_save=save_flag, image_save_path=test_save_path, image_name=name[0],
+                  heatmap=heatmap)
 
         heatmap_target, offset_target, wh_target, mask_target = targetgenerator(gt_boxes, gt_ids,
-                                                                                netwidth // scale_factor, netheight // scale_factor, image.context)
+                                                                                netwidth // scale_factor,
+                                                                                netheight // scale_factor,
+                                                                                image.context)
         heatmap_loss = heatmapfocalloss(heatmap_pred, heatmap_target)
         offset_loss = normedl1loss(offset_pred, offset_target, mask_target) * lambda_off
         wh_loss = normedl1loss(wh_pred, wh_target, mask_target) * lambda_size
@@ -172,9 +175,10 @@ def run(mean=[0.485, 0.456, 0.406],
     test_heatmap_loss_mean = np.divide(heatmap_loss_sum, test_update_number_per_epoch)
     test_offset_loss_mean = np.divide(offset_loss_sum, test_update_number_per_epoch)
     test_wh_loss_mean = np.divide(wh_loss_sum, test_update_number_per_epoch)
+    test_total_loss_mean = test_heatmap_loss_mean + test_offset_loss_mean + test_wh_loss_mean
 
     logging.info(
-        f"test heatmap loss : {test_heatmap_loss_mean} / test offset loss : {test_offset_loss_mean} / test wh loss : {test_wh_loss_mean}")
+        f"test heatmap loss : {test_heatmap_loss_mean} / test offset loss : {test_offset_loss_mean} / test wh loss : {test_wh_loss_mean} / test total loss : {test_total_loss_mean}")
 
     AP_appender = []
     round_position = 2

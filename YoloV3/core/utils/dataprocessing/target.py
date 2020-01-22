@@ -11,7 +11,7 @@ class TargetGenerator(Block):
     def __init__(self, ignore_threshold=0.5, dynamic=False, from_sigmoid=False):
         super(TargetGenerator, self).__init__()
         self._matcher = Matcher()
-        self._from_sigmoid=from_sigmoid
+        self._from_sigmoid = from_sigmoid
 
         '''
         https://github.com/eriklindernoren/PyTorch-YOLOv3/issues/61 : 이슈

@@ -285,7 +285,8 @@ def export_block_for_cplusplus(path=None, block=None, data_shape=None, epoch=0, 
         wrapper_block.hybridize()
         try:
             wrapper_block(x)
-            wrapper_block.export(path, epoch, remove_amp_cast=remove_amp_cast)
+            if path != None:
+                wrapper_block.export(path, epoch, remove_amp_cast=remove_amp_cast)
             last_exception = None
             break
         except MXNetError as e:

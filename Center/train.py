@@ -395,9 +395,10 @@ def run(mean=[0.485, 0.456, 0.406],
         train_heatmap_loss_mean = np.divide(heatmap_loss_sum, train_update_number_per_epoch)
         train_offset_loss_mean = np.divide(offset_loss_sum, train_update_number_per_epoch)
         train_wh_loss_mean = np.divide(wh_loss_sum, train_update_number_per_epoch)
+        train_total_loss_mean = train_heatmap_loss_mean + train_offset_loss_mean + train_wh_loss_mean
 
         logging.info(
-            f"train heatmap loss : {train_heatmap_loss_mean} / train offset loss : {train_offset_loss_mean} / train wh loss : {train_wh_loss_mean}")
+            f"train heatmap loss : {train_heatmap_loss_mean} / train offset loss : {train_offset_loss_mean} / train wh loss : {train_wh_loss_mean} / train total loss : {train_total_loss_mean}")
 
         if i % eval_period == 0 and valid_list:
 
@@ -460,9 +461,10 @@ def run(mean=[0.485, 0.456, 0.406],
             valid_heatmap_loss_mean = np.divide(heatmap_loss_sum, valid_update_number_per_epoch)
             valid_offset_loss_mean = np.divide(offset_loss_sum, valid_update_number_per_epoch)
             valid_wh_loss_mean = np.divide(wh_loss_sum, valid_update_number_per_epoch)
+            valid_total_loss_mean = valid_heatmap_loss_mean + valid_offset_loss_mean + valid_wh_loss_mean
 
             logging.info(
-                f"valid heatmap loss : {valid_heatmap_loss_mean} / valid offset loss : {valid_offset_loss_mean} / valid wh loss : {valid_wh_loss_mean}")
+                f"valid heatmap loss : {valid_heatmap_loss_mean} / valid offset loss : {valid_offset_loss_mean} / valid wh loss : {valid_wh_loss_mean} / valid total loss : {valid_total_loss_mean}")
 
             AP_appender = []
             round_position = 2
@@ -556,8 +558,8 @@ def run(mean=[0.485, 0.456, 0.406],
                                    global_step=i)
 
                 summary.add_scalar(tag="total_loss", value={
-                    "train_total_loss": train_heatmap_loss_mean + train_offset_loss_mean + train_wh_loss_mean,
-                    "valid_total_loss": valid_heatmap_loss_mean + valid_offset_loss_mean + valid_wh_loss_mean},
+                    "train_total_loss": train_total_loss_mean,
+                    "valid_total_loss": valid_total_loss_mean},
                                    global_step=i)
 
                 params = net.collect_params().values()
@@ -585,18 +587,10 @@ def run(mean=[0.485, 0.456, 0.406],
                 context = mx.cpu(0)
 
             auxnet = Prediction(topk=topk, scale=scale_factor)  # amp 없애기 위함
-            postnet = PostNet(net=net, auxnet=auxnet)
+            postnet = PostNet(net=net, auxnet=auxnet)  # 새로운 객체가 생성
             try:
                 net.export(os.path.join(weight_path, f"{model}"), epoch=i, remove_amp_cast=True)
                 net.save_parameters(os.path.join(weight_path, f"{i}.params"))  # onnx 추출용
-                export_block_for_cplusplus(path=os.path.join(weight_path, f"{model}_pre"),
-                                           block=net,
-                                           data_shape=tuple(input_size) + tuple((3,)),
-                                           epoch=i,
-                                           preprocess=True,  # c++ 에서 inference시 opencv에서 읽은 이미지 그대로 넣으면 됨
-                                           layout='HWC',
-                                           ctx=context,
-                                           remove_amp_cast=True)
                 # network inference, decoder, nms까지 처리됨 - mxnet c++에서 편리함
                 export_block_for_cplusplus(path=os.path.join(weight_path, f"{model}_prepost"),
                                            block=postnet,
