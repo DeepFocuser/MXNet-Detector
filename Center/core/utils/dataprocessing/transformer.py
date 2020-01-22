@@ -8,7 +8,7 @@ from core.utils.util.image_utils import *
 class CenterTrainTransform(object):
 
     def __init__(self, input_size, mean=(0.485, 0.456, 0.406),
-                 std=(0.229, 0.224, 0.225), scale_factor=4, augmentation=True, image_normalization=True,
+                 std=(0.229, 0.224, 0.225), scale_factor=4, augmentation=True,
                  make_target=False, num_classes=3):
 
         self._width = input_size[1]
@@ -17,7 +17,6 @@ class CenterTrainTransform(object):
         self._std = std
         self._scale_factor = scale_factor
         self._augmentation = augmentation
-        self._image_normalization = image_normalization
         self._make_target = make_target
         if self._make_target:
             self._target_generator = TargetGenerator(num_classes=num_classes)
@@ -84,16 +83,15 @@ class CenterTrainTransform(object):
         bbox[:, 2] = np.clip(bbox[:, 2], 0, output_w)
         bbox[:, 3] = np.clip(bbox[:, 3], 0, output_h)
 
-        if self._image_normalization:
-            img = mx.nd.array(img)
-            img = mx.nd.image.to_tensor(img)  # 0 ~ 1 로 바꾸기
-            img = mx.nd.image.normalize(img, mean=self._mean, std=self._std)
+        img = mx.nd.array(img)
+        img = mx.nd.image.to_tensor(img)  # 0 ~ 1 로 바꾸기
+        img = mx.nd.image.normalize(img, mean=self._mean, std=self._std)
 
-        if self._image_normalization and self._make_target:
+        if self._make_target:
             bbox = bbox[np.newaxis, :, :]
             heatmap, offset_target, wh_target, mask_target = self._target_generator(bbox[:, :, :4], bbox[:, :, 4:5],
                                                                                     output_w, output_h, img.context)
-            return img, heatmap[0], offset_target[0], wh_target[0], mask_target[0], name
+            return img, bbox[0], heatmap[0], offset_target[0], wh_target[0], mask_target[0], name
         else:
             return img, bbox, name
 
@@ -101,13 +99,12 @@ class CenterTrainTransform(object):
 class CenterValidTransform(object):
 
     def __init__(self, input_size, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], scale_factor=4,
-                 image_normalization=True, make_target=False, num_classes=3):
+                 make_target=False, num_classes=3):
         self._width = input_size[1]
         self._height = input_size[0]
         self._mean = mean
         self._std = std
         self._scale_factor = scale_factor
-        self._image_normalization = image_normalization
         self._make_target = make_target
         if self._make_target:
             self._target_generator = TargetGenerator(num_classes=num_classes)
@@ -122,12 +119,11 @@ class CenterValidTransform(object):
         img = mx.image.imresize(img, self._width, self._height, interp=1)  # Bilinear interpolation
         bbox = box_resize(bbox, (w, h), (output_w, output_h))
 
-        if self._image_normalization:
-            img = mx.nd.array(img)
-            img = mx.nd.image.to_tensor(img)  # 0 ~ 1 로 바꾸기
-            img = mx.nd.image.normalize(img, mean=self._mean, std=self._std)
+        img = mx.nd.array(img)
+        img = mx.nd.image.to_tensor(img)  # 0 ~ 1 로 바꾸기
+        img = mx.nd.image.normalize(img, mean=self._mean, std=self._std)
 
-        if self._image_normalization and self._make_target:
+        if self._make_target:
             bbox = bbox[np.newaxis, :, :]
             heatmap, offset_target, wh_target, mask_target = self._target_generator(bbox[:, :, :4], bbox[:, :, 4:5],
                                                                                     output_w, output_h, img.context)
@@ -140,7 +136,6 @@ class CenterValidTransform(object):
 # test
 if __name__ == "__main__":
     import random
-    from core.utils.util.utils import plot_bbox
     from core.utils.dataprocessing.dataset import DetectionDataset
 
     input_size = (960, 1280)
@@ -148,20 +143,11 @@ if __name__ == "__main__":
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     transform = CenterTrainTransform(input_size, mean=(0.485, 0.456, 0.406),
                                      std=(0.229, 0.224, 0.225),
-                                     scale_factor=scale_factor,
-                                     image_normalization=False)
+                                     scale_factor=scale_factor)
     dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), transform=transform)
     length = len(dataset)
-    image, label, file_name = dataset[random.randint(0, length - 1)]
+    image, label, file_name, _, _ = dataset[random.randint(0, length - 1)]
 
     print('images length:', length)
     print('image shape:', image.shape)
-
-    # box scale up
-    label[:, :4] = box_resize(label[:, :4], (input_size[1] // scale_factor, input_size[0] // scale_factor),
-                              (input_size[1], input_size[0]))
-
-    plot_bbox(image, label[:, :4],
-              scores=None, labels=label[:, 4:5],
-              class_names=dataset.classes, colors=None, reverse_rgb=True, absolute_coordinates=True,
-              image_show=True, image_save=False, image_save_path="result", image_name=file_name)
+    print('label shape:', label.shape)

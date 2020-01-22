@@ -61,16 +61,17 @@ class Prediction(HybridBlock):
 
 # test
 if __name__ == "__main__":
-    from core import Yolov3, DetectionDataset
+    from core import Yolov3, DetectionDataset_V1
     import os
 
     input_size = (416, 416)
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), input_size=input_size,
-                               image_normalization=True,
-                               box_normalization=False)
+    dataset = DetectionDataset_V1(path=os.path.join(root, 'Dataset', 'train'), input_size=(512, 512),
+                                  mean=[0.485, 0.456, 0.406],
+                                  std=[0.229, 0.224, 0.225], image_normalization=True, box_normalization=False)
+
     num_classes = dataset.num_class
-    image, label, _ = dataset[0]
+    image, label, _, _, _ = dataset[0]
 
     net = Yolov3(Darknetlayer=53,
                  input_size=input_size,
@@ -109,7 +110,7 @@ if __name__ == "__main__":
     nms class id shape : (1, 53235, 1)
     nms class scores shape : (1, 53235, 1)
     nms box predictions shape : (1, 53235, 4)
-    
+
     multiperclass = False 일 때,
     nms class id shape : (1, 10647, 1)
     nms class scores shape : (1, 10647, 1)

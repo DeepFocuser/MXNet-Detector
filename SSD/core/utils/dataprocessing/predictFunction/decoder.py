@@ -125,17 +125,18 @@ class BoxDecodeLimit(HybridBlock):
 
 # test
 if __name__ == "__main__":
-    from core import SSD_VGG16, DetectionDataset
+    from core import SSD_VGG16, DetectionDataset_V1
     import os
 
     input_size = (512, 512)
     root = os.path.dirname(
         os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-    dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), input_size=input_size,
-                               image_normalization=True,
-                               box_normalization=False)
+    dataset = DetectionDataset_V1(path=os.path.join(root, 'Dataset', 'train'), input_size=(512, 512),
+                                  mean=[0.485, 0.456, 0.406],
+                                  std=[0.229, 0.224, 0.225], image_normalization=True, box_normalization=False)
+
     num_classes = dataset.num_class
-    image, label, _ = dataset[0]
+    image, label, _, _, _ = dataset[0]
 
     net = SSD_VGG16(version=512, input_size=input_size,
                     # box_sizes=[21, 45, 101.25, 157.5, 213.75, 270, 326.25],
@@ -160,7 +161,7 @@ if __name__ == "__main__":
     cls_preds, box_preds, anchors = net(image)
 
     boxdecoder = BoxDecoder(stds=(0.1, 0.1, 0.2, 0.2), means=(0., 0., 0., 0.))
-    #classdecoder = ClassMDecoder(num_classes=num_classes, thresh=0.01, from_softmax=False)
+    # classdecoder = ClassMDecoder(num_classes=num_classes, thresh=0.01, from_softmax=False)
     classdecoder = ClassMPDecoder(num_classes=num_classes, thresh=0.01, from_softmax=False)
     box_predictions = boxdecoder(box_preds, anchors)
     class_ids, class_scores = classdecoder(cls_preds)

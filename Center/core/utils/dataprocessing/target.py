@@ -136,7 +136,7 @@ if __name__ == "__main__":
     dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'valid'), transform=transform)
 
     num_classes = dataset.num_class
-    image, label, _ = dataset[0]
+    image, label, _, _, _ = dataset[0]
     targetgenerator = TargetGenerator(num_classes=num_classes)
 
     # batch 형태로 만들기

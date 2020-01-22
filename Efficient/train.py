@@ -126,8 +126,6 @@ def run(mean=[0.485, 0.456, 0.406],
                                                           factor_scale=factor_scale,
                                                           augmentation=data_augmentation,
                                                           path=train_dataset_path,
-                                                          image_normalization=True,
-                                                          box_normalization=False,
                                                           input_size=input_size,
                                                           batch_size=batch_size,
                                                           batch_interval=batch_interval,
@@ -413,7 +411,7 @@ def run(mean=[0.485, 0.456, 0.406],
             loc_loss_sum = 0
 
             # loss 구하기
-            for image, label, _ in valid_dataloader:
+            for image, label, _, _, _ in valid_dataloader:
                 vd_batch_size = image.shape[0]
                 if GPU_COUNT <= 1:
                     image = gluon.utils.split_and_load(image, [ctx], even_split=False)
@@ -482,7 +480,7 @@ def run(mean=[0.485, 0.456, 0.406],
             if tensorboard:
                 # gpu N 개를 대비한 코드 (Data Parallelism)
                 dataloader_iter = iter(valid_dataloader)
-                image, label, _ = next(dataloader_iter)
+                image, label, _, _, _ = next(dataloader_iter)
                 if GPU_COUNT <= 1:
                     image = gluon.utils.split_and_load(image, [ctx], even_split=False)
                     label = gluon.utils.split_and_load(label, [ctx], even_split=False)

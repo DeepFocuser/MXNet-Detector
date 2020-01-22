@@ -3,7 +3,7 @@ import numpy as np
 from gluoncv.data.dataloader import RandomTransformDataLoader
 from mxnet.gluon.data import DataLoader
 
-from core.utils.dataprocessing.dataset import DetectionDataset, DetectionDataset_V1
+from core.utils.dataprocessing.dataset import DetectionDataset
 from core.utils.dataprocessing.transformer import CenterTrainTransform, CenterValidTransform
 
 
@@ -106,7 +106,7 @@ class Stack(object):
 
 def traindataloader(multiscale=False, factor_scale=[8, 5], augmentation=True, path="Dataset/train",
                     input_size=(512, 512), batch_size=8, batch_interval=10, num_workers=4, shuffle=True,
-                    mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], scale_factor=4, make_target = True):
+                    mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], scale_factor=4, make_target=True):
     if multiscale:
 
         h_seed = input_size[0] // factor_scale[0]
@@ -117,21 +117,28 @@ def traindataloader(multiscale=False, factor_scale=[8, 5], augmentation=True, pa
         end = end + 1
 
         dataset = DetectionDataset(path=path)
-        train_transform = [CenterTrainTransform([x * h_seed, x * w_seed], mean=mean, std=std, scale_factor = scale_factor, augmentation=augmentation, make_target=make_target, num_classes=dataset.num_class) for x in
+        train_transform = [CenterTrainTransform([x * h_seed, x * w_seed], mean=mean, std=std, scale_factor=scale_factor,
+                                                augmentation=augmentation, make_target=make_target,
+                                                num_classes=dataset.num_class) for x in
                            range(init, end)]
 
         dataloader = RandomTransformDataLoader(
             train_transform, dataset, batch_size=batch_size, interval=batch_interval, last_batch='rollover',
-            shuffle=True, batchify_fn=Tuple(Stack(use_shared_mem=True),
-                                            Stack(use_shared_mem=True),
-                                            Stack(use_shared_mem=True),
-                                            Stack(use_shared_mem=True),
-                                            Stack(use_shared_mem=True),
-                                            Stack()),
+            shuffle=shuffle, batchify_fn=Tuple(Stack(use_shared_mem=True),
+                                               Pad(pad_val=-1),
+                                               Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack(),
+                                               Stack(use_shared_mem=True),
+                                               Pad(pad_val=-1)),
             num_workers=num_workers)
     else:
-        transform = CenterTrainTransform(input_size, mean=mean, std=std, scale_factor=scale_factor, augmentation=augmentation, make_target=make_target, num_classes=DetectionDataset(path=path).num_class)
-        dataset = DetectionDataset(path=path, transform = transform)
+        transform = CenterTrainTransform(input_size, mean=mean, std=std, scale_factor=scale_factor,
+                                         augmentation=augmentation, make_target=make_target,
+                                         num_classes=DetectionDataset(path=path).num_class)
+        dataset = DetectionDataset(path=path, transform=transform)
         ''')
         batchify_fn 왜 필요하지?
         -> 각 데이터들의 박스 개수가 다르기 때문
@@ -142,6 +149,7 @@ def traindataloader(multiscale=False, factor_scale=[8, 5], augmentation=True, pa
             batch_size=batch_size,
             shuffle=shuffle,
             batchify_fn=Tuple(Stack(use_shared_mem=True),
+                              Pad(pad_val=-1),
                               Stack(use_shared_mem=True),
                               Stack(use_shared_mem=True),
                               Stack(use_shared_mem=True),
@@ -154,9 +162,10 @@ def traindataloader(multiscale=False, factor_scale=[8, 5], augmentation=True, pa
 
 
 def validdataloader(path="Dataset/valid", input_size=(512, 512),
-                    batch_size=1, num_workers=4, shuffle=True, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], scale_factor=4, make_target = True):
-
-    transform = CenterValidTransform(input_size, mean=mean, std=std, scale_factor=scale_factor, make_target=make_target, num_classes=DetectionDataset(path=path).num_class)
+                    batch_size=1, num_workers=4, shuffle=True, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225],
+                    scale_factor=4, make_target=True):
+    transform = CenterValidTransform(input_size, mean=mean, std=std, scale_factor=scale_factor, make_target=make_target,
+                                     num_classes=DetectionDataset(path=path).num_class)
     dataset = DetectionDataset(path=path, transform=transform)
 
     dataloader = DataLoader(
@@ -178,15 +187,17 @@ def validdataloader(path="Dataset/valid", input_size=(512, 512),
 
 def testdataloader(path="Dataset/test", input_size=(512, 512),
                    num_workers=4, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], scale_factor=4):
-
     transform = CenterValidTransform(input_size, mean=mean, std=std, scale_factor=scale_factor)
-    dataset = DetectionDataset_V1(path=path, transform=transform)
+    dataset = DetectionDataset(path=path, transform=transform)
 
     dataloader = DataLoader(
         dataset,
         batch_size=1,
-        batchify_fn=Tuple(Stack(use_shared_mem=True), Pad(pad_val=-1), Stack(use_shared_mem=True), Pad(pad_val=-1),
-                          Stack()),
+        batchify_fn=Tuple(Stack(use_shared_mem=True),
+                          Pad(pad_val=-1),
+                          Stack(),
+                          Stack(use_shared_mem=True),
+                          Pad(pad_val=-1)),
         num_workers=num_workers)
     return dataloader, dataset
 
@@ -197,11 +208,12 @@ if __name__ == "__main__":
 
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     dataloader, dataset = validdataloader(path=os.path.join(root, "Dataset/valid"), input_size=(512, 512),
-                                          batch_size=1, num_workers=4, shuffle=True, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+                                          batch_size=1, num_workers=4, shuffle=True, mean=[0.485, 0.456, 0.406],
+                                          std=[0.229, 0.224, 0.225])
 
     # for문 돌리기 싫으므로, iterator로 만든
     dataloader_iter = iter(dataloader)
-    data, label, name = next(dataloader_iter)
+    data, label, _, _, _, _, name = next(dataloader_iter)
 
     # 첫번째 이미지만 가져옴
     image = data[0]

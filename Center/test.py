@@ -119,7 +119,7 @@ def run(mean=[0.485, 0.456, 0.406],
     offset_loss_sum = 0
     wh_loss_sum = 0
 
-    for image, label, origin_image, origin_box, name in tqdm(test_dataloader):
+    for image, label, name, origin_image, origin_box in tqdm(test_dataloader):
         _, height, width, _ = origin_image.shape
         logging.info(f"real input size : {(height, width)}")
         origin_image = origin_image.asnumpy()[0]

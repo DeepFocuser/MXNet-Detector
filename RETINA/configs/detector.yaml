@@ -11,7 +11,7 @@ Dataset:
   decode_number: -1 # decode할 개수
   multiperclass: True
   nms_thresh: 0.45 # 0.5
-  nms_topk: 200 # 전체 다하면(-1) 너무 오래걸림.
+  nms_topk: 100 # 전체 다하면(-1) 너무 오래걸림.
   except_class_thresh: 0.01 #0.05
   plot_class_thresh: 0.5 # 그릴때 score_thresh 보다 큰 것들만 그린다.
   test_graph_path: test_Graph
@@ -19,7 +19,7 @@ Dataset:
 model:
   training: True
   load_name: 512_512_ADAM_PRES_18 # training = False,
-  save_period: 20
+  save_period: 10
   load_period: 100
   input_size: [512, 512] # height, width
   ResNetbase: 18 # resnet base version : 18, 34, 50, 101, 152
@@ -53,13 +53,13 @@ hyperparameters:
   optimizer: ADAM # ADAM, RMSPROP, SGD
   learning_rate: 0.0001
   decay_lr: 0.999
-  decay_step: 100 # 몇 epoch이 지난후 decay_lr을 적용할지
+  decay_step: 10 # 몇 epoch이 지난후 decay_lr을 적용할지
   AMP: True # https://mxnet.apache.org/api/python/docs/tutorials/performance/backend/amp.html# / available on new Volta and Turing GPUs
 context:
   using_cuda: True
 validation:
-  valid_size: 8
-  eval_period: 20
+  valid_size: 4
+  eval_period: 10
   tensorboard: True
   valid_graph_path: valid_Graph
 mlflow:

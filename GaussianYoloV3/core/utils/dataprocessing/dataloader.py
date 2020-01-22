@@ -3,8 +3,8 @@ import numpy as np
 from gluoncv.data.dataloader import RandomTransformDataLoader
 from mxnet.gluon.data import DataLoader
 
-from core.utils.dataprocessing.dataset import DetectionDataset, DetectionDataset_V0, DetectionDataset_V1
-from core.utils.dataprocessing.transformer import YoloTrainTransform, YoloTrainTransform_V0, YoloTrainResize_V0
+from core.utils.dataprocessing.dataset import DetectionDataset, DetectionDataset_V1
+from core.utils.dataprocessing.transformer import YoloTrainTransform, YoloTrainResize
 
 
 class Tuple(object):
@@ -105,72 +105,63 @@ class Stack(object):
 
 
 def traindataloader(multiscale=False, factor_scale=[10, 9], augmentation=True, path="Dataset/train",
-                    image_normalization=True, box_normalization=False,
                     input_size=(512, 512), batch_size=8, batch_interval=10, num_workers=4, shuffle=True,
                     mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], net=None, ignore_threshold=0.5, dynamic=True,
                     from_sigmoid=False, make_target=True):
+    dataset = DetectionDataset(path=path)
     if multiscale:
-
-        # YoloTrainTransform_V0 의 크기 전략은 때에 따라 바꾸면 된다.
         init = factor_scale[0]
         end = init + factor_scale[1] + 1
-        dataset = DetectionDataset_V0(path=path)
         if augmentation:
-            train_transform = [YoloTrainTransform_V0(x * 32, x * 32, mean=mean, std=std,
-                                                     net=net,
-                                                     ignore_threshold=ignore_threshold,
-                                                     dynamic=dynamic,
-                                                     from_sigmoid=from_sigmoid,
-                                                     make_target=make_target) for x in range(init, end)]
-        else:
-            train_transform = [YoloTrainResize_V0(x * 32, x * 32, mean=mean, std=std,
+            train_transform = [YoloTrainTransform(x * 32, x * 32, mean=mean, std=std,
                                                   net=net,
                                                   ignore_threshold=ignore_threshold,
                                                   dynamic=dynamic,
                                                   from_sigmoid=from_sigmoid,
                                                   make_target=make_target) for x in range(init, end)]
+        else:
+            train_transform = [YoloTrainResize(x * 32, x * 32, mean=mean, std=std,
+                                               net=net,
+                                               ignore_threshold=ignore_threshold,
+                                               dynamic=dynamic,
+                                               from_sigmoid=from_sigmoid,
+                                               make_target=make_target) for x in range(init, end)]
 
         dataloader = RandomTransformDataLoader(
             train_transform, dataset, batch_size=batch_size, interval=batch_interval, last_batch='rollover',
-            shuffle=True, batchify_fn=Tuple(Stack(use_shared_mem=True),
-                                            Stack(use_shared_mem=True),
-                                            Stack(use_shared_mem=True),
-                                            Stack(use_shared_mem=True),
-                                            Stack(use_shared_mem=True),
-                                            Stack(use_shared_mem=True),
-                                            Stack()),
+            shuffle=shuffle, batchify_fn=Tuple(Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack()),
             num_workers=num_workers)
     else:
         if augmentation:
-            train_transform = YoloTrainTransform(input_size[0], input_size[1],
-                                                 net=net,
-                                                 ignore_threshold=ignore_threshold,
-                                                 dynamic=dynamic,
-                                                 from_sigmoid=from_sigmoid,
-                                                 make_target=make_target)
+            train_transform = [YoloTrainTransform(input_size[0], input_size[1], mean=mean, std=std,
+                                                  net=net,
+                                                  ignore_threshold=ignore_threshold,
+                                                  dynamic=dynamic,
+                                                  from_sigmoid=from_sigmoid,
+                                                  make_target=make_target)]
         else:
-            train_transform = None
+            train_transform = [YoloTrainResize(input_size[0], input_size[1], mean=mean, std=std,
+                                               net=net,
+                                               ignore_threshold=ignore_threshold,
+                                               dynamic=dynamic,
+                                               from_sigmoid=from_sigmoid,
+                                               make_target=make_target)]
 
-        dataset = DetectionDataset(path=path, input_size=input_size, mean=mean, std=std, transform=train_transform,
-                                   image_normalization=image_normalization, box_normalization=box_normalization)
-
-        '''
-        batchify_fn 왜 필요하지?
-        -> 각 데이터들의 박스 개수가 다르기 때문
-            batchify_fn -> 순서대로 stack images, and pad labels, stacked file name
-        '''
-        dataloader = DataLoader(
-            dataset,
-            batch_size=batch_size,
-            shuffle=shuffle,
-            batchify_fn=Tuple(Stack(use_shared_mem=True),
-                              Stack(use_shared_mem=True),
-                              Stack(use_shared_mem=True),
-                              Stack(use_shared_mem=True),
-                              Stack(use_shared_mem=True),
-                              Stack(use_shared_mem=True),
-                              Stack()),
-            last_batch='rollover',  # or "keep", "discard"
+        dataloader = RandomTransformDataLoader(
+            train_transform, dataset, batch_size=batch_size, interval=batch_interval, last_batch='rollover',
+            shuffle=shuffle, batchify_fn=Tuple(Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack(use_shared_mem=True),
+                                               Stack()),
             num_workers=num_workers)
 
     return dataloader, dataset
@@ -178,23 +169,25 @@ def traindataloader(multiscale=False, factor_scale=[10, 9], augmentation=True, p
 
 def validdataloader(path="Dataset/valid", image_normalization=True, box_normalization=False, input_size=(512, 512),
                     batch_size=1, num_workers=4, shuffle=True, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]):
-    dataset = DetectionDataset(path=path, input_size=input_size, mean=mean, std=std, transform=None,
-                               image_normalization=image_normalization,
-                               box_normalization=box_normalization)
+    dataset = DetectionDataset_V1(path=path, input_size=input_size, mean=mean, std=std,
+                                  image_normalization=image_normalization,
+                                  box_normalization=box_normalization)
     dataloader = DataLoader(
         dataset,
         batch_size=batch_size,
-        shuffle=shuffle,
-        batchify_fn=Tuple(Stack(use_shared_mem=True), Pad(pad_val=-1), Stack()),
+        batchify_fn=Tuple(Stack(use_shared_mem=True), Pad(pad_val=-1), Stack(use_shared_mem=True), Pad(pad_val=-1),
+                          Stack()),
         last_batch='rollover',  # or "keep", "discard"
-        num_workers=num_workers)
+        num_workers=num_workers,
+        shuffle=shuffle,
+    )
 
     return dataloader, dataset
 
 
 def testdataloader(path="Dataset/test", image_normalization=True, box_normalization=False, input_size=(512, 512),
                    num_workers=4, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]):
-    dataset = DetectionDataset_V1(path=path, input_size=input_size, mean=mean, std=std, transform=None,
+    dataset = DetectionDataset_V1(path=path, input_size=input_size, mean=mean, std=std,
                                   image_normalization=image_normalization,
                                   box_normalization=box_normalization)
     dataloader = DataLoader(
@@ -212,14 +205,14 @@ if __name__ == "__main__":
     from core.utils.util.utils import plot_bbox
 
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    dataloader, dataset = validdataloader(path=os.path.join(root, 'Dataset', 'valid'),
-                                          image_normalization=False,
-                                          box_normalization=False,
-                                          input_size=(320, 640), batch_size=8, num_workers=0, shuffle=True)
+    dataloader, dataset = testdataloader(path=os.path.join(root, 'Dataset', 'test'),
+                                         image_normalization=False,
+                                         box_normalization=False,
+                                         input_size=(320, 640))
 
     # for문 돌리기 싫으므로, iterator로 만든
     dataloader_iter = iter(dataloader)
-    data, label, name = next(dataloader_iter)
+    data, label, _, _, name = next(dataloader_iter)
 
     # 첫번째 이미지만 가져옴
     image = data[0]

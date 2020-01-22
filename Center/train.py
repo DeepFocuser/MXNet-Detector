@@ -131,7 +131,8 @@ def run(mean=[0.485, 0.456, 0.406],
                                                           input_size=input_size,
                                                           batch_size=valid_size,
                                                           num_workers=num_workers,
-                                                          shuffle=True, mean=mean, std=std, scale_factor=scale_factor)
+                                                          shuffle=True, mean=mean, std=std, scale_factor=scale_factor,
+                                                          make_target=True)
 
     except Exception as E:
         logging.info(E)
@@ -295,8 +296,9 @@ def run(mean=[0.485, 0.456, 0.406],
         target generator를 train_dataloader에서 만들어 버리는게 학습 속도가 훨씬 빠르다. 
         '''
 
-        for batch_count, (image, heatmap, offset_target, wh_target, mask_target, _) in enumerate(train_dataloader,
-                                                                                                 start=1):
+        for batch_count, (image, _, heatmap, offset_target, wh_target, mask_target, _) in enumerate(
+                train_dataloader,
+                start=1):
             td_batch_size = image.shape[0]
 
             image_split = mx.nd.split(data=image, num_outputs=subdivision, axis=0)
@@ -586,7 +588,7 @@ def run(mean=[0.485, 0.456, 0.406],
             else:
                 context = mx.cpu(0)
 
-            auxnet = Prediction(topk=topk, scale=scale_factor)  # amp 없애기 위함
+            auxnet = Prediction(topk=topk, scale=scale_factor, amp=AMP)  # amp 없애기 위함
             postnet = PostNet(net=net, auxnet=auxnet)  # 새로운 객체가 생성
             try:
                 net.export(os.path.join(weight_path, f"{model}"), epoch=i, remove_amp_cast=True)

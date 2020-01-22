@@ -105,7 +105,6 @@ class BoxDecodeLimit(HybridBlock):
 
     def hybrid_forward(self, F, box_preds, anchors, class_ids, class_scores):
 
-
         if self._decode_number > 0:
             cls_scores_argmax = F.argmax(class_scores, axis=-1)  # (batch, all feature number)
             cls_scores_argsort = F.argsort(cls_scores_argmax, axis=1, is_ascend=False)
@@ -122,18 +121,18 @@ class BoxDecodeLimit(HybridBlock):
 
 # test
 if __name__ == "__main__":
-    from core import RetinaNet, DetectionDataset
+    from core import RetinaNet, DetectionDataset_V1
     import os
 
     input_size = (512, 512)
     root = os.path.dirname(
         os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-    dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), input_size=input_size,
-                               image_normalization=True,
-                               box_normalization=False)
+    dataset = DetectionDataset_V1(path=os.path.join(root, 'Dataset', 'train'), input_size=(512, 512),
+                                  mean=[0.485, 0.456, 0.406],
+                                  std=[0.229, 0.224, 0.225], image_normalization=True, box_normalization=False)
 
     num_classes = dataset.num_class
-    image, label, _ = dataset[0]
+    image, label, _, _, _ = dataset[0]
 
     net = RetinaNet(version=18,
                     input_size=input_size,
@@ -154,7 +153,7 @@ if __name__ == "__main__":
     cls_preds, box_preds, anchors = net(image)
 
     boxdecoder = BoxDecoder(stds=(0.1, 0.1, 0.2, 0.2), means=(0., 0., 0., 0.))
-    #classdecoder = ClassMDecoder(num_classes=num_classes, thresh=0.01, from_sigmoid=False)
+    # classdecoder = ClassMDecoder(num_classes=num_classes, thresh=0.01, from_sigmoid=False)
     classdecoder = ClassMPDecoder(num_classes=num_classes, thresh=0.05, from_sigmoid=False)
     box_predictions = boxdecoder(box_preds, anchors)
     class_ids, class_scores = classdecoder(cls_preds)
