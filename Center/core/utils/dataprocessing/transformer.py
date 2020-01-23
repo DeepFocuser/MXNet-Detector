@@ -83,12 +83,12 @@ class CenterTrainTransform(object):
         bbox[:, 2] = np.clip(bbox[:, 2], 0, output_w)
         bbox[:, 3] = np.clip(bbox[:, 3], 0, output_h)
 
-        img = mx.nd.array(img)
         img = mx.nd.image.to_tensor(img)  # 0 ~ 1 로 바꾸기
         img = mx.nd.image.normalize(img, mean=self._mean, std=self._std)
 
         if self._make_target:
             bbox = bbox[np.newaxis, :, :]
+            bbox = mx.nd.array(bbox)
             heatmap, offset_target, wh_target, mask_target = self._target_generator(bbox[:, :, :4], bbox[:, :, 4:5],
                                                                                     output_w, output_h, img.context)
             return img, bbox[0], heatmap[0], offset_target[0], wh_target[0], mask_target[0], name
@@ -119,12 +119,18 @@ class CenterValidTransform(object):
         img = mx.image.imresize(img, self._width, self._height, interp=1)  # Bilinear interpolation
         bbox = box_resize(bbox, (w, h), (output_w, output_h))
 
-        img = mx.nd.array(img)
         img = mx.nd.image.to_tensor(img)  # 0 ~ 1 로 바꾸기
         img = mx.nd.image.normalize(img, mean=self._mean, std=self._std)
 
+        # heatmap 기반이기 때문에 제한 해줘야 한다.
+        bbox[:, 0] = np.clip(bbox[:, 0], 0, output_w)
+        bbox[:, 1] = np.clip(bbox[:, 1], 0, output_h)
+        bbox[:, 2] = np.clip(bbox[:, 2], 0, output_w)
+        bbox[:, 3] = np.clip(bbox[:, 3], 0, output_h)
+
         if self._make_target:
             bbox = bbox[np.newaxis, :, :]
+            bbox = mx.nd.array(bbox)
             heatmap, offset_target, wh_target, mask_target = self._target_generator(bbox[:, :, :4], bbox[:, :, 4:5],
                                                                                     output_w, output_h, img.context)
 

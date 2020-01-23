@@ -121,42 +121,22 @@ def traindataloader(multiscale=False, factor_scale=[8, 5], augmentation=True, pa
                                                 augmentation=augmentation, make_target=make_target,
                                                 num_classes=dataset.num_class) for x in
                            range(init, end)]
-
-        dataloader = RandomTransformDataLoader(
-            train_transform, dataset, batch_size=batch_size, interval=batch_interval, last_batch='rollover',
-            shuffle=shuffle, batchify_fn=Tuple(Stack(use_shared_mem=True),
-                                               Pad(pad_val=-1),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(),
-                                               Stack(use_shared_mem=True),
-                                               Pad(pad_val=-1)),
-            num_workers=num_workers)
     else:
-        transform = CenterTrainTransform(input_size, mean=mean, std=std, scale_factor=scale_factor,
-                                         augmentation=augmentation, make_target=make_target,
-                                         num_classes=DetectionDataset(path=path).num_class)
-        dataset = DetectionDataset(path=path, transform=transform)
-        ''')
-        batchify_fn 왜 필요하지?
-        -> 각 데이터들의 박스 개수가 다르기 때문
-            batchify_fn -> 순서대로 stack images, and pad labels, stacked file name
-        '''
-        dataloader = DataLoader(
-            dataset,
-            batch_size=batch_size,
-            shuffle=shuffle,
-            batchify_fn=Tuple(Stack(use_shared_mem=True),
-                              Pad(pad_val=-1),
-                              Stack(use_shared_mem=True),
-                              Stack(use_shared_mem=True),
-                              Stack(use_shared_mem=True),
-                              Stack(use_shared_mem=True),
-                              Stack()),
-            last_batch='rollover',  # or "keep", "discard"
-            num_workers=num_workers)
+        dataset = DetectionDataset(path=path)
+        train_transform = [CenterTrainTransform(input_size, mean=mean, std=std, scale_factor=scale_factor,
+                                                augmentation=augmentation, make_target=make_target,
+                                                num_classes=dataset.num_class)]
+
+    dataloader = RandomTransformDataLoader(
+        train_transform, dataset, batch_size=batch_size, interval=batch_interval, last_batch='rollover',
+        shuffle=shuffle, batchify_fn=Tuple(Stack(use_shared_mem=True),
+                                           Pad(pad_val=-1),
+                                           Stack(use_shared_mem=True),
+                                           Stack(use_shared_mem=True),
+                                           Stack(use_shared_mem=True),
+                                           Stack(use_shared_mem=True),
+                                           Stack()),
+        num_workers=num_workers)
 
     return dataloader, dataset
 
@@ -187,7 +167,7 @@ def validdataloader(path="Dataset/valid", input_size=(512, 512),
 
 def testdataloader(path="Dataset/test", input_size=(512, 512),
                    num_workers=4, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], scale_factor=4):
-    transform = CenterValidTransform(input_size, mean=mean, std=std, scale_factor=scale_factor)
+    transform = CenterValidTransform(input_size, mean=mean, std=std, scale_factor=scale_factor, make_target=False)
     dataset = DetectionDataset(path=path, transform=transform)
 
     dataloader = DataLoader(

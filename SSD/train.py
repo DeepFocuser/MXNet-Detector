@@ -16,7 +16,7 @@ from mxboard import SummaryWriter
 from tqdm import tqdm
 
 from core import HuberLoss, SoftmaxCrossEntropyLoss
-from core import SSD_VGG16, TargetGenerator, Prediction
+from core import SSD_VGG16, Prediction
 from core import Voc_2007_AP
 from core import plot_bbox, export_block_for_cplusplus, PostNet
 from core import traindataloader, validdataloader
@@ -141,12 +141,11 @@ def run(mean=[0.485, 0.456, 0.406],
                                                           shuffle=True, mean=mean, std=std, net=net,
                                                           foreground_iou_thresh=foreground_iou_thresh, make_target=True)
         valid_dataloader, valid_dataset = validdataloader(path=valid_dataset_path,
-                                                          image_normalization=True,
-                                                          box_normalization=False,
                                                           input_size=input_size,
                                                           batch_size=valid_size,
                                                           num_workers=num_workers,
-                                                          shuffle=True, mean=mean, std=std)
+                                                          shuffle=True, mean=mean, std=std, net=net,
+                                                          foreground_iou_thresh=foreground_iou_thresh, make_target=True)
     except Exception as E:
         logging.info(E)
         exit(0)
@@ -333,8 +332,6 @@ def run(mean=[0.485, 0.456, 0.406],
                                       reduction="sum",
                                       exclude=False)
 
-    targetgenerator = TargetGenerator(foreground_iou_thresh=foreground_iou_thresh)
-
     prediction = Prediction(
         from_softmax=False,
         num_classes=num_classes,
@@ -354,33 +351,33 @@ def run(mean=[0.485, 0.456, 0.406],
         loc_loss_sum = 0
         time_stamp = time.time()
 
-        for batch_count, (image, cls_t, box_t, _) in enumerate(train_dataloader, start=1):
+        for batch_count, (image, _, cls_t_all, box_t_all, _) in enumerate(train_dataloader, start=1):
             td_batch_size = image.shape[0]
 
             image_split = mx.nd.split(data=image, num_outputs=subdivision, axis=0)
-            cls_split = mx.nd.split(data=cls_t, num_outputs=subdivision, axis=0)
-            box_split = mx.nd.split(data=box_t, num_outputs=subdivision, axis=0)
+            cls_t_all = mx.nd.split(data=cls_t_all, num_outputs=subdivision, axis=0)
+            box_t_all = mx.nd.split(data=box_t_all, num_outputs=subdivision, axis=0)
 
             if subdivision == 1:
                 image_split = [image_split]
-                cls_split = [cls_split]
-                box_split = [box_split]
+                cls_t_all = [cls_t_all]
+                box_t_all = [box_t_all]
 
             with autograd.record(train_mode=True):
 
                 cls_all_losses = []
                 box_all_losses = []
 
-                for image_part, cls_part, box_part in zip(image_split, cls_split, box_split):
+                for image_split, cls_split, box_split in zip(image_split, cls_t_all, box_t_all):
 
                     if GPU_COUNT <= 1:
-                        image_part = gluon.utils.split_and_load(image_part, [ctx], even_split=False)
-                        cls_part = gluon.utils.split_and_load(cls_part, [ctx], even_split=False)
-                        box_part = gluon.utils.split_and_load(box_part, [ctx], even_split=False)
+                        image_split = gluon.utils.split_and_load(image_split, [ctx], even_split=False)
+                        cls_split = gluon.utils.split_and_load(cls_split, [ctx], even_split=False)
+                        box_split = gluon.utils.split_and_load(box_split, [ctx], even_split=False)
                     else:
-                        image_part = gluon.utils.split_and_load(image_part, ctx, even_split=False)
-                        cls_part = gluon.utils.split_and_load(cls_part, ctx, even_split=False)
-                        box_part = gluon.utils.split_and_load(box_part, ctx, even_split=False)
+                        image_split = gluon.utils.split_and_load(image_split, ctx, even_split=False)
+                        cls_split = gluon.utils.split_and_load(cls_split, ctx, even_split=False)
+                        box_split = gluon.utils.split_and_load(box_split, ctx, even_split=False)
 
                     # prediction, target space for Data Parallelism
                     cls_losses = []
@@ -388,7 +385,7 @@ def run(mean=[0.485, 0.456, 0.406],
                     total_loss = []
 
                     # gpu N 개를 대비한 코드 (Data Parallelism)
-                    for img, cls_target, box_target in zip(image_part, cls_part, box_part):
+                    for img, cls_target, box_target in zip(image_split, cls_split, box_split):
                         # 1. SSD network Inference
                         cls_pred, box_pred, anchor = net(img)
                         '''
@@ -518,22 +515,26 @@ def run(mean=[0.485, 0.456, 0.406],
 
             conf_loss_sum = 0
             loc_loss_sum = 0
+            for image, label, cls_t_all, box_t_all, _ in valid_dataloader:
 
-            for image, label, _, _, _ in valid_dataloader:
                 vd_batch_size = image.shape[0]
                 if GPU_COUNT <= 1:
                     image = gluon.utils.split_and_load(image, [ctx], even_split=False)
                     label = gluon.utils.split_and_load(label, [ctx], even_split=False)
+                    cls_t_all = gluon.utils.split_and_load(cls_t_all, [ctx], even_split=False)
+                    box_t_all = gluon.utils.split_and_load(box_t_all, [ctx], even_split=False)
                 else:
                     image = gluon.utils.split_and_load(image, ctx, even_split=False)
                     label = gluon.utils.split_and_load(label, ctx, even_split=False)
+                    cls_t_all = gluon.utils.split_and_load(cls_t_all, [ctx], even_split=False)
+                    box_t_all = gluon.utils.split_and_load(box_t_all, [ctx], even_split=False)
 
                 # prediction, target space for Data Parallelism
                 cls_losses = []
                 box_losses = []
 
                 # gpu N 개를 대비한 코드 (Data Parallelism)
-                for img, lb in zip(image, label):
+                for img, lb, cls_target, box_target in zip(image, label, cls_t_all, box_t_all):
                     gt_box = lb[:, :, :4]
                     gt_id = lb[:, :, 4:5]
                     cls_pred, box_pred, anchor = net(img)
@@ -544,8 +545,6 @@ def run(mean=[0.485, 0.456, 0.406],
                                             pred_scores=score,
                                             gt_boxes=gt_box,
                                             gt_labels=gt_id)
-
-                    cls_target, box_target = targetgenerator(anchor, gt_box, gt_id)
 
                     positive_samples = cls_target > 0
                     positive_numbers = positive_samples.sum()

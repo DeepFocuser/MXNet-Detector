@@ -3,8 +3,8 @@ import numpy as np
 from gluoncv.data.dataloader import RandomTransformDataLoader
 from mxnet.gluon.data import DataLoader
 
-from core.utils.dataprocessing.dataset import DetectionDataset, DetectionDataset_V1
-from core.utils.dataprocessing.transformer import YoloTrainTransform, YoloTrainResize
+from core.utils.dataprocessing.dataset import DetectionDataset
+from core.utils.dataprocessing.transformer import YoloTrainTransform, YoloValidTransform
 
 
 class Tuple(object):
@@ -109,73 +109,60 @@ def traindataloader(multiscale=False, factor_scale=[10, 9], augmentation=True, p
                     mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], net=None, ignore_threshold=0.5, dynamic=True,
                     from_sigmoid=False, make_target=True):
     dataset = DetectionDataset(path=path)
+
     if multiscale:
         init = factor_scale[0]
         end = init + factor_scale[1] + 1
-        if augmentation:
-            train_transform = [YoloTrainTransform(x * 32, x * 32, mean=mean, std=std,
-                                                  net=net,
-                                                  ignore_threshold=ignore_threshold,
-                                                  dynamic=dynamic,
-                                                  from_sigmoid=from_sigmoid,
-                                                  make_target=make_target) for x in range(init, end)]
-        else:
-            train_transform = [YoloTrainResize(x * 32, x * 32, mean=mean, std=std,
-                                               net=net,
-                                               ignore_threshold=ignore_threshold,
-                                               dynamic=dynamic,
-                                               from_sigmoid=from_sigmoid,
-                                               make_target=make_target) for x in range(init, end)]
-
-        dataloader = RandomTransformDataLoader(
-            train_transform, dataset, batch_size=batch_size, interval=batch_interval, last_batch='rollover',
-            shuffle=shuffle, batchify_fn=Tuple(Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack()),
-            num_workers=num_workers)
+        train_transform = [YoloTrainTransform(x * 32, x * 32, mean=mean, std=std,
+                                              net=net,
+                                              ignore_threshold=ignore_threshold,
+                                              dynamic=dynamic,
+                                              from_sigmoid=from_sigmoid,
+                                              augmentation = augmentation,
+                                              make_target=make_target) for x in range(init, end)]
     else:
-        if augmentation:
-            train_transform = [YoloTrainTransform(input_size[0], input_size[1], mean=mean, std=std,
-                                                  net=net,
-                                                  ignore_threshold=ignore_threshold,
-                                                  dynamic=dynamic,
-                                                  from_sigmoid=from_sigmoid,
-                                                  make_target=make_target)]
-        else:
-            train_transform = [YoloTrainResize(input_size[0], input_size[1], mean=mean, std=std,
-                                               net=net,
-                                               ignore_threshold=ignore_threshold,
-                                               dynamic=dynamic,
-                                               from_sigmoid=from_sigmoid,
-                                               make_target=make_target)]
+        train_transform = [YoloTrainTransform(input_size[0], input_size[1], mean=mean, std=std,
+                                              net=net,
+                                              ignore_threshold=ignore_threshold,
+                                              dynamic=dynamic,
+                                              from_sigmoid=from_sigmoid,
+                                              augmentation=augmentation,
+                                              make_target=make_target)]
 
-        dataloader = RandomTransformDataLoader(
-            train_transform, dataset, batch_size=batch_size, interval=batch_interval, last_batch='rollover',
-            shuffle=shuffle, batchify_fn=Tuple(Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack()),
-            num_workers=num_workers)
+    dataloader = RandomTransformDataLoader(
+        train_transform, dataset, batch_size=batch_size, interval=batch_interval, last_batch='rollover',
+        shuffle=shuffle, batchify_fn=Tuple(Stack(use_shared_mem=True),
+                                           Pad(pad_val=-1),
+                                           Stack(use_shared_mem=True),
+                                           Stack(use_shared_mem=True),
+                                           Stack(use_shared_mem=True),
+                                           Stack(use_shared_mem=True),
+                                           Stack(use_shared_mem=True),
+                                           Stack()),
+        num_workers=num_workers)
 
     return dataloader, dataset
 
 
-def validdataloader(path="Dataset/valid", image_normalization=True, box_normalization=False, input_size=(512, 512),
-                    batch_size=1, num_workers=4, shuffle=True, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]):
-    dataset = DetectionDataset_V1(path=path, input_size=input_size, mean=mean, std=std,
-                                  image_normalization=image_normalization,
-                                  box_normalization=box_normalization)
+def validdataloader(path="Dataset/valid",
+                    input_size=(512, 512), batch_size=8, num_workers=4, shuffle=True,
+                    mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], net=None, ignore_threshold=0.5, dynamic=True,
+                    from_sigmoid=False, make_target=True):
+
+    transform = YoloValidTransform(input_size[0], input_size[1], net=net, mean=mean,
+                                   std=std, ignore_threshold=ignore_threshold, dynamic=dynamic, from_sigmoid=from_sigmoid, make_target=make_target)
+    dataset = DetectionDataset(path=path, transform=transform)
+
     dataloader = DataLoader(
         dataset,
         batch_size=batch_size,
-        batchify_fn=Tuple(Stack(use_shared_mem=True), Pad(pad_val=-1), Stack(use_shared_mem=True), Pad(pad_val=-1),
+        batchify_fn=Tuple(Stack(use_shared_mem=True),
+                          Pad(pad_val=-1),
+                          Stack(use_shared_mem=True),
+                          Stack(use_shared_mem=True),
+                          Stack(use_shared_mem=True),
+                          Stack(use_shared_mem=True),
+                          Stack(use_shared_mem=True),
                           Stack()),
         last_batch='rollover',  # or "keep", "discard"
         num_workers=num_workers,
@@ -185,16 +172,18 @@ def validdataloader(path="Dataset/valid", image_normalization=True, box_normaliz
     return dataloader, dataset
 
 
-def testdataloader(path="Dataset/test", image_normalization=True, box_normalization=False, input_size=(512, 512),
+def testdataloader(path="Dataset/test", input_size=(512, 512),
                    num_workers=4, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]):
-    dataset = DetectionDataset_V1(path=path, input_size=input_size, mean=mean, std=std,
-                                  image_normalization=image_normalization,
-                                  box_normalization=box_normalization)
+    transform = YoloValidTransform(input_size[0], input_size[1], mean=mean, std=std, make_target=False)
+    dataset = DetectionDataset(path=path, transform=transform)
     dataloader = DataLoader(
         dataset,
         batch_size=1,
-        batchify_fn=Tuple(Stack(use_shared_mem=True), Pad(pad_val=-1), Stack(use_shared_mem=True), Pad(pad_val=-1),
-                          Stack()),
+        batchify_fn=Tuple(Stack(use_shared_mem=True),
+                          Pad(pad_val=-1),
+                          Stack(),
+                          Stack(use_shared_mem=True),
+                          Pad(pad_val=-1)),
         num_workers=num_workers)
     return dataloader, dataset
 
@@ -206,17 +195,15 @@ if __name__ == "__main__":
 
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     dataloader, dataset = testdataloader(path=os.path.join(root, 'Dataset', 'test'),
-                                         image_normalization=False,
-                                         box_normalization=False,
                                          input_size=(320, 640))
 
     # for문 돌리기 싫으므로, iterator로 만든
     dataloader_iter = iter(dataloader)
-    data, label, _, _, name = next(dataloader_iter)
+    data, label, name, origin_image, origin_label = next(dataloader_iter)
 
     # 첫번째 이미지만 가져옴
-    image = data[0]
-    label = label[0]
+    image = origin_image[0]
+    label = origin_label[0]
     name = name[0]
 
     plot_bbox(image, label[:, :4],

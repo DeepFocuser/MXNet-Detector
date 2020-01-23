@@ -74,6 +74,7 @@ class Encoderfix(Block):
 
                     gtx, gty, gtw, gth = (np_gtx[b, o, 0], np_gty[b, o, 0],
                                           np_gtw[b, o, 0], np_gth[b, o, 0])
+
                     ''' 
                         matching 단계에서 image만 들어온 데이터들도 matching이 되기때문에 아래와 같이 걸러줘야 한다.
                         image만 들어온 데이터 or padding 된것들은 noobject이다. 
@@ -130,18 +131,18 @@ class Encoderfix(Block):
 
 # test
 if __name__ == "__main__":
-    from core import Yolov3, DetectionDataset_V1
+    from core import Yolov3, YoloTrainTransform, DetectionDataset
     import os
 
     input_size = (416, 416)
     root = os.path.dirname(
         os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-    dataset = DetectionDataset_V1(path=os.path.join(root, 'Dataset', 'train'), input_size=(512, 512),
-                                  mean=[0.485, 0.456, 0.406],
-                                  std=[0.229, 0.224, 0.225], image_normalization=True, box_normalization=False)
-
+    transform = YoloTrainTransform(input_size[0], input_size[1], make_target=False)
+    dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), transform=transform)
     num_classes = dataset.num_class
+
     image, label, _, _, _ = dataset[0]
+    label = mx.nd.array(label)
 
     net = Yolov3(Darknetlayer=53,
                  input_size=input_size,

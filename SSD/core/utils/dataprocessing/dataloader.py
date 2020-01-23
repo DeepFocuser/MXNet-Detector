@@ -3,8 +3,8 @@ import numpy as np
 from gluoncv.data.dataloader import RandomTransformDataLoader
 from mxnet.gluon.data import DataLoader
 
-from core.utils.dataprocessing.dataset import DetectionDataset, DetectionDataset_V1
-from core.utils.dataprocessing.transformer import SSDTrainTransform, SSDTrainResize
+from core.utils.dataprocessing.dataset import DetectionDataset
+from core.utils.dataprocessing.transformer import SSDTrainTransform, SSDValidTransform
 
 
 def _pad_arrs_to_max_length(arrs, pad_axis, pad_val, use_shared_mem=True):
@@ -117,56 +117,46 @@ def traindataloader(multiscale=False, factor_scale=[8, 6], augmentation=True, pa
         init = factor_scale[0] - (factor_scale[1] // 2)
         end = factor_scale[0] + (factor_scale[1] // 2)
         end = end + 1
-        if augmentation:
-            train_transform = [SSDTrainTransform(x * h_seed, x * w_seed, net=net, mean=mean, std=std,
-                                                 foreground_iou_thresh=foreground_iou_thresh,
-                                                 make_target=make_target) for x in
-                               range(init, end)]
-        else:
-            train_transform = [SSDTrainResize(x * h_seed, x * w_seed, net=net, mean=mean, std=std,
-                                              foreground_iou_thresh=foreground_iou_thresh,
-                                              make_target=make_target) for x in
-                               range(init, end)]
 
-        dataloader = RandomTransformDataLoader(
-            train_transform, dataset, batch_size=batch_size, interval=batch_interval, last_batch='rollover',
-            shuffle=shuffle, batchify_fn=Tuple(Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack()),
-            num_workers=num_workers)
-
+        train_transform = [SSDTrainTransform(x * h_seed, x * w_seed, net=net, mean=mean, std=std,
+                                             foreground_iou_thresh=foreground_iou_thresh,
+                                             augmentation = augmentation,
+                                             make_target=make_target) for x in
+                           range(init, end)]
     else:
-        if augmentation:
-            train_transform = [SSDTrainTransform(input_size[0], input_size[1], net=net, mean=mean, std=std,
-                                                 foreground_iou_thresh=foreground_iou_thresh,
-                                                 make_target=make_target)]
-        else:
-            train_transform = [SSDTrainResize(input_size[0], input_size[1], net=net, mean=mean, std=std,
-                                              foreground_iou_thresh=foreground_iou_thresh,
-                                              make_target=make_target)]
+        train_transform = [SSDTrainTransform(input_size[0], input_size[1], net=net, mean=mean, std=std,
+                                             foreground_iou_thresh=foreground_iou_thresh,
+                                             augmentation=augmentation,
+                                             make_target=make_target)]
 
-        dataloader = RandomTransformDataLoader(
-            train_transform, dataset, batch_size=batch_size, interval=batch_interval, last_batch='rollover',
-            shuffle=shuffle, batchify_fn=Tuple(Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack(use_shared_mem=True),
-                                               Stack()),
-            num_workers=num_workers)
+    dataloader = RandomTransformDataLoader(
+        train_transform, dataset, batch_size=batch_size, interval=batch_interval, last_batch='rollover',
+        shuffle=shuffle, batchify_fn=Tuple(Stack(use_shared_mem=True),
+                                           Pad(pad_val=-1),
+                                           Stack(use_shared_mem=True),
+                                           Stack(use_shared_mem=True),
+                                           Stack()),
+        num_workers=num_workers)
 
     return dataloader, dataset
 
 
-def validdataloader(path="Dataset/valid", image_normalization=True, box_normalization=False, input_size=(512, 512),
-                    batch_size=1, num_workers=4, shuffle=True, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]):
-    dataset = DetectionDataset_V1(path=path, input_size=input_size, mean=mean, std=std,
-                                  image_normalization=image_normalization,
-                                  box_normalization=box_normalization)
+def validdataloader(path="Dataset/valid", input_size=(512, 512),
+                    batch_size=1, num_workers=4, shuffle=True, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], net=None,
+                    foreground_iou_thresh=0.5,
+                    make_target=True):
+
+    transform = SSDValidTransform(input_size[0], input_size[1], net=net, mean=mean,
+                                  std=std, foreground_iou_thresh=foreground_iou_thresh, make_target=make_target)
+    dataset = DetectionDataset(path=path, transform=transform)
     dataloader = DataLoader(
         dataset,
         batch_size=batch_size,
         shuffle=shuffle,
-        batchify_fn=Tuple(Stack(use_shared_mem=True), Pad(pad_val=-1), Stack(use_shared_mem=True), Pad(pad_val=-1),
+        batchify_fn=Tuple(Stack(use_shared_mem=True),
+                          Pad(pad_val=-1),
+                          Stack(use_shared_mem=True),
+                          Stack(use_shared_mem=True),
                           Stack()),
         last_batch='rollover',  # or "keep", "discard"
         num_workers=num_workers)
@@ -174,16 +164,19 @@ def validdataloader(path="Dataset/valid", image_normalization=True, box_normaliz
     return dataloader, dataset
 
 
-def testdataloader(path="Dataset/test", image_normalization=True, box_normalization=False, input_size=(512, 512),
+def testdataloader(path="Dataset/test", input_size=(512, 512),
                    num_workers=4, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]):
-    dataset = DetectionDataset_V1(path=path, input_size=input_size, mean=mean, std=std,
-                                  image_normalization=image_normalization,
-                                  box_normalization=box_normalization)
+    transform = SSDValidTransform(input_size[0], input_size[1], mean=mean,
+                                  std=std, make_target=False)
+    dataset = DetectionDataset(path=path, transform=transform)
     dataloader = DataLoader(
         dataset,
         batch_size=1,
-        batchify_fn=Tuple(Stack(use_shared_mem=True), Pad(pad_val=-1), Stack(use_shared_mem=True), Pad(pad_val=-1),
-                          Stack()),
+        batchify_fn=Tuple(Stack(use_shared_mem=True),
+                          Pad(pad_val=-1),
+                          Stack(),
+                          Stack(use_shared_mem=True),
+                          Pad(pad_val=-1)),
         num_workers=num_workers)
     return dataloader, dataset
 
@@ -195,17 +188,15 @@ if __name__ == "__main__":
 
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     dataloader, dataset = testdataloader(path=os.path.join(root, 'Dataset', 'test'),
-                                         image_normalization=False,
-                                         box_normalization=False,
                                          input_size=(320, 640))
 
     # for문 돌리기 싫으므로, iterator로 만든
     dataloader_iter = iter(dataloader)
-    data, label, _, _, name = next(dataloader_iter)
+    data, label, name, origin_image, origin_label = next(dataloader_iter)
 
     # 첫번째 이미지만 가져옴
-    image = data[0]
-    label = label[0]
+    image = origin_image[0]
+    label = origin_label[0]
     name = name[0]
 
     plot_bbox(image, label[:, :4],

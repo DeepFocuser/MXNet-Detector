@@ -45,10 +45,10 @@ hyperparameters:
   factor_scale: [10, 9] # (10 ~ 19)*32 / 직사각형 데이터 학습시 dataloader.py 에가서 multiscale전략을 바꿔야한다.
   ignore_threshold: 0.7
   dynamic: True
-  data_augmentation: True
+  data_augmentation: False
   num_workers: 4 # the number of multiprocessing workers to use for data preprocessing.
   optimizer: ADAM # ADAM, RMSPROP, SGD
-  learning_rate: 0.0001
+  learning_rate: 0.001
   decay_lr: 0.5
   decay_step: 10 # 몇 epoch이 지난후 decay_lr을 적용할지
   AMP: True # https://mxnet.apache.org/api/python/docs/tutorials/performance/backend/amp.html# / available on new Volta and Turing GPUs

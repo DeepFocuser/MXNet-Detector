@@ -126,18 +126,19 @@ class Decoder(HybridBlock):
 
 # test
 if __name__ == "__main__":
-    from core import Yolov3, DetectionDataset_V1
+    from core import Yolov3, YoloTrainTransform, DetectionDataset
     import os
 
     input_size = (416, 416)
     root = os.path.dirname(
         os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-    dataset = DetectionDataset_V1(path=os.path.join(root, 'Dataset', 'train'), input_size=(512, 512),
-                                  mean=[0.485, 0.456, 0.406],
-                                  std=[0.229, 0.224, 0.225], image_normalization=True, box_normalization=False)
 
+    transform = YoloTrainTransform(input_size[0], input_size[1], make_target=False)
+    dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), transform=transform)
     num_classes = dataset.num_class
+
     image, label, _, _, _ = dataset[0]
+    label = mx.nd.array(label)
 
     net = Yolov3(Darknetlayer=53,
                  input_size=input_size,
@@ -148,7 +149,8 @@ if __name__ == "__main__":
                  pretrained=False,
                  pretrained_path=os.path.join(root, "modelparam"),
                  ctx=mx.cpu())
-    net.hybridize(active=True, static_alloc=True, static_shape=True)
+
+    # net.hybridize(active=True, static_alloc=True, static_shape=True)
 
     # batch 형태로 만들기
     image = image.expand_dims(axis=0)
@@ -169,7 +171,7 @@ if __name__ == "__main__":
     '''
     multiperclass=True 일 때 
     decoder shape : (1, 53235, 6)
-    
+
     multiperclass=False 일 때 
     decoder shape : (1, 10647, 6)
     '''

@@ -75,56 +75,49 @@ class DetectionDataset(Dataset):
             with open(path, mode='r') as json_file:
                 dict = json.load(json_file)
             for label in dict["labels"]:
-                try:
-                    if "box2d" in label.keys():
-                        xmin = label["box2d"]["x1"]
-                        ymin = label["box2d"]["y1"]
-                        xmax = label["box2d"]["x2"]
-                        ymax = label["box2d"]["y2"]
-                        category = label["category"]
+                if "box2d" in label.keys():
+                    xmin = label["box2d"]["x1"]
+                    ymin = label["box2d"]["y1"]
+                    xmax = label["box2d"]["x2"]
+                    ymax = label["box2d"]["y2"]
+                    category = label["category"]
 
-                        box_size = (ymax - ymin, xmax - xmin)
-                        # 사이즈가 너무 작은 박스는 제외하자
-                        if box_size[0] > box_size_limit and box_size[1] > box_size_limit:
-                            if category == self.CLASSES[0]:  # bus
-                                classes = 0
-                            elif category == self.CLASSES[1]:  # traffic light
-                                classes = 1
-                            elif category == self.CLASSES[2]:  # traffic sign
-                                classes = 2
-                            elif category == self.CLASSES[3]:  # person
-                                classes = 3
-                            elif category == self.CLASSES[4]:  # bike
-                                classes = 4
-                            elif category == self.CLASSES[5]:  # truck
-                                classes = 5
-                            elif category == self.CLASSES[6]:  # motor
-                                classes = 6
-                            elif category == self.CLASSES[7]:  # car
-                                classes = 7
-                            elif category == self.CLASSES[8]:  # train
-                                classes = 8
-                            elif category == self.CLASSES[9]:  # rider
-                                classes = 9
-                            else:
-                                raise AttributeError
+                    box_size = (ymax - ymin, xmax - xmin)
+                    # 사이즈가 너무 작은 박스는 제외하자
+                    if box_size[0] > box_size_limit and box_size[1] > box_size_limit:
+                        if category == self.CLASSES[0]:  # bus
+                            classes = 0
+                        elif category == self.CLASSES[1]:  # traffic light
+                            classes = 1
+                        elif category == self.CLASSES[2]:  # traffic sign
+                            classes = 2
+                        elif category == self.CLASSES[3]:  # person
+                            classes = 3
+                        elif category == self.CLASSES[4]:  # bike
+                            classes = 4
+                        elif category == self.CLASSES[5]:  # truck
+                            classes = 5
+                        elif category == self.CLASSES[6]:  # motor
+                            classes = 6
+                        elif category == self.CLASSES[7]:  # car
+                            classes = 7
+                        elif category == self.CLASSES[8]:  # train
+                            classes = 8
+                        elif category == self.CLASSES[9]:  # rider
+                            classes = 9
                         else:
-                            classes = -1
+                            xmin, ymin, xmax, ymax, classes = -1, -1, -1, -1, -1
                     else:
-                        xmin = -1
-                        ymin = -1
-                        xmax = -1
-                        ymax = -1
-                        classes = -1
-                except Exception:
-                    print("content 이상 파일 : " + path)
-                    exit(0)
-                else:
+                        xmin, ymin, xmax, ymax, classes = -1,-1,-1,-1,-1
                     json_list.append((xmin, ymin, xmax, ymax, classes))
-            return np.array(json_list, dtype="float32")  # 반드시 numpy여야함.
+                else:
+                    print(f"only image : {path}")
+                    json_list.append((-1, -1, -1, -1, -1))
         except Exception:
-            print("only image : " + path)
+            print(f"only image or json crash : {path}")
             json_list.append((-1, -1, -1, -1, -1))
+            return np.array(json_list, dtype="float32")  # 반드시 numpy여야함.
+        else:
             return np.array(json_list, dtype="float32")  # 반드시 numpy여야함.
 
     @property
