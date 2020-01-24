@@ -10,7 +10,8 @@ from core.utils.util.image_utils import *
 class YoloTrainTransform(object):
 
     def __init__(self, height, width, net=None, mean=[0.485, 0.456, 0.406],
-                 std=[0.229, 0.224, 0.225], ignore_threshold=0.5, dynamic=True, from_sigmoid=False, augmentation=False, make_target=False):
+                 std=[0.229, 0.224, 0.225], ignore_threshold=0.5, dynamic=True, from_sigmoid=False, augmentation=False,
+                 make_target=False):
 
         self._height = height
         self._width = width
@@ -101,6 +102,7 @@ class YoloTrainTransform(object):
         else:
             return img, bbox, name
 
+
 class YoloValidTransform(object):
 
     def __init__(self, height, width, net=None, mean=[0.485, 0.456, 0.406],
@@ -122,8 +124,7 @@ class YoloValidTransform(object):
     def __call__(self, img, bbox, name):
         # resize with random interpolation
         h, w, _ = img.shape
-        interp = np.random.randint(0, 5)
-        img = mx.image.imresize(img, self._width, self._height, interp=interp)
+        img = mx.image.imresize(img, self._width, self._height, interp=1)
         bbox = box_resize(bbox, (w, h), (self._width, self._height))
 
         img = mx.nd.image.to_tensor(img)  # 0 ~ 1 로 바꾸기
@@ -141,6 +142,7 @@ class YoloValidTransform(object):
             return img, bbox[0], xcyc_target[0], wh_target[0], objectness[0], class_target[0], weights[0], name
         else:
             return img, bbox, name
+
 
 # test
 if __name__ == "__main__":

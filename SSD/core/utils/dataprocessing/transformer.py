@@ -97,6 +97,7 @@ class SSDTrainTransform(object):
         else:
             return img, bbox, name
 
+
 class SSDValidTransform(object):
 
     def __init__(self, height, width, net=None, mean=[0.485, 0.456, 0.406],
@@ -118,8 +119,7 @@ class SSDValidTransform(object):
     def __call__(self, img, bbox, name):
         # resize with random interpolation
         h, w, _ = img.shape
-        interp = np.random.randint(0, 5)
-        img = mx.image.imresize(img, self._width, self._height, interp=interp)
+        img = mx.image.imresize(img, self._width, self._height, interp=1)
         bbox = box_resize(bbox, (w, h), (self._width, self._height))
 
         img = mx.nd.image.to_tensor(img)  # 0 ~ 1 로 바꾸기
@@ -132,6 +132,7 @@ class SSDValidTransform(object):
             return img, bbox[0], cls_target[0], box_target[0], name
         else:
             return img, bbox, name
+
 
 # test
 if __name__ == "__main__":

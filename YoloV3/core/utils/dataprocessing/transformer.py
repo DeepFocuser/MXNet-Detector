@@ -122,8 +122,7 @@ class YoloValidTransform(object):
     def __call__(self, img, bbox, name):
         # resize with random interpolation
         h, w, _ = img.shape
-        interp = np.random.randint(0, 5)
-        img = mx.image.imresize(img, self._width, self._height, interp=interp)
+        img = mx.image.imresize(img, self._width, self._height, interp=1)
         bbox = box_resize(bbox, (w, h), (self._width, self._height))
 
         img = mx.nd.image.to_tensor(img)  # 0 ~ 1 로 바꾸기

@@ -351,15 +351,15 @@ def run(mean=[0.485, 0.456, 0.406],
         loc_loss_sum = 0
         time_stamp = time.time()
 
-        for batch_count, (image, _, cls_t_all, box_t_all, _) in enumerate(train_dataloader, start=1):
+        for batch_count, (image, _, cls_all, box_all, _) in enumerate(train_dataloader, start=1):
             td_batch_size = image.shape[0]
 
-            image_split = mx.nd.split(data=image, num_outputs=subdivision, axis=0)
-            cls_t_all = mx.nd.split(data=cls_t_all, num_outputs=subdivision, axis=0)
-            box_t_all = mx.nd.split(data=box_t_all, num_outputs=subdivision, axis=0)
+            image = mx.nd.split(data=image, num_outputs=subdivision, axis=0)
+            cls_all = mx.nd.split(data=cls_all, num_outputs=subdivision, axis=0)
+            box_all = mx.nd.split(data=box_all, num_outputs=subdivision, axis=0)
 
             if subdivision == 1:
-                image_split = [image_split]
+                image = [image]
                 cls_t_all = [cls_t_all]
                 box_t_all = [box_t_all]
 
@@ -368,7 +368,7 @@ def run(mean=[0.485, 0.456, 0.406],
                 cls_all_losses = []
                 box_all_losses = []
 
-                for image_split, cls_split, box_split in zip(image_split, cls_t_all, box_t_all):
+                for image_split, cls_split, box_split in zip(image, cls_all, box_all):
 
                     if GPU_COUNT <= 1:
                         image_split = gluon.utils.split_and_load(image_split, [ctx], even_split=False)
@@ -515,26 +515,26 @@ def run(mean=[0.485, 0.456, 0.406],
 
             conf_loss_sum = 0
             loc_loss_sum = 0
-            for image, label, cls_t_all, box_t_all, _ in valid_dataloader:
+            for image, label, cls_all, box_all, _ in valid_dataloader:
 
                 vd_batch_size = image.shape[0]
                 if GPU_COUNT <= 1:
                     image = gluon.utils.split_and_load(image, [ctx], even_split=False)
                     label = gluon.utils.split_and_load(label, [ctx], even_split=False)
-                    cls_t_all = gluon.utils.split_and_load(cls_t_all, [ctx], even_split=False)
-                    box_t_all = gluon.utils.split_and_load(box_t_all, [ctx], even_split=False)
+                    cls_all = gluon.utils.split_and_load(cls_all, [ctx], even_split=False)
+                    box_all = gluon.utils.split_and_load(box_all, [ctx], even_split=False)
                 else:
                     image = gluon.utils.split_and_load(image, ctx, even_split=False)
                     label = gluon.utils.split_and_load(label, ctx, even_split=False)
-                    cls_t_all = gluon.utils.split_and_load(cls_t_all, [ctx], even_split=False)
-                    box_t_all = gluon.utils.split_and_load(box_t_all, [ctx], even_split=False)
+                    cls_all = gluon.utils.split_and_load(cls_all, [ctx], even_split=False)
+                    box_all = gluon.utils.split_and_load(box_all, [ctx], even_split=False)
 
                 # prediction, target space for Data Parallelism
                 cls_losses = []
                 box_losses = []
 
                 # gpu N 개를 대비한 코드 (Data Parallelism)
-                for img, lb, cls_target, box_target in zip(image, label, cls_t_all, box_t_all):
+                for img, lb, cls_target, box_target in zip(image, label, cls_all, box_all):
                     gt_box = lb[:, :, :4]
                     gt_id = lb[:, :, 4:5]
                     cls_pred, box_pred, anchor = net(img)

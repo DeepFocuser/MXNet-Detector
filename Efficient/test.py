@@ -71,8 +71,6 @@ def run(mean=[0.485, 0.456, 0.406],
 
     try:
         test_dataloader, test_dataset = testdataloader(path=test_dataset_path,
-                                                       image_normalization=True,
-                                                       box_normalization=False,
                                                        input_size=(netheight, netwidth),
                                                        num_workers=num_workers,
                                                        mean=mean, std=std)
@@ -141,7 +139,7 @@ def run(mean=[0.485, 0.456, 0.406],
     conf_loss_sum = 0
     loc_loss_sum = 0
 
-    for image, label, origin_image, origin_box, name in tqdm(test_dataloader):
+    for image, label, name, origin_image, origin_box in tqdm(test_dataloader):
         _, height, width, _ = origin_image.shape
         logging.info(f"real input size : {(height, width)}")
         origin_image = origin_image.asnumpy()[0]
