@@ -281,7 +281,7 @@ def run(mean=[0.485, 0.456, 0.406],
 
     heatmapfocalloss = HeatmapFocalLoss(from_sigmoid=True, alpha=2, beta=4)
     normedl1loss = NormedL1Loss()
-    prediction = Prediction(batch_size=valid_size, topk=topk, scale=scale_factor, amp=AMP)
+    prediction = Prediction(batch_size=valid_size, topk=topk, scale=scale_factor)
     precision_recall = Voc_2007_AP(iou_thresh=0.5, class_names=name_classes)
 
     start_time = time.time()
@@ -588,8 +588,7 @@ def run(mean=[0.485, 0.456, 0.406],
             else:
                 context = mx.cpu(0)
 
-            auxnet = Prediction(topk=topk, scale=scale_factor, amp=AMP)  # amp 없애기 위함
-            postnet = PostNet(net=net, auxnet=auxnet)  # 새로운 객체가 생성
+            postnet = PostNet(net=net, auxnet=prediction)  # 새로운 객체가 생성
             try:
                 net.export(os.path.join(weight_path, f"{model}"), epoch=i, remove_amp_cast=True)
                 net.save_parameters(os.path.join(weight_path, f"{i}.params"))  # onnx 추출용

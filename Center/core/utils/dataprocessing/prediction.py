@@ -5,15 +5,21 @@ from mxnet.gluon.nn import MaxPool2D
 
 class Prediction(HybridBlock):
 
-    def __init__(self, batch_size=1, topk=100, scale=4.0, amp=False):
+    def __init__(self, batch_size=1, topk=100, scale=4.0):
         super(Prediction, self).__init__()
         self._batch_size = batch_size
         self._topk = topk
         self._scale = scale
-        self._amp = amp
         self._heatmap_nms = MaxPool2D(pool_size=(3, 3), strides=(1, 1), padding=(1, 1))
 
     def hybrid_forward(self, F, heatmap, offset, wh):
+        '''
+        prediction 결과를 만들 때는 float32를 사용하자
+        float16으로 하면 결과가 이상해지는 경우가 있음
+        '''
+        heatmap = F.cast(heatmap, dtype="float32")
+        offset = F.cast(offset, dtype="float32")
+        wh = F.cast(wh, dtype="float32")
 
         '''
         The peak keypoint extraction serves
@@ -21,14 +27,6 @@ class Prediction(HybridBlock):
         '''
         keep = self._heatmap_nms(heatmap) == heatmap
         heatmap = F.broadcast_mul(keep, heatmap)
-
-        if self._amp:
-            floatdtype = "float16"
-            heatmap = F.cast(heatmap, dtype=floatdtype)
-            offset = F.cast(offset, dtype=floatdtype)
-            wh = F.cast(wh, dtype=floatdtype)
-        else:
-            floatdtype = "float32"
 
         _, channel, height, width = heatmap.shape_array().split(num_outputs=4, axis=0)  # int64임
         # 상위 self._topk개만 뽑아내기
@@ -38,7 +36,7 @@ class Prediction(HybridBlock):
 
         indices = F.cast(indices, dtype='int64')
         ids = F.broadcast_div(indices, (height * width))  # 정수/정수 는 정수 = // 연산
-        ids = F.cast(ids, floatdtype) # c++에서 float으로 받아오기 때문에!!! 형 변환 필요
+        ids = F.cast(ids, "float32")  # c++에서 float으로 받아오기 때문에!!! 형 변환 필요
         ids = ids.expand_dims(-1)
 
         '''
@@ -71,8 +69,8 @@ class Prediction(HybridBlock):
             (-1, self._topk))  # (batch, height*width, 2) / (3, self_batch_size*self._topk)
         ys = F.gather_nd(offset, offset_ys).reshape(
             (-1, self._topk))  # (batch, height*width, 2) / (3, self_batch_size*self._topk)
-        topk_xs = F.cast(topk_xs, floatdtype) + xs
-        topk_ys = F.cast(topk_ys, floatdtype) + ys
+        topk_xs = F.cast(topk_xs, "float32") + xs
+        topk_ys = F.cast(topk_ys, "float32") + ys
         w = F.gather_nd(wh, offset_xs).reshape(
             (-1, self._topk))  # (batch, height*width, 2) / (3, self_batch_size*self._topk)
         h = F.gather_nd(wh, offset_ys).reshape(
@@ -83,8 +81,6 @@ class Prediction(HybridBlock):
         bboxes = [topk_xs - half_w, topk_ys - half_h, topk_xs + half_w, topk_ys + half_h]  # 각각 (batch, self._topk)
         bboxes = F.concat(*[bbox.expand_dims(-1) for bbox in bboxes],
                           dim=-1)  # (batch, self._topk, 1) ->  (batch, self._topk, 4)
-
-
 
         return ids, scores, bboxes * self._scale
 

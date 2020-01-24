@@ -23,7 +23,7 @@ model:
   load_period: 100
   input_size: [512, 512] # height, width
   ResNetbase: 18 # resnet base version : 18, 34, 50, 101, 152
-  pretrained_base: False
+  pretrained_base: True
   pretrained_path: modelparam
   graphviz: False
 

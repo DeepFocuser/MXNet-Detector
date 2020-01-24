@@ -35,6 +35,14 @@ class Prediction(HybridBlock):
 
     def hybrid_forward(self, F, class_preds, box_preds, anchors):
 
+        '''
+        prediction 결과를 만들 때는 float32를 사용하자
+        float16으로 하면 결과가 이상해지는 경우가 있음
+        '''
+        class_preds = F.cast(class_preds, dtype="float32")
+        box_preds = F.cast(box_preds, dtype="float32")
+        anchors = F.cast(anchors, dtype="float32")
+
         class_ids, class_scores = self._classdecoder(class_preds)
         class_ids, class_scores, box_preds, anchors = self._boxdecodelimit(box_preds, anchors, class_ids, class_scores)
         box_predictions = self._boxdecoder(box_preds, anchors)

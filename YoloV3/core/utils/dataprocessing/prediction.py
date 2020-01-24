@@ -31,6 +31,23 @@ class Prediction(HybridBlock):
                        offset1, offset2, offset3,
                        stride1, stride2, stride3):
 
+        '''
+        prediction 결과를 만들 때는 float32를 사용하자
+        float16으로 하면 결과가 이상해지는 경우가 있음
+        '''
+        output1 = F.cast(output1, dtype="float32")
+        output2 = F.cast(output2, dtype="float32")
+        output3 = F.cast(output3, dtype="float32")
+        anchor1 = F.cast(anchor1, dtype="float32")
+        anchor2 = F.cast(anchor2, dtype="float32")
+        anchor3 = F.cast(anchor3, dtype="float32")
+        offset1 = F.cast(offset1, dtype="float32")
+        offset2 = F.cast(offset2, dtype="float32")
+        offset3 = F.cast(offset3, dtype="float32")
+        stride1 = F.cast(stride1, dtype="float32")
+        stride2 = F.cast(stride2, dtype="float32")
+        stride3 = F.cast(stride3, dtype="float32")
+
         results = []
         for out, an, off, st in zip([output1, output2, output3],
                                     [anchor1, anchor2, anchor3],

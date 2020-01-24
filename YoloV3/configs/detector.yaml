@@ -45,7 +45,7 @@ hyperparameters:
   factor_scale: [10, 9] # (10 ~ 19)*32 / 직사각형 데이터 학습시 dataloader.py 에가서 multiscale전략을 바꿔야한다.
   ignore_threshold: 0.7
   dynamic: True
-  data_augmentation: False
+  data_augmentation: True
   num_workers: 4 # the number of multiprocessing workers to use for data preprocessing.
   optimizer: ADAM # ADAM, RMSPROP, SGD
   learning_rate: 0.001
