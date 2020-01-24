@@ -14,6 +14,7 @@ class DetectionDataset(Dataset):
     ----------
     path : str(jpg)
         Path to input image directory.
+    transform : object
     """
     CLASSES = ['meerkat', 'otter', 'panda', 'raccoon', 'pomeranian']
 
