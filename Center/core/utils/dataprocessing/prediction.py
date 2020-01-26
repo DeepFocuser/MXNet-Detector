@@ -5,21 +5,14 @@ from mxnet.gluon.nn import MaxPool2D
 
 class Prediction(HybridBlock):
 
-    def __init__(self, batch_size=1, topk=100, scale=4.0, amp=True):
+    def __init__(self, batch_size=1, topk=100, scale=4.0):
         super(Prediction, self).__init__()
         self._batch_size = batch_size
         self._topk = topk
         self._scale = scale
         self._heatmap_nms = MaxPool2D(pool_size=(3, 3), strides=(1, 1), padding=(1, 1))
-        self._amp = amp
 
     def hybrid_forward(self, F, heatmap, offset, wh):
-
-        if self._amp:
-            floatdtype = "float16"
-        else:
-            floatdtype = "float32"
-
         '''
         The peak keypoint extraction serves
         as a sufficient NMS alternative and can be implemented efficiently on device using a 3 × 3 max pooling operation.
@@ -35,7 +28,7 @@ class Prediction(HybridBlock):
 
         indices = F.cast(indices, dtype='int64')
         ids = F.broadcast_div(indices, (height * width))  # 정수/정수 는 정수 = // 연산
-        ids = F.cast(ids, floatdtype)  # c++에서 float으로 받아오기 때문에!!! 형 변환 필요
+        ids = F.cast(ids, "float32")  # c++에서 float으로 받아오기 때문에!!! 형 변환 필요
         ids = ids.expand_dims(-1)
 
         '''
@@ -68,8 +61,8 @@ class Prediction(HybridBlock):
             (-1, self._topk))  # (batch, height*width, 2) / (3, self_batch_size*self._topk)
         ys = F.gather_nd(offset, offset_ys).reshape(
             (-1, self._topk))  # (batch, height*width, 2) / (3, self_batch_size*self._topk)
-        topk_xs = F.cast(topk_xs, floatdtype) + xs
-        topk_ys = F.cast(topk_ys, floatdtype) + ys
+        topk_xs = F.cast(topk_xs, "float32") + xs
+        topk_ys = F.cast(topk_ys, "float32") + ys
         w = F.gather_nd(wh, offset_xs).reshape(
             (-1, self._topk))  # (batch, height*width, 2) / (3, self_batch_size*self._topk)
         h = F.gather_nd(wh, offset_ys).reshape(

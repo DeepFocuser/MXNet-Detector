@@ -281,7 +281,7 @@ def run(mean=[0.485, 0.456, 0.406],
 
     heatmapfocalloss = HeatmapFocalLoss(from_sigmoid=True, alpha=2, beta=4)
     normedl1loss = NormedL1Loss()
-    prediction = Prediction(batch_size=valid_size, topk=topk, scale=scale_factor, amp=AMP)
+    prediction = Prediction(batch_size=valid_size, topk=topk, scale=scale_factor)
     precision_recall = Voc_2007_AP(iou_thresh=0.5, class_names=name_classes)
 
     start_time = time.time()
