@@ -2,10 +2,9 @@ import logging
 import os
 
 import mxnet as mx
+from core.model.backbone.ResNetV2 import get_resnet
 from mxnet.gluon import contrib
 from mxnet.gluon.nn import HybridBlock, HybridSequential, Conv2D, Conv2DTranspose, BatchNorm, Activation
-
-from core.model.backbone.ResNetV2 import get_resnet
 
 logfilepath = ""
 if os.path.isfile(logfilepath):
@@ -24,8 +23,8 @@ class UpConvResNet(HybridBlock):
                  ctx=mx.cpu()):
 
         mxnet_version = float(mx.__version__[0:3])
-        if mxnet_version < 1.6:
-            logging.error("please upgrade mxnet version above 1.6.x")
+        if mxnet_version < 1.5:
+            logging.error("please upgrade mxnet version above 1.5.x")
             raise EnvironmentError
 
         super(UpConvResNet, self).__init__()
