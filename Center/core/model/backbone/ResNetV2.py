@@ -208,8 +208,8 @@ def get_resnet(num_layers, pretrained=False, ctx=mx.cpu(),
                             ignore_extra=True)
         logging.info(f"resnet{num_layers}_v2 pretrained weight load 완료")
     else:
-        logging.info(f"resnet{num_layers}_v2 weight init 완료")
         net.initialize(ctx=ctx)
+        logging.info(f"resnet{num_layers}_v2 weight init 완료")
     return net
 
 
