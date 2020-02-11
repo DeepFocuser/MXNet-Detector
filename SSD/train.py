@@ -12,14 +12,13 @@ import mxnet.autograd as autograd
 import mxnet.contrib.amp as amp
 import mxnet.gluon as gluon
 import numpy as np
-from mxboard import SummaryWriter
-from tqdm import tqdm
-
 from core import HuberLoss, SoftmaxCrossEntropyLoss
 from core import SSD_VGG16, Prediction
 from core import Voc_2007_AP
 from core import plot_bbox, export_block_for_cplusplus, PostNet
 from core import traindataloader, validdataloader
+from mxboard import SummaryWriter
+from tqdm import tqdm
 
 logfilepath = ""
 if os.path.isfile(logfilepath):
@@ -656,8 +655,9 @@ def run(mean=[0.485, 0.456, 0.406],
 
         if i % save_period == 0:
 
-            if not os.path.exists(weight_path):
-                os.makedirs(weight_path)
+            weight_epoch_path = os.path.join(weight_path, str(i))
+            if not os.path.exists(weight_epoch_path):
+                os.makedirs(weight_epoch_path)
 
             '''
             Hybrid models can be serialized as JSON files using the export function
@@ -676,7 +676,7 @@ def run(mean=[0.485, 0.456, 0.406],
                 net.export(os.path.join(weight_path, f"{model}"), epoch=i, remove_amp_cast=True)
                 net.save_parameters(os.path.join(weight_path, f"{i}.params"))  # onnx 추출용
                 # network inference, decoder, nms까지 처리됨 - mxnet c++에서 편리함 / onnx로는 추출 못함.
-                export_block_for_cplusplus(path=os.path.join(weight_path, f"{model}_prepost"),
+                export_block_for_cplusplus(path=os.path.join(weight_epoch_path, f"{model}_prepost"),
                                            block=postnet,
                                            data_shape=tuple(input_size) + tuple((3,)),
                                            epoch=i,
