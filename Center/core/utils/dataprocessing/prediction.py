@@ -95,7 +95,7 @@ if __name__ == "__main__":
     this initialization prevents the large number of background anchors from generating a large, 
     destabilizing loss value in the first iteration of training
     '''
-    net = CenterNet(version=2,
+    net = CenterNet(base=18,
                     heads=OrderedDict([
                         ('heatmap', {'num_output': 3, 'bias': -2.19}),
                         ('offset', {'num_output': 2}),
