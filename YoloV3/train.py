@@ -141,8 +141,8 @@ def run(mean=[0.485, 0.456, 0.406],
                                                           net=net, ignore_threshold=ignore_threshold, dynamic=dynamic,
                                                           from_sigmoid=False, make_target=True)
 
-    except Exception as E:
-        logging.info(E)
+    except Exception:
+        logging.info("dataset 없음")
         exit(0)
 
     train_update_number_per_epoch = len(train_dataloader)

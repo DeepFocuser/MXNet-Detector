@@ -142,8 +142,8 @@ def run(mean=[0.485, 0.456, 0.406],
                                                           foreground_iou_thresh=foreground_iou_thresh,
                                                           background_iou_thresh=background_iou_thresh, make_target=True)
 
-    except Exception as E:
-        logging.info(E)
+    except Exception:
+        logging.info("dataset 없음")
         exit(0)
 
     train_update_number_per_epoch = len(train_dataloader)

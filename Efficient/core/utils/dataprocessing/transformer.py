@@ -32,11 +32,14 @@ class EfficientTrainTransform(object):
     def __call__(self, img, bbox, name):
 
         if self._augmentation:
-            # random color jittering - photo-metric distortions
-            img = image_random_color_distort(img)
+
+            # random color jittering
+            distortion = np.random.choice([False, True], p=[0.7, 0.3])
+            if distortion:
+                img = image_random_color_distort(img)
 
             # random expansion with prob 0.5
-            expansion = np.random.choice([False, True], p=[0.5, 0.5])
+            expansion = np.random.choice([False, True], p=[0.7, 0.3])
             if expansion:
                 # Random expand original image with borders, this is identical to placing the original image on a larger canvas.
                 img, expand = random_expand(img, max_ratio=4, fill=[m * 255 for m in [0.485, 0.456, 0.406]],
@@ -50,7 +53,7 @@ class EfficientTrainTransform(object):
                                                           max_scale=1,
                                                           max_aspect_ratio=2,
                                                           constraints=None,
-                                                          max_trial=50)
+                                                          max_trial=30)
 
             x0, y0, w, h = crop
             img = mx.image.fixed_crop(img, x0, y0, w, h)
@@ -75,8 +78,8 @@ class EfficientTrainTransform(object):
             if translation:
                 img[:, :, (0, 1, 2)] = img[:, :, (2, 1, 0)]
                 img = img.asnumpy()
-                x_offset = np.random.randint(-20, high=20)
-                y_offset = np.random.randint(-20, high=20)
+                x_offset = np.random.randint(-7, high=7)
+                y_offset = np.random.randint(-7, high=7)
                 M = np.float32([[1, 0, x_offset], [0, 1, y_offset]])  # +일 경우, (오른쪽, 아래)
                 img = cv2.warpAffine(img, M, (w, h), borderValue=[m * 255 for m in [0.406, 0.456, 0.485]])
                 bbox = box_translate(bbox, x_offset=x_offset, y_offset=y_offset, shape=(h, w))
