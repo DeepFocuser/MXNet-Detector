@@ -56,12 +56,6 @@ class CenterTrainTransform(object):
             x0, y0, w, h = crop
             img = mx.image.fixed_crop(img, x0, y0, w, h)
 
-            # resize with random interpolation
-            h, w, _ = img.shape
-            interp = np.random.randint(0, 5)
-            img = mx.image.imresize(img, self._width, self._height, interp=interp)
-            bbox = box_resize(bbox, (w, h), (self._width, self._height))
-
             # random horizontal flip with probability of 0.5
             h, w, _ = img.shape
             img, flips = random_flip(img, px=0.5)
@@ -83,6 +77,13 @@ class CenterTrainTransform(object):
                 bbox = box_translate(bbox, x_offset=x_offset, y_offset=y_offset, shape=(h, w))
                 img[:, :, (0, 1, 2)] = img[:, :, (2, 1, 0)]
                 img = mx.nd.array(img)
+
+            # resize with random interpolation
+            h, w, _ = img.shape
+            interp = np.random.randint(0, 5)
+            img = mx.image.imresize(img, self._width, self._height, interp=interp)
+            bbox = box_resize(bbox, (w, h), (output_w, output_h))
+
         else:
             h, w, _ = img.shape
             img = mx.image.imresize(img, self._width, self._height, interp=1)
