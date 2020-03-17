@@ -1,11 +1,9 @@
 import logging
 import os
 
-from mxnet import gluon
-
 from core import Prediction
 from core import export_block_for_cplusplus, PostNet
-from core import testdataloader
+from mxnet import gluon
 
 logfilepath = ""
 if os.path.isfile(logfilepath):
@@ -18,11 +16,6 @@ def export(originpath="weights",
            load_name="480_640_ADAM_PCENTER_RES18",
            load_period=1,
            topk=200):
-    try:
-        _, test_dataset = testdataloader()
-    except Exception:
-        logging.info("The dataset does not exist")
-        exit(0)
 
     prediction = Prediction(topk=topk)
 
