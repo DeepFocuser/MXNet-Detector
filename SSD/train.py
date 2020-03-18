@@ -66,6 +66,7 @@ def run(mean=[0.485, 0.456, 0.406],
         multiperclass=True,
         nms_thresh=0.45,
         nms_topk=500,
+        iou_thresh=0.5,
         except_class_thresh=0.01,
         plot_class_thresh=0.5):
     if GPU_COUNT == 0:
@@ -340,7 +341,7 @@ def run(mean=[0.485, 0.456, 0.406],
         except_class_thresh=except_class_thresh,
         multiperclass=multiperclass)
 
-    precision_recall = Voc_2007_AP(iou_thresh=0.5, class_names=name_classes)
+    precision_recall = Voc_2007_AP(iou_thresh=iou_thresh, class_names=name_classes)
 
     start_time = time.time()
 
@@ -740,5 +741,6 @@ if __name__ == "__main__":
         multiperclass=True,
         nms_thresh=0.45,
         nms_topk=500,
+        iou_thresh=0.5,
         except_class_thresh=0.01,
         plot_class_thresh=0.5)

@@ -33,6 +33,7 @@ test_save_path = parser['save_path']
 save_flag = parser['save_flag']
 show_flag = parser['show_flag']
 topk = parser['topk']
+iou_thresh = parser['iou_thresh']
 plot_class_thresh = parser['plot_class_thresh']
 test_graph_path = parser["test_graph_path"]
 
@@ -150,6 +151,7 @@ if __name__ == "__main__":
 
                   # valid dataset 그리기
                   topk=topk,
+                  iou_thresh=iou_thresh,
                   plot_class_thresh=plot_class_thresh)
 
         if using_mlflow:
@@ -168,4 +170,5 @@ if __name__ == "__main__":
                  save_flag=save_flag,
                  # test dataset 그리기
                  topk=topk,
+                 iou_thresh=iou_thresh,
                  plot_class_thresh=plot_class_thresh)

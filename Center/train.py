@@ -60,6 +60,7 @@ def run(mean=[0.485, 0.456, 0.406],
         valid_graph_path="valid_Graph",
         using_mlflow=True,
         topk=100,
+        iou_thresh=0.5,
         plot_class_thresh=0.5):
     '''
     AMP 가 모든 연산을 지원하지는 않는다.
@@ -281,7 +282,7 @@ def run(mean=[0.485, 0.456, 0.406],
     heatmapfocalloss = HeatmapFocalLoss(from_sigmoid=True, alpha=2, beta=4)
     normedl1loss = NormedL1Loss()
     prediction = Prediction(batch_size=valid_size, topk=topk, scale=scale_factor)
-    precision_recall = Voc_2007_AP(iou_thresh=0.5, class_names=name_classes)
+    precision_recall = Voc_2007_AP(iou_thresh=iou_thresh, class_names=name_classes)
 
     start_time = time.time()
     for i in tqdm(range(start_epoch + 1, epoch + 1, 1), initial=start_epoch + 1, total=epoch):
@@ -649,4 +650,5 @@ if __name__ == "__main__":
         valid_graph_path="valid_Graph",
         using_mlflow=True,
         topk=100,
+        iou_thresh = 0.5,
         plot_class_thresh=0.5)

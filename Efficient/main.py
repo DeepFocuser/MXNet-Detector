@@ -1,11 +1,10 @@
 import os
+import test
 
 import mlflow as ml
 import mxnet as mx
-import yaml
-
-import test
 import train
+import yaml
 
 # MXNET-ONNX EXPORT 지원 가능 함수 확인
 # -> https://github.com/apache/incubator-mxnet/tree/master/python/mxnet/contrib/onnx/mx2onnx
@@ -36,6 +35,7 @@ decode_number = parser['decode_number']
 multiperclass = parser['multiperclass']
 nms_thresh = parser['nms_thresh']
 nms_topk = parser['nms_topk']
+iou_thresh = parser['iou_thresh']
 except_class_thresh = parser['except_class_thresh']
 plot_class_thresh = parser['plot_class_thresh']
 test_graph_path = parser["test_graph_path"]
@@ -123,7 +123,7 @@ if __name__ == "__main__":
 
         train.run(mean=image_mean,
                   std=image_std,
-                  anchor_alloc_size = anchor_alloc_size,
+                  anchor_alloc_size=anchor_alloc_size,
                   anchor_sizes=anchor_sizes,
                   anchor_size_ratios=anchor_size_ratios,
                   anchor_aspect_ratios=anchor_aspect_ratios,
@@ -153,7 +153,7 @@ if __name__ == "__main__":
                   base=base,
                   AMP=AMP,
 
-                  valid_size= valid_size,
+                  valid_size=valid_size,
                   eval_period=eval_period,
                   tensorboard=tensorboard,
                   valid_graph_path=valid_graph_path,
@@ -164,6 +164,7 @@ if __name__ == "__main__":
                   multiperclass=multiperclass,
                   nms_thresh=nms_thresh,
                   nms_topk=nms_topk,
+                  iou_thresh=iou_thresh,
                   except_class_thresh=except_class_thresh,
                   plot_class_thresh=plot_class_thresh)
 
@@ -173,7 +174,7 @@ if __name__ == "__main__":
         test.run(mean=image_mean,
                  std=image_std,
                  load_name=load_name, load_period=load_period, GPU_COUNT=GPU_COUNT,
-                 test_weight_path = test_weight_path,
+                 test_weight_path=test_weight_path,
                  test_dataset_path=test_dataset_path, num_workers=num_workers,
                  test_save_path=test_save_path,
                  test_graph_path=test_graph_path,
@@ -186,5 +187,6 @@ if __name__ == "__main__":
                  multiperclass=multiperclass,
                  nms_thresh=nms_thresh,
                  nms_topk=nms_topk,
+                 iou_thresh=iou_thresh,
                  except_class_thresh=except_class_thresh,
                  plot_class_thresh=plot_class_thresh)

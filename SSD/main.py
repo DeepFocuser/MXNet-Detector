@@ -1,11 +1,10 @@
 import os
+import test
 
 import mlflow as ml
 import mxnet as mx
-import yaml
-
-import test
 import train
+import yaml
 
 # MXNET-ONNX EXPORT 지원 가능 함수 확인
 # -> https://github.com/apache/incubator-mxnet/tree/master/python/mxnet/contrib/onnx/mx2onnx
@@ -35,6 +34,7 @@ decode_number = parser['decode_number']
 multiperclass = parser['multiperclass']
 nms_thresh = parser['nms_thresh']
 nms_topk = parser['nms_topk']
+iou_thresh = parser['iou_thresh']
 except_class_thresh = parser['except_class_thresh']
 plot_class_thresh = parser['plot_class_thresh']
 test_graph_path = parser["test_graph_path"]
@@ -142,7 +142,7 @@ if __name__ == "__main__":
                   graphviz=graphviz,
                   epoch=epoch,
                   input_size=input_size,
-                  batch_log = batch_log,
+                  batch_log=batch_log,
                   batch_size=batch_size,
                   batch_interval=batch_interval,
                   subdivision=subdivision,
@@ -178,6 +178,7 @@ if __name__ == "__main__":
                   multiperclass=multiperclass,
                   nms_thresh=nms_thresh,
                   nms_topk=nms_topk,
+                  iou_thresh = iou_thresh,
                   except_class_thresh=except_class_thresh,
                   plot_class_thresh=plot_class_thresh)
 
@@ -200,5 +201,6 @@ if __name__ == "__main__":
                  multiperclass=multiperclass,
                  nms_thresh=nms_thresh,
                  nms_topk=nms_topk,
+                 iou_thresh=iou_thresh,
                  except_class_thresh=except_class_thresh,
                  plot_class_thresh=plot_class_thresh)
