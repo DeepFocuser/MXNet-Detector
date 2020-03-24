@@ -245,7 +245,8 @@ class Voc_base_PR(object):
                       )
         fig = dict(data=graph, layout=layout)
         if isinstance(epoch, int):
-            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_{epoch}epoch_line.html'), auto_open=auto_open)
+            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_{epoch}epoch_line.html'),
+                 auto_open=auto_open)
         else:
             plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_line.html'), auto_open=auto_open)
 
@@ -265,7 +266,8 @@ class Voc_base_PR(object):
 
         fig = dict(data=[graph], layout=layout)
         if isinstance(epoch, int):
-            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_{epoch}epoch_vbar.html'), auto_open=auto_open)
+            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_{epoch}epoch_vbar.html'),
+                 auto_open=auto_open)
         else:
             plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_vbar.html'), auto_open=auto_open)
 
