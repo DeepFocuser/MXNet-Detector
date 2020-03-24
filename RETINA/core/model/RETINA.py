@@ -244,5 +244,5 @@ if __name__ == "__main__":
     < input size(height, width) : (512, 512) >
     class prediction shape : (2, 49104, 7)
     box prediction shape : (2, 49104, 4)
-    anchor shape : (1, 785664, 4)
+    anchor shape : (1, 49104, 4)
     '''

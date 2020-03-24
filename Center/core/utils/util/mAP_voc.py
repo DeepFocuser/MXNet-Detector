@@ -388,20 +388,20 @@ class Voc_2010_AP(Voc_base_PR):
 
 if __name__ == "__main__":
     import random
-    from core import CenterNet, DetectionDataset, CenterTrainTransform
+    from core import CenterNet, DetectionDataset, CenterValidTransform
     from core import Prediction
     from collections import OrderedDict
     import mxnet as mx
 
     input_size = (512, 512)
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    transform = CenterTrainTransform(input_size, mean=(0.485, 0.456, 0.406),
-                                     std=(0.229, 0.224, 0.225))
+    transform = CenterValidTransform(input_size, mean=(0.485, 0.456, 0.406),
+                                     std=(0.229, 0.224, 0.225), make_target=False)
     dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), transform=transform)
     num_classes = dataset.num_class
     name_classes = dataset.classes
     length = len(dataset)
-    image, label, _ = dataset[random.randint(0, length - 1)]
+    image, label, _, _, _ = dataset[random.randint(0, length - 1)]
 
     net = CenterNet(base=18,
                     heads=OrderedDict([
@@ -409,7 +409,10 @@ if __name__ == "__main__":
                         ('offset', {'num_output': 2}),
                         ('wh', {'num_output': 2})
                     ]),
-                    head_conv_channel=64)
+                    head_conv_channel=64, pretrained=False,
+                    root=os.path.join(root, "modelparam"),
+                    use_dcnv2=False,
+                    ctx=mx.cpu())
     net.hybridize(active=True, static_alloc=True, static_shape=True)
 
     prediction = Prediction(topk=100, scale=4)

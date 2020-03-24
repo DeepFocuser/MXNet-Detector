@@ -13,14 +13,15 @@ import mxnet.autograd as autograd
 import mxnet.contrib.amp as amp
 import mxnet.gluon as gluon
 import numpy as np
+from mxboard import SummaryWriter
+from tqdm import tqdm
+
 from core import CenterNet
 from core import HeatmapFocalLoss, NormedL1Loss
 from core import Prediction
 from core import Voc_2007_AP
 from core import plot_bbox, export_block_for_cplusplus, PostNet
 from core import traindataloader, validdataloader
-from mxboard import SummaryWriter
-from tqdm import tqdm
 
 logfilepath = ""
 if os.path.isfile(logfilepath):

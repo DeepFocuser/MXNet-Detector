@@ -389,26 +389,26 @@ class Voc_2010_AP(Voc_base_PR):
 
 if __name__ == "__main__":
     import random
-    from core import RetinaNet, DetectionDataset
+    from core import RetinaNet, RetinaValidTransform, DetectionDataset
     from core import Prediction
 
     input_size = (512, 512)
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), input_size=input_size,
-                               box_normalization=True)
+    transform = RetinaValidTransform(input_size[0], input_size[1], make_target=False)
+    dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), transform=transform)
     num_classes = dataset.num_class
     name_classes = dataset.classes
     length = len(dataset)
-    image, label, _ = dataset[random.randint(0, length - 1)]
+    image, label, _, _, _ = dataset[random.randint(0, length - 1)]
+    label = mx.nd.array(label)
 
     net = RetinaNet(version=18,
-                    height_width_size=input_size,
-                    feature_sizes=[64, 32, 16, 8, 4],  # 입력 512일 때 feature size
+                    input_size=(512, 512),
                     anchor_sizes=[32, 64, 128, 256, 512],
                     anchor_size_ratios=[1, pow(2, 1 / 3), pow(2, 2 / 3)],
                     anchor_aspect_ratios=[0.5, 1, 2],
                     num_classes=num_classes,  # foreground만
-                    pretrained=True,
+                    pretrained=False,
                     pretrained_path=os.path.join(root, "modelparam"),
                     anchor_box_offset=(0.5, 0.5),
                     anchor_box_clip=True,
@@ -416,7 +416,7 @@ if __name__ == "__main__":
     net.hybridize(active=True, static_alloc=True, static_shape=True)
 
     pred = Prediction(
-        sigmoid=False,
+        from_sigmoid=False,
         means=(0., 0., 0., 0.),
         stds=(0.1, 0.1, 0.2, 0.2),
         num_classes=num_classes,

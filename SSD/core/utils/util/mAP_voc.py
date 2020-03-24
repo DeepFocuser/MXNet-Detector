@@ -389,27 +389,27 @@ class Voc_2010_AP(Voc_base_PR):
 
 if __name__ == "__main__":
     import random
-    from core import SSD_VGG16, DetectionDataset
+    from core import SSD_VGG16, SSDValidTransform, DetectionDataset
     from core import Prediction
 
     input_size = (512, 512)
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), input_size=input_size,
-                               box_normalization=True)
+    transform = SSDValidTransform(input_size[0], input_size[1], make_target=False)
+    dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), transform=transform)
     num_classes = dataset.num_class
     name_classes = dataset.classes
     length = len(dataset)
-    image, label, _ = dataset[random.randint(0, length - 1)]
+    image, label, _, _, _ = dataset[random.randint(0, length - 1)]
+    label = mx.nd.array(label)
 
-    net = SSD_VGG16(height_width_size=input_size,
+    net = SSD_VGG16(input_size=input_size,
                     box_sizes=[21, 51.2, 133.12, 215.04, 296.96, 378.88, 460.8, 542.72],
                     box_ratios=[[1, 2, 0.5]] +  # conv4_3
                                [[1, 2, 0.5, 3, 1.0 / 3]] * 4 +  # conv7, conv8_2, conv9_2, conv10_2
                                [[1, 2, 0.5]] * 2,  # conv11_2, conv12_2
                     num_classes=num_classes,
                     # feature_sizes=[38, 19, 10, 5, 3, 1], # input_size : 300 - 6개
-                    feature_sizes=[64, 32, 16, 8, 4, 2, 1],  # input_size : 512 - 7개
-                    pretrained=True,
+                    pretrained=False,
                     pretrained_path=os.path.join(root, 'modelparam'),
                     anchor_box_offset=(0.5, 0.5),
                     anchor_box_clip=True,
@@ -420,7 +420,7 @@ if __name__ == "__main__":
     precision_recall_2010 = Voc_2010_AP(iou_thresh=0.5, class_names=name_classes)
 
     pred = Prediction(
-        softmax=False,
+        from_softmax=False,
         means=(0., 0., 0., 0.),
         stds=(0.1, 0.1, 0.2, 0.2),
         num_classes=num_classes,

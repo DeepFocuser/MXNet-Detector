@@ -120,6 +120,7 @@ class DetectionDataset(Dataset):
     def __len__(self):
         return len(self._items)
 
+
 # test
 if __name__ == "__main__":
     import random

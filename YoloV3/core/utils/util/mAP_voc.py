@@ -389,41 +389,37 @@ class Voc_2010_AP(Voc_base_PR):
 
 if __name__ == "__main__":
     import random
-    from core import RetinaNet, DetectionDataset
+    from core import Yolov3, YoloValidTransform, DetectionDataset
     from core import Prediction
 
     input_size = (512, 512)
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), input_size=input_size,
-                               box_normalization=True)
+    transform = YoloValidTransform(input_size[0], input_size[1], make_target=False)
+    dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), transform=transform)
     num_classes = dataset.num_class
     name_classes = dataset.classes
     length = len(dataset)
-    image, label, _ = dataset[random.randint(0, length - 1)]
+    image, label, _, _, _ = dataset[random.randint(0, length - 1)]
+    label = mx.nd.array(label)
 
-    net = RetinaNet(version=18,
-                    height_width_size=input_size,
-                    feature_sizes=[64, 32, 16, 8, 4],  # 입력 512일 때 feature size
-                    anchor_sizes=[32, 64, 128, 256, 512],
-                    anchor_size_ratios=[1, pow(2, 1 / 3), pow(2, 2 / 3)],
-                    anchor_aspect_ratios=[0.5, 1, 2],
-                    num_classes=num_classes,  # foreground만
-                    pretrained=True,
-                    pretrained_path=os.path.join(root, "modelparam"),
-                    anchor_box_offset=(0.5, 0.5),
-                    anchor_box_clip=True,
-                    ctx=mx.cpu())
+    net = Yolov3(Darknetlayer=53,
+                 input_size=input_size,
+                 anchors={"shallow": [(10, 13), (16, 30), (33, 23)],
+                          "middle": [(30, 61), (62, 45), (59, 119)],
+                          "deep": [(116, 90), (156, 198), (373, 326)]},
+                 num_classes=num_classes,  # foreground만
+                 pretrained=False,
+                 pretrained_path=os.path.join(root, "modelparam"),
+                 ctx=mx.cpu())
     net.hybridize(active=True, static_alloc=True, static_shape=True)
 
-    pred = Prediction(
-        sigmoid=False,
-        means=(0., 0., 0., 0.),
-        stds=(0.1, 0.1, 0.2, 0.2),
+    prediction = Prediction(
+        from_sigmoid=False,
         num_classes=num_classes,
-        decode_number=1000,
         nms_thresh=0.5,
         nms_topk=100,
-        except_class_thresh=0.05)
+        except_class_thresh=0.05,
+        multiperclass=True)
 
     precision_recall_2007 = Voc_2007_AP(iou_thresh=0.5, class_names=name_classes)
     precision_recall_2010 = Voc_2010_AP(iou_thresh=0.5, class_names=name_classes)
@@ -437,8 +433,10 @@ if __name__ == "__main__":
     gt_boxes = label[:, :, :4]
     gt_ids = label[:, :, 4:5]
 
-    cls_preds, box_preds, anchors = net(data)
-    ids, scores, bboxes = pred(cls_preds, box_preds, anchors)
+    output1, output2, output3, anchor1, anchor2, anchor3, offset1, offset2, offset3, stride1, stride2, stride3 = net(
+        data)
+    ids, scores, bboxes = prediction(output1, output2, output3, anchor1, anchor2, anchor3, offset1, offset2, offset3,
+                                     stride1, stride2, stride3)
 
     precision_recall_2007.update(pred_bboxes=bboxes,
                                  pred_labels=ids,
