@@ -1,11 +1,10 @@
 import os
+import test
 
 import mlflow as ml
 import mxnet as mx
-import yaml
-
-import test
 import train
+import yaml
 
 # MXNET-ONNX EXPORT 지원 가능 함수 확인
 # -> https://github.com/apache/incubator-mxnet/tree/master/python/mxnet/contrib/onnx/mx2onnx
@@ -36,6 +35,7 @@ topk = parser['topk']
 iou_thresh = parser['iou_thresh']
 plot_class_thresh = parser['plot_class_thresh']
 test_graph_path = parser["test_graph_path"]
+test_html_auto_open = parser["test_html_auto_open"]
 
 # model
 parser = stream['model']
@@ -81,6 +81,7 @@ valid_size = parser["valid_size"]
 eval_period = parser["eval_period"]
 tensorboard = parser["tensorboard"]
 valid_graph_path = parser["valid_graph_path"]
+valid_html_auto_open = parser["valid_html_auto_open"]
 
 parser = stream['mlflow']
 using_mlflow = parser["using_mlflow"]
@@ -131,7 +132,7 @@ if __name__ == "__main__":
                   num_workers=num_workers,
                   optimizer=optimizer,
                   lambda_off=lambda_off,
-                  lambda_size = lambda_size,
+                  lambda_size=lambda_size,
                   save_period=save_period,
                   load_period=load_period,
                   learning_rate=learning_rate,
@@ -147,6 +148,7 @@ if __name__ == "__main__":
                   eval_period=eval_period,
                   tensorboard=tensorboard,
                   valid_graph_path=valid_graph_path,
+                  valid_html_auto_open=valid_html_auto_open,
                   using_mlflow=using_mlflow,
 
                   # valid dataset 그리기
@@ -164,6 +166,7 @@ if __name__ == "__main__":
                  test_dataset_path=test_dataset_path, num_workers=num_workers,
                  test_save_path=test_save_path,
                  test_graph_path=test_graph_path,
+                 test_html_auto_open=test_html_auto_open,
                  lambda_off=lambda_off,
                  lambda_size=lambda_size,
                  show_flag=show_flag,

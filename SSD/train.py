@@ -61,6 +61,7 @@ def run(mean=[0.485, 0.456, 0.406],
         eval_period=5,
         tensorboard=True,
         valid_graph_path="valid_Graph",
+        valid_html_auto_open=True,
         using_mlflow=True,
         decode_number=-1,
         multiperclass=True,
@@ -587,7 +588,8 @@ def run(mean=[0.485, 0.456, 0.406],
                                           precision=precision,
                                           recall=recall,
                                           threshold=threshold,
-                                          AP=AP_appender, mAP=mAP_result, folder_name=valid_graph_path, epoch=i)
+                                          AP=AP_appender, mAP=mAP_result, folder_name=valid_graph_path, epoch=i,
+                                          auto_open=valid_html_auto_open)
 
             precision_recall.reset()
 
@@ -736,6 +738,7 @@ if __name__ == "__main__":
         eval_period=5,
         tensorboard=True,
         valid_graph_path="valid_Graph",
+        valid_html_auto_open=True,
         using_mlflow=True,
         decode_number=-1,
         multiperclass=True,

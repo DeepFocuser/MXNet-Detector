@@ -58,6 +58,7 @@ def run(mean=[0.485, 0.456, 0.406],
         eval_period=5,
         tensorboard=True,
         valid_graph_path="valid_Graph",
+        valid_html_auto_open=True,
         using_mlflow=True,
         topk=100,
         iou_thresh=0.5,
@@ -482,7 +483,8 @@ def run(mean=[0.485, 0.456, 0.406],
                                           precision=precision,
                                           recall=recall,
                                           threshold=threshold,
-                                          AP=AP_appender, mAP=mAP_result, folder_name=valid_graph_path, epoch=i)
+                                          AP=AP_appender, mAP=mAP_result, folder_name=valid_graph_path, epoch=i,
+                                          auto_open=valid_html_auto_open)
             precision_recall.reset()
 
             if tensorboard:
@@ -648,7 +650,8 @@ if __name__ == "__main__":
         eval_period=5,
         tensorboard=True,
         valid_graph_path="valid_Graph",
+        valid_html_auto_open=True,
         using_mlflow=True,
         topk=100,
-        iou_thresh = 0.5,
+        iou_thresh=0.5,
         plot_class_thresh=0.5)

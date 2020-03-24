@@ -26,6 +26,7 @@ def run(mean=[0.485, 0.456, 0.406],
         test_dataset_path="Dataset/test",
         test_save_path="result",
         test_graph_path="test_Graph",
+        test_html_auto_open=False,
         lambda_off=1,
         lambda_size=0.1,
         num_workers=4,
@@ -194,7 +195,8 @@ def run(mean=[0.485, 0.456, 0.406],
                                   precision=precision,
                                   recall=recall,
                                   threshold=threshold,
-                                  AP=AP_appender, mAP=mAP_result, folder_name=test_graph_path)
+                                  AP=AP_appender, mAP=mAP_result, folder_name=test_graph_path, epoch=load_period,
+                                  auto_open=test_html_auto_open)
 
 
 if __name__ == "__main__":
@@ -205,6 +207,7 @@ if __name__ == "__main__":
         test_dataset_path="Dataset/test",
         test_save_path="result",
         test_graph_path="test_Graph",
+        test_html_auto_open=True,
         lambda_off=1,
         lambda_size=0.1,
         num_workers=4,

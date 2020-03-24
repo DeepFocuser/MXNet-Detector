@@ -38,6 +38,7 @@ iou_thresh = parser['iou_thresh']
 except_class_thresh = parser['except_class_thresh']
 plot_class_thresh = parser['plot_class_thresh']
 test_graph_path = parser["test_graph_path"]
+test_html_auto_open = parser["test_html_auto_open"]
 
 # model
 parser = stream['model']
@@ -89,6 +90,7 @@ valid_size = parser["valid_size"]
 eval_period = parser["eval_period"]
 tensorboard = parser["tensorboard"]
 valid_graph_path = parser["valid_graph_path"]
+valid_html_auto_open = parser["valid_html_auto_open"]
 
 parser = stream['mlflow']
 using_mlflow = parser["using_mlflow"]
@@ -171,6 +173,7 @@ if __name__ == "__main__":
                   eval_period=eval_period,
                   tensorboard=tensorboard,
                   valid_graph_path=valid_graph_path,
+                  valid_html_auto_open=valid_html_auto_open,
                   using_mlflow=using_mlflow,
 
                   # valid dataset 그리기
@@ -192,6 +195,7 @@ if __name__ == "__main__":
                  test_dataset_path=test_dataset_path,
                  test_save_path=test_save_path,
                  test_graph_path=test_graph_path,
+                 test_html_auto_open=test_html_auto_open,
                  foreground_iou_thresh=foreground_iou_thresh,
                  num_workers=num_workers,
                  show_flag=show_flag,

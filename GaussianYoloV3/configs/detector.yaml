@@ -15,6 +15,7 @@ Dataset:
   except_class_thresh: 0.01 #0.05
   plot_class_thresh: 0.5 # 그릴때 score_thresh 보다 큰 것들만 그린다.
   test_graph_path: test_Graph
+  test_html_auto_open: False
 
 model:
   training: True
@@ -60,6 +61,7 @@ validation:
   eval_period: 10
   tensorboard: True
   valid_graph_path: valid_Graph
+  valid_html_auto_open: True
 mlflow:
   using_mlflow: True
   run_name: Animal

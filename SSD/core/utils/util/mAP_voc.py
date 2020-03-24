@@ -208,7 +208,7 @@ class Voc_base_PR(object):
         return class_name, precision, recall, true_positive, false_positive, threshold
 
     def get_PR_curve(self, name=None, precision=None, recall=None, threshold=None, AP=None, mAP=None, root="",
-                     folder_name="test_graph", epoch=None):
+                     folder_name="test_graph", epoch=None, auto_open=False):
 
         graph = []
         ceil_position = 2
@@ -246,9 +246,9 @@ class Voc_base_PR(object):
                       )
         fig = dict(data=graph, layout=layout)
         if isinstance(epoch, int):
-            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_{epoch}epoch_line.html'))
+            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_{epoch}epoch_line.html'), auto_open=auto_open)
         else:
-            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_line.html'))
+            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_line.html'), auto_open=auto_open)
 
         # vertical bar
         graph = go.Bar(
@@ -266,9 +266,9 @@ class Voc_base_PR(object):
 
         fig = dict(data=[graph], layout=layout)
         if isinstance(epoch, int):
-            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_{epoch}epoch_vbar.html'))
+            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_{epoch}epoch_vbar.html'), auto_open=auto_open)
         else:
-            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_vbar.html'))
+            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_vbar.html'), auto_open=auto_open)
 
     def reset(self):
 
