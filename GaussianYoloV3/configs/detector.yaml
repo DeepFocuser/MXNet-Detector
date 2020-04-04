@@ -11,7 +11,7 @@ Dataset:
   multiperclass: True
   nms_thresh: 0.5
   nms_topk: 100 # 전체 다하면(-1) 너무 오래걸림.
-  iou_thresh: 0.5,
+  iou_thresh: 0.5
   except_class_thresh: 0.01 #0.05
   plot_class_thresh: 0.5 # 그릴때 score_thresh 보다 큰 것들만 그린다.
   test_graph_path: test_Graph
