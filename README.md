@@ -13,7 +13,7 @@
     * Configure Run Environment
         1. Create a virtual environment
         ```cmd
-        jg@JG:~$ conda create -n mxnet python==3.7.0
+        jg@JG:~$ conda create -n mxnet python==3.7.3
         ```
         2. Install the required module
         ```cmd
