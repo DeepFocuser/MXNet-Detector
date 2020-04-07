@@ -18,7 +18,7 @@
         2. Install the required module
         ```cmd
         (mxnet) jg@JG:~$ conda install  cudatoolkit==10.1.243 cudnn 
-        (mxnet) jg@JG:~$ pip install mxnet-cu101 mxboard gluoncv plotly  mlflow opencv-python==4.1.1.26 onnx tqdm PyYAML --pre --upgrade
+        (mxnet) jg@JG:~$ pip install mxnet-cu101==1.5.1 mxboard gluoncv plotly  mlflow opencv-python==4.1.1.26 onnx tqdm PyYAML --pre --upgrade
         ```
 
 >## ***Author*** 
