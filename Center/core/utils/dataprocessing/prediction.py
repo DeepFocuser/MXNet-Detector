@@ -22,7 +22,7 @@ class Prediction(HybridBlock):
 
         _, channel, height, width = heatmap.shape_array().split(num_outputs=4, axis=0)  # int64임
         # 상위 self._topk개만 뽑아내기
-        scores, indices = heatmap.reshape((0, -1)).topk(k=self._topk, axis=-1, ret_typ='both',
+        scores, indices = heatmap.reshape((0, -1)).topk(k=self._topk, axis=-1, ret_typ='both', dtype='float32',
                                                         is_ascend=False)  # (batch, channel * height * width)
         scores = scores.expand_dims(-1)
 

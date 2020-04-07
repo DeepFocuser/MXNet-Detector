@@ -626,7 +626,24 @@ def run(mean=[0.485, 0.456, 0.406],
             else:
                 context = mx.cpu(0)
 
-            postnet = PostNet(net=net, auxnet=prediction)
+            '''
+                mxnet1.6.0 버전 에서 AMP 사용시 위에 미리 선언한 prediction을 사용하면 문제가 될 수 있다. 
+                -yolo v3, gaussian yolo v3 에서는 문제가 발생한다.
+                mxnet 1.5.x 버전에서는 아래와 같이 새로 선언하지 않아도 정상 동작한다.  
+
+                block들은 함수 인자로 보낼 경우 자기 자신이 보내진다.(복사되는 것이 아님)
+                export_block_for_cplusplus 에서 prediction 이 hybridize 되면서 
+                미리 선언한 prediction도 hybridize화 되면서 symbol 형태가 된다. 
+                이런 현상을 보면 아래와같이 다시 선언해 주는게 맞는 것 같다.
+            '''
+            auxnet = Prediction(
+                from_sigmoid=False,
+                num_classes=num_classes,
+                nms_thresh=nms_thresh,
+                nms_topk=nms_topk,
+                except_class_thresh=except_class_thresh,
+                multiperclass=multiperclass)
+            postnet = PostNet(net=net, auxnet=auxnet)
 
             try:
                 net.export(os.path.join(weight_path, f"{model}"), epoch=i, remove_amp_cast=True)  # for onnx
