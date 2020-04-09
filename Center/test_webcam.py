@@ -72,8 +72,8 @@ def run(weight_path="weights",
         exit(0)
 
     weight_path = os.path.join(weight_path, load_name)
-    sym = os.path.join(weight_path, f'{load_name}_pre-symbol.json')
-    params = os.path.join(weight_path, f'{load_name}_pre-{load_period:04d}.params')
+    sym = os.path.join(weight_path, f'{load_name}-symbol.json')
+    params = os.path.join(weight_path, f'{load_name}-{load_period:04d}.params')
 
     logging.info("symbol model test")
     if os.path.exists(sym) and os.path.exists(params):
