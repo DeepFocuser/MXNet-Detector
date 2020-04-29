@@ -128,13 +128,6 @@ def run(mean=[0.485, 0.456, 0.406],
                                                           num_workers=num_workers,
                                                           shuffle=True, mean=mean, std=std, scale_factor=scale_factor,
                                                           make_target=True)
-        valid_dataloader, valid_dataset = validdataloader(path=valid_dataset_path,
-                                                          input_size=input_size,
-                                                          batch_size=valid_size,
-                                                          num_workers=num_workers,
-                                                          shuffle=True, mean=mean, std=std, scale_factor=scale_factor,
-                                                          make_target=True)
-
     except Exception:
         logging.info("dataset 없음")
         exit(0)
@@ -146,6 +139,12 @@ def run(mean=[0.485, 0.456, 0.406],
 
     valid_list = glob.glob(os.path.join(valid_dataset_path, "*"))
     if valid_list:
+        valid_dataloader, valid_dataset = validdataloader(path=valid_dataset_path,
+                                                          input_size=input_size,
+                                                          batch_size=valid_size,
+                                                          num_workers=num_workers,
+                                                          shuffle=True, mean=mean, std=std, scale_factor=scale_factor,
+                                                          make_target=True)
         valid_update_number_per_epoch = len(valid_dataloader)
         if valid_update_number_per_epoch < 1:
             logging.warning("valid batch size가 데이터 수보다 큼")
