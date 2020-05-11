@@ -19,7 +19,10 @@ Value of 2 chooses the fastest algo whose memory requirements may be larger than
 '''
 os.environ["MXNET_CUDNN_AUTOTUNE_DEFAULT"] = "2"
 
+# https://mxnet.apache.org/versions/1.4.1/faq/env_var.html
+os.environ["MXNET_GPU_WORKER_NTHREADS"] = "4"
 stream = yaml.load(open("configs/detector.yaml", "rt", encoding='UTF8'), Loader=yaml.SafeLoader)
+
 # dataset
 parser = stream['Dataset']
 train_dataset_path = parser['train']
