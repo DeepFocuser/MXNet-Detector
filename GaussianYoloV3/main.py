@@ -25,6 +25,9 @@ Value of 1 chooses the best algo in a limited workspace
 Value of 2 chooses the fastest algo whose memory requirements may be larger than the default workspace threshold
 '''
 os.environ["MXNET_CUDNN_AUTOTUNE_DEFAULT"] = "2"  # 메모리 사용 관련
+
+# https://mxnet.apache.org/versions/1.4.1/faq/env_var.html
+os.environ["MXNET_GPU_WORKER_NTHREADS"] = "4"
 stream = yaml.load(open("configs/detector.yaml", "rt", encoding='UTF8'), Loader=yaml.SafeLoader)
 
 # dataset
