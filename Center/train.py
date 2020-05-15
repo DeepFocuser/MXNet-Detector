@@ -522,8 +522,8 @@ def run(mean=[0.485, 0.456, 0.406],
                         heatmap = mx.nd.transpose(heatmap, axes=(1, 2, 0))  # (height, width, channel=1)
                         heatmap = mx.nd.repeat(heatmap, repeats=3, axis=-1)  # (height, width, channel=3)
                         heatmap = heatmap.asnumpy()  # mxnet.ndarray -> numpy.ndarray
-                        heatmap = cv2.resize(heatmap, dsize=(input_size[1], input_size[0]))  # 사이즈 원복
                         heatmap = heatmap.astype("uint8")  # float32 -> uint8
+                        heatmap = cv2.resize(heatmap, dsize=(input_size[1], input_size[0]))  # 사이즈 원복
                         heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
                         heatmap[:, :, (0, 1, 2)] = heatmap[:, :, (2, 1, 0)]  # BGR -> RGB
                         heatmap = np.transpose(heatmap, axes=(2, 0, 1))  # (channel=3, height, width)
