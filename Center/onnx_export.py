@@ -2,10 +2,8 @@ import logging
 import os
 
 import numpy as np
-from mxnet.contrib import onnx as onnx_mxnet
-
 from core import check_onnx
-from core import testdataloader
+from mxnet.contrib import onnx as onnx_mxnet
 
 logfilepath = ""
 if os.path.isfile(logfilepath):
@@ -18,11 +16,6 @@ def export(path="weights",
            load_period=1,
            target_size=(768, 768),
            dtype=np.float32):
-    try:
-        _, test_dataset = testdataloader()
-    except Exception:
-        logging.info("The dataset does not exist")
-        exit(0)
 
     weight_path = os.path.join(path, load_name)
     if not os.path.exists(weight_path):

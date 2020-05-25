@@ -24,11 +24,8 @@ def export(path="weights",
            anchor_box_offset=(0.5, 0.5),
            anchor_box_clip=False,
            dtype=np.float32):
-    try:
-        _, test_dataset = testdataloader()
-    except Exception:
-        logging.info("The dataset does not exist")
-        exit(0)
+
+    _, test_dataset = testdataloader()
 
     weight_path = os.path.join(path, load_name)
     if not os.path.exists(weight_path):

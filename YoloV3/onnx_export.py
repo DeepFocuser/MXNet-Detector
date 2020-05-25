@@ -2,11 +2,10 @@ import logging
 import os
 
 import numpy as np
-from mxnet.contrib import onnx as onnx_mxnet
-
 from core import YoloV3output, AnchorOffstNet, export_block_for_cplusplus
 from core import check_onnx
 from core import testdataloader
+from mxnet.contrib import onnx as onnx_mxnet
 
 logfilepath = ""
 if os.path.isfile(logfilepath):
@@ -23,11 +22,8 @@ def onnx_export(path="weights",
                          "middle": [(30, 61), (62, 45), (59, 119)],
                          "deep": [(116, 90), (156, 198), (373, 326)]},
                 dtype=np.float32):
-    try:
-        _, test_dataset = testdataloader()
-    except Exception:
-        logging.info("The dataset does not exist")
-        exit(0)
+
+    _, test_dataset = testdataloader()
 
     weight_path = os.path.join(path, load_name)
     if not os.path.exists(weight_path):
@@ -38,8 +34,8 @@ def onnx_export(path="weights",
     temp = load_name.split("_")
     version = int(temp[-1])
     net = YoloV3output(Darknetlayer=version,
-                               anchors=anchors,
-                               num_classes=test_dataset.num_class)
+                       anchors=anchors,
+                       num_classes=test_dataset.num_class)
     net.load_parameters(params, allow_missing=True,
                         ignore_extra=True)
 

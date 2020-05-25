@@ -119,25 +119,21 @@ def run(mean=[0.485, 0.456, 0.406],
     logging.info("training YoloV3 Detector")
     input_shape = (1, 3) + tuple(input_size)
 
-    try:
-        net = Yolov3(Darknetlayer=Darknetlayer,
-                     anchors=anchors,
-                     pretrained=False,
-                     ctx=mx.cpu())
-        train_dataloader, train_dataset = traindataloader(multiscale=multiscale,
-                                                          factor_scale=factor_scale,
-                                                          augmentation=data_augmentation,
-                                                          path=train_dataset_path,
-                                                          input_size=input_size,
-                                                          batch_size=batch_size,
-                                                          batch_interval=batch_interval,
-                                                          num_workers=num_workers,
-                                                          shuffle=True, mean=mean, std=std,
-                                                          net=net, ignore_threshold=ignore_threshold, dynamic=dynamic,
-                                                          from_sigmoid=False, make_target=True)
-    except Exception:
-        logging.info("dataset 없음")
-        exit(0)
+    net = Yolov3(Darknetlayer=Darknetlayer,
+                 anchors=anchors,
+                 pretrained=False,
+                 ctx=mx.cpu())
+    train_dataloader, train_dataset = traindataloader(multiscale=multiscale,
+                                                      factor_scale=factor_scale,
+                                                      augmentation=data_augmentation,
+                                                      path=train_dataset_path,
+                                                      input_size=input_size,
+                                                      batch_size=batch_size,
+                                                      batch_interval=batch_interval,
+                                                      num_workers=num_workers,
+                                                      shuffle=True, mean=mean, std=std,
+                                                      net=net, ignore_threshold=ignore_threshold, dynamic=dynamic,
+                                                      from_sigmoid=False, make_target=True)
 
     train_update_number_per_epoch = len(train_dataloader)
     if train_update_number_per_epoch < 1:
