@@ -62,6 +62,9 @@ def run(mean=[0.485, 0.456, 0.406],
         using_mlflow=True,
         topk=100,
         iou_thresh=0.5,
+        nms=False,
+        except_class_thresh=0.01,
+        nms_thresh=0.5,
         plot_class_thresh=0.5):
     '''
     AMP 가 모든 연산을 지원하지는 않는다.
@@ -281,7 +284,7 @@ def run(mean=[0.485, 0.456, 0.406],
 
     heatmapfocalloss = HeatmapFocalLoss(from_sigmoid=True, alpha=2, beta=4)
     normedl1loss = NormedL1Loss()
-    prediction = Prediction(batch_size=valid_size, topk=topk, scale=scale_factor)
+    prediction = Prediction(batch_size=valid_size, topk=topk, scale=scale_factor, nms=nms, except_class_thresh=except_class_thresh, nms_thresh=nms_thresh)
     precision_recall = Voc_2007_AP(iou_thresh=iou_thresh, class_names=name_classes)
 
     start_time = time.time()
@@ -427,7 +430,7 @@ def run(mean=[0.485, 0.456, 0.406],
                 미리 선언한 prediction도 hybridize화 되면서 symbol 형태가 된다. 
                 이런 현상을 보면 아래와같이 다시 선언해 주는게 맞는 것 같다.
             '''
-            auxnet = Prediction(topk=topk, scale=scale_factor)
+            auxnet = Prediction(topk=topk, scale=scale_factor, nms=nms, except_class_thresh=except_class_thresh, nms_thresh=nms_thresh)
             postnet = PostNet(net=net, auxnet=auxnet)  # 새로운 객체가 생성
             try:
                 net.export(os.path.join(weight_path, f"{model}"), epoch=i, remove_amp_cast=True)
@@ -664,4 +667,7 @@ if __name__ == "__main__":
         using_mlflow=True,
         topk=100,
         iou_thresh=0.5,
+        nms=False,
+        except_class_thresh=0.01,
+        nms_thresh=0.5,
         plot_class_thresh=0.5)

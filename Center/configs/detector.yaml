@@ -10,6 +10,12 @@ Dataset:
   show_flag: False
   topk: 100
   iou_thresh: 0.5
+
+  # nms 관련
+  nms: False
+  except_class_thresh: 0.01
+  nms_thresh: 0.5
+
   plot_class_thresh: 0.5 # 그릴때 score_thresh 보다 큰 것들만 그린다.
   test_graph_path: test_Graph
   test_html_auto_open: False

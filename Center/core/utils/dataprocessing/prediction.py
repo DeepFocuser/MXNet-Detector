@@ -5,12 +5,15 @@ from mxnet.gluon.nn import MaxPool2D
 
 class Prediction(HybridBlock):
 
-    def __init__(self, batch_size=1, topk=100, scale=4.0):
+    def __init__(self, batch_size=1, topk=100, scale=4.0, nms=False, except_class_thresh=0.01, nms_thresh=0.5):
         super(Prediction, self).__init__()
         self._batch_size = batch_size
         self._topk = topk
         self._scale = scale
         self._heatmap_nms = MaxPool2D(pool_size=(3, 3), strides=(1, 1), padding=(1, 1))
+        self._nms = nms
+        self._nms_thresh = nms_thresh
+        self._except_class_thresh = except_class_thresh
 
     def hybrid_forward(self, F, heatmap, offset, wh):
         '''
@@ -74,7 +77,29 @@ class Prediction(HybridBlock):
         bboxes = F.concat(*[bbox.expand_dims(-1) for bbox in bboxes],
                           dim=-1)  # (batch, self._topk, 1) ->  (batch, self._topk, 4)
 
-        return ids, scores, bboxes * self._scale
+        if self._nms:
+            results = F.concat(*[ids, scores, bboxes * self._scale], dim=-1)
+            if self._nms_thresh > 0 and self._nms_thresh < 1:
+                '''
+                Apply non-maximum suppression to input.
+                The output will be sorted in descending order according to score.
+                Boxes with overlaps larger than overlap_thresh,
+                smaller scores and background boxes will be removed and filled with -1,
+                '''
+                results = F.contrib.box_nms(
+                    results,
+                    valid_thresh = self._except_class_thresh,
+                    overlap_thresh=self._nms_thresh,
+                    topk=-1,
+                    id_index=0, score_index=1, coord_start=2,
+                    force_suppress=False, in_format="corner", out_format="corner")
+
+            ids = F.slice_axis(results, axis=-1, begin=0, end=1)
+            scores = F.slice_axis(results, axis=-1, begin=1, end=2)
+            bboxes = F.slice_axis(results, axis=-1, begin=2, end=6)
+            return ids, scores, bboxes
+        else:
+            return ids, scores, bboxes * self._scale
 
 
 # test

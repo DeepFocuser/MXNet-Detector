@@ -23,7 +23,7 @@ def run(video_list=True,
         video_path="",
         weight_path="exportweights",
         load_name="608_608_ADAM_PDark_53",
-        load_period=100, GPU_COUNT=0,
+        load_period=100,
         multiperclass=True,
         nms_thresh=0.5,
         nms_topk=500,
@@ -35,6 +35,11 @@ def run(video_list=True,
     if video_save:
         if not os.path.exists(video_save_path):
             os.makedirs(video_save_path)
+
+    if mx.context.num_gpus() > 0:
+        GPU_COUNT = mx.context.num_gpus()
+    else:
+        GPU_COUNT = 0
 
     if GPU_COUNT <= 0:
         ctx = mx.cpu(0)
@@ -67,12 +72,7 @@ def run(video_list=True,
     else:
         logging.info(f"network input size : {(netheight, netwidth)}")
 
-    try:
-        _, test_dataset = testdataloader()
-
-    except Exception:
-        logging.info("The dataset does not exist")
-        exit(0)
+    _, test_dataset = testdataloader()
 
     weight_path = os.path.join(weight_path, load_name)
     sym = os.path.join(weight_path, f'{load_name}-symbol.json')
@@ -208,7 +208,7 @@ if __name__ == "__main__":
         video_path='test_video',
         weight_path="exportweights",
         load_name="608_608_ADAM_PDark_53",
-        load_period=100, GPU_COUNT=0,
+        load_period=100,
         multiperclass=True,
         nms_thresh=0.5,
         nms_topk=500,

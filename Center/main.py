@@ -1,10 +1,11 @@
 import os
-import test
 
 import mlflow as ml
 import mxnet as mx
-import train
 import yaml
+
+import test
+import train
 
 # MXNET-ONNX EXPORT 지원 가능 함수 확인
 # -> https://github.com/apache/incubator-mxnet/tree/master/python/mxnet/contrib/onnx/mx2onnx
@@ -35,6 +36,9 @@ save_flag = parser['save_flag']
 show_flag = parser['show_flag']
 topk = parser['topk']
 iou_thresh = parser['iou_thresh']
+nms = parser['nms']
+except_class_thresh = parser['except_class_thresh']
+nms_thresh = parser['nms_thresh']
 plot_class_thresh = parser['plot_class_thresh']
 test_graph_path = parser["test_graph_path"]
 test_html_auto_open = parser["test_html_auto_open"]
@@ -103,6 +107,12 @@ if __name__ == "__main__":
             ml.set_tracking_uri("./mlruns")  # mlruns가 기본 트래킹이다.
             ex_id = ml.set_experiment("CENTER_" + "RES" + str(base))
             ml.start_run(run_name=run_name, experiment_id=ex_id)
+
+            ml.log_param("image order", "RGB")
+            ml.log_param("image range before normalization", "0~1")
+            ml.log_param("image_mean : ", image_mean)
+            ml.log_param("image_std : ", image_std)
+
             ml.log_param("height", input_size[0])
             ml.log_param("width", input_size[1])
             ml.log_param("pretrained_base", pretrained_base)
@@ -112,10 +122,26 @@ if __name__ == "__main__":
             ml.log_param("epoch", epoch)
             ml.log_param("batch size", batch_size)
             ml.log_param("multiscale", multiscale)
+            ml.log_param("factor_scale", factor_scale)
             ml.log_param("data augmentation", data_augmentation)
             ml.log_param("optimizer", optimizer)
+            ml.log_param("num_workers", num_workers)
+
+            ml.log_param("lambda_off", lambda_off)
+            ml.log_param("lambda_size", lambda_size)
             ml.log_param("learning rate", learning_rate)
             ml.log_param("decay lr", decay_lr)
+            ml.log_param("decay_step", decay_step)
+            ml.log_param("AMP", AMP)
+            ml.log_param("using_cuda", using_cuda)
+
+            ml.log_param("save_period", save_period)
+            ml.log_param("topk", topk)
+            ml.log_param("mAP iou_thresh", iou_thresh)
+            ml.log_param("nms", nms)
+            ml.log_param("except_class_thresh", except_class_thresh)
+            ml.log_param("nms_thresh", nms_thresh)
+            ml.log_param("plot_class_thresh", plot_class_thresh)
 
         train.run(mean=image_mean,
                   std=image_std,
@@ -155,6 +181,9 @@ if __name__ == "__main__":
 
                   # valid dataset 그리기
                   topk=topk,
+                  nms=nms,
+                  except_class_thresh = except_class_thresh,
+                  nms_thresh = nms_thresh,
                   iou_thresh=iou_thresh,
                   plot_class_thresh=plot_class_thresh)
 
@@ -175,5 +204,8 @@ if __name__ == "__main__":
                  save_flag=save_flag,
                  # test dataset 그리기
                  topk=topk,
+                 nms=nms,
+                 except_class_thresh=except_class_thresh,
+                 nms_thresh=nms_thresh,
                  iou_thresh=iou_thresh,
                  plot_class_thresh=plot_class_thresh)

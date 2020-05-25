@@ -21,6 +21,7 @@ class Prediction(HybridBlock):
                  multiperclass=True):
         super(Prediction, self).__init__()
 
+        self._except_class_thresh = except_class_thresh
         self._decoder = Decoder(from_sigmoid=from_sigmoid, num_classes=num_classes, thresh=except_class_thresh,
                                 multiperclass=multiperclass)
         self._nms_thresh = nms_thresh
@@ -48,6 +49,7 @@ class Prediction(HybridBlock):
             '''
             results = F.contrib.box_nms(
                 results,
+                valid_thresh = self._except_class_thresh,
                 overlap_thresh=self._nms_thresh,
                 topk=self._nms_topk,
                 id_index=0, score_index=1, coord_start=2,
@@ -88,7 +90,7 @@ if __name__ == "__main__":
         from_sigmoid=False,
         num_classes=num_classes,
         nms_thresh=0.5,
-        nms_topk=100,
+        nms_topk=-1,
         except_class_thresh=0.05,
         multiperclass=True)
 

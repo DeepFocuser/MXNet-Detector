@@ -24,8 +24,11 @@ def run(video_list=True,  # True일 때, 폴더에 있는 비디오(mp4)들 전�
         video_path='test_video',
         weight_path="weights",
         load_name="480_640_ADAM_PCENTER_RES18",
-        load_period=100, GPU_COUNT=0,
+        load_period=100,
         topk=500,
+        nms=False,
+        except_class_thresh=0.01,
+        nms_thresh=0.5,
         plot_class_thresh=0.5,
         video_save_path="result_video",
         video_show=True,
@@ -33,6 +36,11 @@ def run(video_list=True,  # True일 때, 폴더에 있는 비디오(mp4)들 전�
     if video_save:
         if not os.path.exists(video_save_path):
             os.makedirs(video_save_path)
+
+    if mx.context.num_gpus() > 0:
+        GPU_COUNT = mx.context.num_gpus()
+    else:
+        GPU_COUNT = 0
 
     if GPU_COUNT <= 0:
         ctx = mx.cpu(0)
@@ -68,12 +76,7 @@ def run(video_list=True,  # True일 때, 폴더에 있는 비디오(mp4)들 전�
     else:
         logging.info(f"network input size : {(netheight, netwidth)}")
 
-    try:
-        _, test_dataset = testdataloader()
-
-    except Exception:
-        logging.info("The dataset does not exist")
-        exit(0)
+    _, test_dataset = testdataloader()
 
     weight_path = os.path.join(weight_path, load_name)
     sym = os.path.join(weight_path, f'{load_name}-symbol.json')
@@ -101,7 +104,7 @@ def run(video_list=True,  # True일 때, 폴더에 있는 비디오(mp4)들 전�
 
     net.hybridize(active=True, static_alloc=True, static_shape=True)
 
-    prediction = Prediction(topk=topk, scale=scale_factor)
+    prediction = Prediction(topk=topk, scale=scale_factor, nms=nms, except_class_thresh=except_class_thresh, nms_thresh=nms_thresh)
 
     fourcc = cv2.VideoWriter_fourcc(*'DIVX')
     if video_list:
@@ -192,8 +195,11 @@ if __name__ == "__main__":
         video_path='test_video',
         weight_path="weights",
         load_name="480_640_ADAM_PCENTER_RES18",
-        load_period=100, GPU_COUNT=0,
+        load_period=100,
         topk=500,
+        nms=False,
+        except_class_thresh=0.01,
+        nms_thresh=0.5,
         plot_class_thresh=0.5,
         video_save_path="result_video",
         video_show=True,

@@ -6,12 +6,13 @@ import cv2
 import mxnet as mx
 import mxnet.gluon as gluon
 import numpy as np
+from tqdm import tqdm
+
 from core import HeatmapFocalLoss, NormedL1Loss
 from core import TargetGenerator, Prediction
 from core import Voc_2007_AP
 from core import plot_bbox, box_resize
 from core import testdataloader
-from tqdm import tqdm
 
 logfilepath = ""  # 따로 지정하지 않으면 terminal에 뜸
 if os.path.isfile(logfilepath):
@@ -34,6 +35,9 @@ def run(mean=[0.485, 0.456, 0.406],
         save_flag=True,
         topk=100,
         iou_thresh=0.5,
+        nms=False,
+        except_class_thresh=0.01,
+        nms_thresh=0.5,
         plot_class_thresh=0.5):
     if GPU_COUNT <= 0:
         ctx = mx.cpu(0)
@@ -108,7 +112,7 @@ def run(mean=[0.485, 0.456, 0.406],
     heatmapfocalloss = HeatmapFocalLoss(from_sigmoid=True, alpha=2, beta=4)
     normedl1loss = NormedL1Loss()
     targetgenerator = TargetGenerator(num_classes=num_classes)
-    prediction = Prediction(topk=topk, scale=scale_factor)
+    prediction = Prediction(topk=topk, scale=scale_factor, nms=nms, except_class_thresh=except_class_thresh, nms_thresh=nms_thresh)
 
     precision_recall = Voc_2007_AP(iou_thresh=iou_thresh, class_names=name_classes)
 
@@ -215,4 +219,7 @@ if __name__ == "__main__":
         save_flag=True,
         topk=100,
         iou_thresh=0.5,
+        nms=False,
+        except_class_thresh=0.01,
+        nms_thresh=0.5,
         plot_class_thresh=0.5)

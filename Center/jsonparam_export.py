@@ -1,9 +1,10 @@
 import logging
 import os
 
+from mxnet import gluon
+
 from core import Prediction
 from core import export_block_for_cplusplus, PostNet
-from mxnet import gluon
 
 logfilepath = ""
 if os.path.isfile(logfilepath):
@@ -15,9 +16,13 @@ def export(originpath="weights",
            newpath="jsonparamweights",
            load_name="480_640_ADAM_PCENTER_RES18",
            load_period=1,
-           topk=200):
+           topk=200,
+           nms=False,
+           except_class_thresh=0.01,
+           nms_thresh=0.5):
 
-    prediction = Prediction(topk=topk)
+    scale_factor = 4  # 고정
+    prediction = Prediction(topk=topk, scale=scale_factor, nms=nms, except_class_thresh=except_class_thresh, nms_thresh=nms_thresh)
 
     origin_weight_path = os.path.join(originpath, load_name)
     sym_path = os.path.join(origin_weight_path, f'{load_name}-symbol.json')
@@ -59,4 +64,7 @@ if __name__ == "__main__":
            newpath="jsonparamweights",
            load_name="480_640_ADAM_PCENTER_RES18",
            load_period=1,
-           topk=100)
+           topk=200,
+           nms=False,
+           except_class_thresh=0.01,
+           nms_thresh=0.5)

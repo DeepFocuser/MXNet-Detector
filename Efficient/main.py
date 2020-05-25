@@ -110,20 +110,44 @@ if __name__ == "__main__":
             ml.set_tracking_uri("./mlruns")  # mlruns가 기본 트래킹이다.
             ex_id = ml.set_experiment("Efficient" + "_" + str(base))
             ml.start_run(run_name=run_name, experiment_id=ex_id)
+
+            ml.log_param("image order", "RGB")
+            ml.log_param("image range before normalization", "0~1")
+            ml.log_param("image_mean : ", image_mean)
+            ml.log_param("image_std : ", image_std)
+
             ml.log_param("height", input_size[0])
             ml.log_param("width", input_size[1])
             ml.log_param("train dataset path", train_dataset_path)
             ml.log_param("valid dataset path", valid_dataset_path)
             ml.log_param("test dataset path", test_dataset_path)
             ml.log_param("epoch", epoch)
+
+            ml.log_param("anchor_alloc_size", anchor_alloc_size)
+            ml.log_param("anchor_sizes", anchor_sizes)
+            ml.log_param("anchor_size_ratios", anchor_size_ratios)
+            ml.log_param("anchor_aspect_ratios", test_dataset_path)
+            ml.log_param("anchor_box_clip", anchor_box_clip)
+
             ml.log_param("batch size", batch_size)
             ml.log_param("multiscale", multiscale)
             ml.log_param("foreground iou thresh", foreground_iou_thresh)
             ml.log_param("background iou thresh", background_iou_thresh)
             ml.log_param("data augmentation", data_augmentation)
             ml.log_param("optimizer", optimizer)
+            ml.log_param("num_workers", num_workers)
+
             ml.log_param("learning rate", learning_rate)
             ml.log_param("decay lr", decay_lr)
+            ml.log_param("decay_step", decay_step)
+            ml.log_param("AMP", AMP)
+            ml.log_param("using_cuda", using_cuda)
+
+            ml.log_param("save_period", save_period)
+            ml.log_param("mAP iou_thresh", iou_thresh)
+            ml.log_param("except_class_thresh", except_class_thresh)
+            ml.log_param("nms_thresh", nms_thresh)
+            ml.log_param("plot_class_thresh", plot_class_thresh)
 
         train.run(mean=image_mean,
                   std=image_std,

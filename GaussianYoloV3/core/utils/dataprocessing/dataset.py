@@ -1,5 +1,6 @@
 import glob
 import os
+import logging
 from xml.etree.ElementTree import parse
 
 # import json
@@ -7,6 +8,10 @@ import mxnet as mx
 import numpy as np
 from mxnet.gluon.data import Dataset
 
+logfilepath = ""  # 따로 지정하지 않으면 terminal에 뜸
+if os.path.isfile(logfilepath):
+    os.remove(logfilepath)
+logging.basicConfig(filename=logfilepath, level=logging.INFO)
 
 class DetectionDataset(Dataset):
     """
@@ -39,7 +44,7 @@ class DetectionDataset(Dataset):
                 name = os.path.splitext(base_image)[0]
                 self.itemname.append(name)
         else:
-            raise FileNotFoundError
+            logging.info("The dataset does not exist")
 
     def __getitem__(self, idx):
 
