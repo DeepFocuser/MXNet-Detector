@@ -110,8 +110,8 @@ if __name__ == "__main__":
 
             ml.log_param("image order", "RGB")
             ml.log_param("image range before normalization", "0~1")
-            ml.log_param("image_mean : ", image_mean)
-            ml.log_param("image_std : ", image_std)
+            ml.log_param("image mean RGB", image_mean)
+            ml.log_param("image std RGB", image_std)
 
             ml.log_param("height", input_size[0])
             ml.log_param("width", input_size[1])
