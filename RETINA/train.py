@@ -477,8 +477,8 @@ def run(mean=[0.485, 0.456, 0.406],
                 else:
                     image = gluon.utils.split_and_load(image, ctx, even_split=False)
                     label = gluon.utils.split_and_load(label, ctx, even_split=False)
-                    cls_all = gluon.utils.split_and_load(cls_all, [ctx], even_split=False)
-                    box_all = gluon.utils.split_and_load(box_all, [ctx], even_split=False)
+                    cls_all = gluon.utils.split_and_load(cls_all, ctx, even_split=False)
+                    box_all = gluon.utils.split_and_load(box_all, ctx, even_split=False)
 
                 # prediction, target space for Data Parallelism
                 cls_losses = []
