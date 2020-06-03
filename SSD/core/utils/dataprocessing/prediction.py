@@ -37,7 +37,6 @@ class Prediction(HybridBlock):
     def hybrid_forward(self, F, class_preds, box_preds, anchors):
 
         class_ids, class_scores = self._classdecoder(class_preds)
-        # 또 드는 생각 : self._boxdecodelimit 를 self._classdecoder 적용전에 cls_preds, box_preds, anchors 에 적용해도 될듯 하다.
         class_ids, class_scores, box_preds, anchors = self._boxdecodelimit(box_preds, anchors, class_ids, class_scores)
         box_predictions = self._boxdecoder(box_preds, anchors)
 
