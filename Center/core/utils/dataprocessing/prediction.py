@@ -23,13 +23,11 @@ class Prediction(HybridBlock):
         keep = self._heatmap_nms(heatmap) == heatmap
         heatmap = F.broadcast_mul(keep, heatmap)
 
-        _, channel, height, width = heatmap.shape_array().split(num_outputs=4, axis=0)  # int64임
+        _, _, height, width = heatmap.shape_array().split(num_outputs=4, axis=0)  # int64임
         # 상위 self._topk개만 뽑아내기
-        scores, indices = heatmap.reshape((0, -1)).topk(k=self._topk, axis=-1, ret_typ='both', dtype='float32',
+        scores, indices = heatmap.reshape((0, -1)).topk(k=self._topk, axis=-1, ret_typ='both', dtype='int64',
                                                         is_ascend=False)  # (batch, channel * height * width)
         scores = scores.expand_dims(-1)
-
-        indices = F.cast(indices, dtype='int64')
         ids = F.broadcast_div(indices, (height * width))  # 정수/정수 는 정수 = // 연산
         ids = F.cast(ids, "float32")  # c++에서 float으로 받아오기 때문에!!! 형 변환 필요
         ids = ids.expand_dims(-1)
@@ -54,7 +52,7 @@ class Prediction(HybridBlock):
         # offset 에서 offset_xs를 index로 보고 뽑기 - gather_nd를 알고 나니 상당히 유용한 듯.
         # x index가 0번에 있고, y index가 1번에 있으므로!!!
         batch_indices = F.cast(F.arange(self._batch_size).slice_like(
-            offset, axes=(0)).expand_dims(-1).repeat(repeats=self._topk, axis=-1), 'int64')  # (batch, self._topk)
+            offset, axes=(0)).expand_dims(-1).repeat(repeats=self._topk, axis=-1), dtype='int64')  # (batch, self._topk)
         offset_xs_indices = F.zeros_like(batch_indices, dtype='int64')
         offset_ys_indices = F.ones_like(batch_indices, dtype='int64')
         offset_xs = F.concat(batch_indices, topk_indices, offset_xs_indices, dim=0).reshape((3, -1))
