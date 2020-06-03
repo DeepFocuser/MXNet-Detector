@@ -22,11 +22,8 @@ def export(originpath="weights",
            nms_thresh=0.45,
            nms_topk=200,
            except_class_thresh=0.01):
-    try:
-        _, test_dataset = testdataloader()
-    except Exception:
-        logging.info("The dataset does not exist")
-        exit(0)
+    
+    _, test_dataset = testdataloader()
 
     prediction = Prediction(
         from_softmax=False,
