@@ -7,7 +7,8 @@ from core.utils.dataprocessing.predictFunction.decoder import ClassMDecoder, Cla
 
 class Prediction(HybridBlock):
 
-    def __init__(self, from_softmax=False,
+    def __init__(self, batch_size=1,
+                 from_softmax=False,
                  means=(0., 0., 0., 0.),
                  stds=(0.1, 0.1, 0.2, 0.2),
                  num_classes=2,
@@ -26,7 +27,7 @@ class Prediction(HybridBlock):
             self._classdecoder = ClassMDecoder(num_classes=num_classes, thresh=except_class_thresh,
                                                from_softmax=from_softmax)
 
-        self._boxdecodelimit = BoxDecodeLimit(decode_number=decode_number)
+        self._boxdecodelimit = BoxDecodeLimit(batch_size = batch_size, num_classes=num_classes, decode_number=decode_number)
         self._boxdecoder = BoxDecoder(stds=stds, means=means)
         self._num_classes = num_classes
         self._nms_thresh = nms_thresh
@@ -104,6 +105,7 @@ if __name__ == "__main__":
     net.hybridize(active=True, static_alloc=True, static_shape=True)
 
     pred = Prediction(
+        batch_size=8,
         from_softmax=False,
         means=(0., 0., 0., 0.),
         stds=(0.1, 0.1, 0.2, 0.2),

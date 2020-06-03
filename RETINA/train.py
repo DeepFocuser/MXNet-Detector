@@ -305,6 +305,7 @@ def run(mean=[0.485, 0.456, 0.406],
                                   exclude=False)
 
     prediction = Prediction(
+        batch_size=batch_size,
         from_sigmoid=False,
         num_classes=num_classes,
         decode_number=decode_number,

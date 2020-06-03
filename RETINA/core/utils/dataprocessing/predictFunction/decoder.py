@@ -93,27 +93,43 @@ class ClassMPDecoder(HybridBlock):
 
 
 class BoxDecodeLimit(HybridBlock):
-    '''
-    Parameters
-    ----------
-    decode_number : int / -1 : all
-    '''
 
-    def __init__(self, decode_number=1000):
+    def __init__(self, batch_size = 8, num_classes=3, decode_number=1000):
         super(BoxDecodeLimit, self).__init__()
+        self._batch_size = batch_size
+        self._num_classes = num_classes
         self._decode_number = decode_number
 
     def hybrid_forward(self, F, box_preds, anchors, class_ids, class_scores):
 
         if self._decode_number > 0:
-            cls_scores_argmax = F.argmax(class_scores, axis=-1)  # (batch, all feature number)
-            cls_scores_argsort = F.argsort(cls_scores_argmax, axis=1, is_ascend=False)
-            cls_scores_argsort = F.slice_axis(cls_scores_argsort, axis=-1, begin=0,
-                                              end=self._decode_number)  # (batch, self._decode_number)
-            class_ids = F.take(class_ids, cls_scores_argsort, axis=1)[0]
-            class_scores = F.take(class_scores, cls_scores_argsort, axis=1)[0]
-            box_preds = F.take(box_preds, cls_scores_argsort, axis=1)[0]
-            anchors = F.take(anchors, cls_scores_argsort, axis=1)[0]
+            _, scores_indices = class_scores.reshape((0, -1)).topk(k=self._decode_number, axis=-1, ret_typ='both', dtype='int64',
+                                                                   is_ascend=False)  # (batch, self._decode_number)
+            batch_indices = F.cast(F.arange(self._batch_size).slice_like(class_ids, axes=(0)).expand_dims(-1).repeat(repeats=self._decode_number, axis=-1), dtype='int64')
+            # id, score
+            class_ids_list = []
+            class_scores_list = []
+            for i in range(0, self._num_classes):
+                class_indices = F.zeros_like(batch_indices, dtype='int64') + i
+                all_indices = F.concat(batch_indices, scores_indices, class_indices, dim=0).reshape((3, -1))
+                class_ids_list.append(F.gather_nd(class_ids, all_indices).reshape((-1, self._decode_number)))
+                class_scores_list.append(F.gather_nd(class_scores, all_indices).reshape((-1, self._decode_number)))
+            class_ids = F.stack(*class_ids_list, axis=-1)
+            class_scores = F.stack(*class_scores_list, axis=-1)
+
+            # box, anchor
+            box_preds_list = []
+            anchors_list = []
+
+            # batch size만큼 반복해줘야 함 - topk로 배치마다 각각의 anchor를 선택하는 작업이 필요함
+            anchors = F.repeat(anchors, repeats=self._batch_size, axis=0)
+            for j in range(0, 4):
+                box_indices = F.zeros_like(batch_indices, dtype='int64') + j
+                all_indices = F.concat(batch_indices, scores_indices, box_indices, dim=0).reshape((3, -1))
+                box_preds_list.append(F.gather_nd(box_preds, all_indices).reshape((-1, self._decode_number)))
+                anchors_list.append(F.gather_nd(anchors, all_indices).reshape((-1, self._decode_number)))
+            box_preds = F.stack(*box_preds_list, axis=-1)
+            anchors = F.stack(*anchors_list, axis=-1)
             return class_ids, class_scores, box_preds, anchors
         else:
             return class_ids, class_scores, box_preds, anchors
