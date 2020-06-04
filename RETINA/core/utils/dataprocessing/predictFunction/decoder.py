@@ -141,7 +141,10 @@ class BoxMPDecodeLimit(HybridBlock):
     def hybrid_forward(self, F, box_preds, anchors, class_ids, class_scores):
 
         if self._decode_number > 0:
-            _, scores_indices = class_scores.reshape((0, -1)).topk(k=self._decode_number, axis=-1, ret_typ='both', dtype='int64',
+            
+            mx_id_indices = F.argmax(class_scores, axis=-1, keepdims=True)
+            max_class_scores = F.pick(class_scores, mx_id_indices, axis=-1, keepdims=False)
+            _, scores_indices = max_class_scores.topk(k=self._decode_number, axis=-1, ret_typ='both', dtype='int64',
                                                                    is_ascend=False)  # (batch, self._decode_number)
 
             batch_indices = F.cast(F.arange(self._batch_size).slice_like(class_ids, axes=(0)).expand_dims(-1).repeat(repeats=self._decode_number, axis=-1), dtype='int64')
