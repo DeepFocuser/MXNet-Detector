@@ -94,10 +94,10 @@ class ClassMPDecoder(HybridBlock):
     모든 박스를 decoding 할 필요는 없다. 
 '''
 
-class BoxDecodeLimit(HybridBlock):
+class BoxMDecodeLimit(HybridBlock):
 
     def __init__(self, batch_size = 8, num_classes=3, decode_number=1000):
-        super(BoxDecodeLimit, self).__init__()
+        super(BoxMDecodeLimit, self).__init__()
         self._batch_size = batch_size
         self._num_classes = num_classes
         self._decode_number = decode_number
@@ -107,6 +107,45 @@ class BoxDecodeLimit(HybridBlock):
         if self._decode_number > 0:
             _, scores_indices = class_scores.reshape((0, -1)).topk(k=self._decode_number, axis=-1, ret_typ='both', dtype='int64',
                                                                    is_ascend=False)  # (batch, self._decode_number)
+
+            batch_indices = F.cast(F.arange(self._batch_size).slice_like(class_ids, axes=(0)).expand_dims(-1).repeat(repeats=self._decode_number, axis=-1), dtype='int64')
+            # id, score
+            class_indices = F.zeros_like(batch_indices, dtype='int64')
+            all_indices = F.concat(batch_indices, scores_indices, class_indices, dim=0).reshape((3, -1))
+            class_ids = F.gather_nd(class_ids, all_indices).reshape((-1, self._decode_number, 1))
+            class_scores = F.gather_nd(class_scores, all_indices).reshape((-1, self._decode_number, 1))
+
+            # box, anchor
+            box_preds_list = []
+            anchors_list = []
+            # batch size만큼 반복해줘야 함 - topk로 배치마다 각각의 anchor를 선택하는 작업이 필요함
+            anchors = F.repeat(anchors, repeats=self._batch_size, axis=0)
+            # box_preds, anchors
+            for j in range(0, 4):
+                box_indices = F.zeros_like(batch_indices, dtype='int64') + j
+                all_indices = F.concat(batch_indices, scores_indices, box_indices, dim=0).reshape((3, -1))
+                box_preds_list.append(F.gather_nd(box_preds, all_indices).reshape((-1, self._decode_number)))
+                anchors_list.append(F.gather_nd(anchors, all_indices).reshape((-1, self._decode_number)))
+            box_preds = F.stack(*box_preds_list, axis=-1)
+            anchors = F.stack(*anchors_list, axis=-1)
+            return class_ids, class_scores, box_preds, anchors
+        else:
+            return class_ids, class_scores, box_preds, anchors
+
+class BoxMPDecodeLimit(HybridBlock):
+
+    def __init__(self, batch_size = 8, num_classes=3, decode_number=1000):
+        super(BoxMPDecodeLimit, self).__init__()
+        self._batch_size = batch_size
+        self._num_classes = num_classes
+        self._decode_number = decode_number
+
+    def hybrid_forward(self, F, box_preds, anchors, class_ids, class_scores):
+
+        if self._decode_number > 0:
+            _, scores_indices = class_scores.reshape((0, -1)).topk(k=self._decode_number, axis=-1, ret_typ='both', dtype='int64',
+                                                                   is_ascend=False)  # (batch, self._decode_number)
+
             batch_indices = F.cast(F.arange(self._batch_size).slice_like(class_ids, axes=(0)).expand_dims(-1).repeat(repeats=self._decode_number, axis=-1), dtype='int64')
             # id, score
             class_ids_list = []
@@ -122,9 +161,9 @@ class BoxDecodeLimit(HybridBlock):
             # box, anchor
             box_preds_list = []
             anchors_list = []
-
             # batch size만큼 반복해줘야 함 - topk로 배치마다 각각의 anchor를 선택하는 작업이 필요함
             anchors = F.repeat(anchors, repeats=self._batch_size, axis=0)
+            # box_preds, anchors
             for j in range(0, 4):
                 box_indices = F.zeros_like(batch_indices, dtype='int64') + j
                 all_indices = F.concat(batch_indices, scores_indices, box_indices, dim=0).reshape((3, -1))
@@ -135,6 +174,7 @@ class BoxDecodeLimit(HybridBlock):
             return class_ids, class_scores, box_preds, anchors
         else:
             return class_ids, class_scores, box_preds, anchors
+
 
 
 

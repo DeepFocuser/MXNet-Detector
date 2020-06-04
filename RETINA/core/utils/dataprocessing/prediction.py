@@ -1,8 +1,7 @@
 import mxnet as mx
-from mxnet.gluon import HybridBlock
-
-from core.utils.dataprocessing.predictFunction.decoder import BoxDecoder, BoxDecodeLimit
+from core.utils.dataprocessing.predictFunction.decoder import BoxMPDecodeLimit, BoxMDecodeLimit, BoxDecoder
 from core.utils.dataprocessing.predictFunction.decoder import ClassMDecoder, ClassMPDecoder
+from mxnet.gluon import HybridBlock
 
 
 class Prediction(HybridBlock):
@@ -21,14 +20,18 @@ class Prediction(HybridBlock):
         super(Prediction, self).__init__()
 
         self._except_class_thresh = except_class_thresh
+
         if multiperclass:
             self._classdecoder = ClassMPDecoder(num_classes=num_classes, thresh=except_class_thresh,
                                                 from_sigmoid=from_sigmoid)
+            self._boxdecodelimit = BoxMPDecodeLimit(batch_size=batch_size, num_classes=num_classes,
+                                                    decode_number=decode_number)
         else:
             self._classdecoder = ClassMDecoder(num_classes=num_classes, thresh=except_class_thresh,
                                                from_sigmoid=from_sigmoid)
+            self._boxdecodelimit = BoxMDecodeLimit(batch_size = batch_size, num_classes=num_classes,
+                                                   decode_number=decode_number)
 
-        self._boxdecodelimit = BoxDecodeLimit(batch_size = batch_size, num_classes=num_classes, decode_number=decode_number)
         self._boxdecoder = BoxDecoder(stds=stds, means=means)
         self._num_classes = num_classes
         self._nms_thresh = nms_thresh
