@@ -164,13 +164,14 @@ def run(mean=[0.485, 0.456, 0.406],
     else:
         model = str(input_size[0]) + "_" + str(input_size[1]) + "_" + optimizer + "_Dark_" + str(Darknetlayer)
 
-    weight_path = f"weights/{model}"
+    weight_path = os.path.join("weights", f"{model}")
     sym_path = os.path.join(weight_path, f'{model}-symbol.json')
     param_path = os.path.join(weight_path, f'{model}-{load_period:04d}.params')
+    optimizer_path = os.path.join(weight_path, f'{model}-{load_period:04d}.opt')
 
     if os.path.exists(param_path) and os.path.exists(sym_path):
         start_epoch = load_period
-        logging.info(f"loading {os.path.basename(param_path)} weights\n")
+        logging.info(f"loading {os.path.basename(param_path)}\n")
         net = gluon.SymbolBlock.imports(sym_path,
                                         ['data'],
                                         param_path, ctx=ctx)
@@ -290,6 +291,11 @@ def run(mean=[0.485, 0.456, 0.406],
         else:
             logging.error("optimizer not selected")
             exit(0)
+
+    # optimizer weight 불러오기
+    if os.path.exists(optimizer_path):
+        logging.info(f"loading {os.path.basename(optimizer_path)}\n")
+        trainer.load_states(optimizer_path)
 
     loss = GaussianYolov3Loss(sparse_label=True,
                               from_sigmoid=False,
@@ -436,6 +442,14 @@ def run(mean=[0.485, 0.456, 0.406],
         )
 
         if i % save_period == 0:
+
+            # optimizer weight 저장하기
+            try:
+                trainer.save_states(os.path.join(weight_path, f'{model}-{i:04d}.opt'))
+            except Exception as E:
+                logging.error(f"optimizer weight export 예외 발생 : {E}")
+            else:
+                logging.info("optimizer weight export 성공")
 
             weight_epoch_path = os.path.join(weight_path, str(i))
             if not os.path.exists(weight_epoch_path):
