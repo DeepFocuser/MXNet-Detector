@@ -244,6 +244,7 @@ def run(mean=[0.485, 0.456, 0.406],
         if optimizer.upper() == "ADAM":
             trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
                                                                                        "lr_scheduler": lr_sch,
+                                                                                       "wd": 0.000001,
                                                                                        "beta1": 0.9,
                                                                                        "beta2": 0.999,
                                                                                        'multi_precision': False},
@@ -251,6 +252,7 @@ def run(mean=[0.485, 0.456, 0.406],
         elif optimizer.upper() == "RMSPROP":
             trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
                                                                                        "lr_scheduler": lr_sch,
+                                                                                       "wd": 0.000001,
                                                                                        "gamma1": 0.9,
                                                                                        "gamma2": 0.999,
                                                                                        'multi_precision': False},
@@ -258,7 +260,7 @@ def run(mean=[0.485, 0.456, 0.406],
         elif optimizer.upper() == "SGD":
             trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
                                                                                        "lr_scheduler": lr_sch,
-                                                                                       "wd": 0.0005,
+                                                                                       "wd": 0.000001,
                                                                                        "momentum": 0.9,
                                                                                        'multi_precision': False},
                                     update_on_kvstore=False)  # for Dynamic loss scaling
@@ -272,19 +274,21 @@ def run(mean=[0.485, 0.456, 0.406],
         if optimizer.upper() == "ADAM":
             trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
                                                                                        "lr_scheduler": lr_sch,
+                                                                                       "wd": 0.000001,
                                                                                        "beta1": 0.9,
                                                                                        "beta2": 0.999,
                                                                                        'multi_precision': False})
         elif optimizer.upper() == "RMSPROP":
             trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
                                                                                        "lr_scheduler": lr_sch,
+                                                                                       "wd": 0.000001,
                                                                                        "gamma1": 0.9,
                                                                                        "gamma2": 0.999,
                                                                                        'multi_precision': False})
         elif optimizer.upper() == "SGD":
             trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
                                                                                        "lr_scheduler": lr_sch,
-                                                                                       "wd": 0.0005,
+                                                                                       "wd": 0.000001,
                                                                                        "momentum": 0.9,
                                                                                        'multi_precision': False})
 
@@ -443,6 +447,10 @@ def run(mean=[0.485, 0.456, 0.406],
 
         if i % save_period == 0:
 
+            weight_epoch_path = os.path.join(weight_path, str(i))
+            if not os.path.exists(weight_epoch_path):
+                os.makedirs(weight_epoch_path)
+
             # optimizer weight 저장하기
             try:
                 trainer.save_states(os.path.join(weight_path, f'{model}-{i:04d}.opt'))
@@ -450,10 +458,6 @@ def run(mean=[0.485, 0.456, 0.406],
                 logging.error(f"optimizer weight export 예외 발생 : {E}")
             else:
                 logging.info("optimizer weight export 성공")
-
-            weight_epoch_path = os.path.join(weight_path, str(i))
-            if not os.path.exists(weight_epoch_path):
-                os.makedirs(weight_epoch_path)
 
             '''
             Hybrid models can be serialized as JSON files using the export function

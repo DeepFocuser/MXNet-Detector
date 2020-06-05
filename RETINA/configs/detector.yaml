@@ -21,8 +21,8 @@ Dataset:
 model:
   training: True
   load_name: 512_512_ADAM_PRES_18 # training = False,
-  save_period: 1
-  load_period: 1
+  save_period: 10
+  load_period: 100
   input_size: [512, 512] # height, width
   ResNetbase: 18 # resnet base version : 18, 34, 50, 101, 152
   pretrained_base: True
@@ -41,7 +41,7 @@ hyperparameters:
   anchor_box_clip: False
 
   # 학습 관련
-  epoch: 3
+  epoch: 100
   batch_log: 10
   batch_size: 4
   batch_interval: 10
@@ -52,7 +52,7 @@ hyperparameters:
   background_iou_thresh: 0.4
   data_augmentation: False
   num_workers: 4 # the number of multiprocessing workers to use for data preprocessing.
-  optimizer: RMSPROP # ADAM, RMSPROP, SGD
+  optimizer: ADAM # ADAM, RMSPROP, SGD
   learning_rate: 0.0001
   decay_lr: 0.999
   decay_step: 10 # 몇 epoch이 지난후 decay_lr을 적용할지
