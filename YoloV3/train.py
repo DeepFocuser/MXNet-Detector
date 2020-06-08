@@ -232,67 +232,41 @@ def run(mean=[0.485, 0.456, 0.406],
         if p.grad_req != "null":
             p.grad_req = 'add'
 
-    if AMP:
-        '''
-        update_on_kvstore : bool, default None
-        Whether to perform parameter updates on kvstore. If None, then trainer will choose the more
-        suitable option depending on the type of kvstore. If the `update_on_kvstore` argument is
-        provided, environment variable `MXNET_UPDATE_ON_KVSTORE` will be ignored.
-        '''
-        if optimizer.upper() == "ADAM":
-            trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
-                                                                                       "lr_scheduler": lr_sch,
-                                                                                       "wd": 0.000001,
-                                                                                       "beta1": 0.9,
-                                                                                       "beta2": 0.999,
-                                                                                       'multi_precision': False},
-                                    update_on_kvstore=False)  # for Dynamic loss scaling
-        elif optimizer.upper() == "RMSPROP":
-            trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
-                                                                                       "lr_scheduler": lr_sch,
-                                                                                       "wd": 0.000001,
-                                                                                       "gamma1": 0.9,
-                                                                                       "gamma2": 0.999,
-                                                                                       'multi_precision': False},
-                                    update_on_kvstore=False)  # for Dynamic loss scaling
-        elif optimizer.upper() == "SGD":
-            trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
-                                                                                       "lr_scheduler": lr_sch,
-                                                                                       "wd": 0.000001,
-                                                                                       "momentum": 0.9,
-                                                                                       'multi_precision': False},
-                                    update_on_kvstore=False)  # for Dynamic loss scaling
-        else:
-            logging.error("optimizer not selected")
-            exit(0)
-
-        amp.init_trainer(trainer)
-
+    '''
+    update_on_kvstore : bool, default None
+    Whether to perform parameter updates on kvstore. If None, then trainer will choose the more
+    suitable option depending on the type of kvstore. If the `update_on_kvstore` argument is
+    provided, environment variable `MXNET_UPDATE_ON_KVSTORE` will be ignored.
+    '''
+    if optimizer.upper() == "ADAM":
+        trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
+                                                                                   "lr_scheduler": lr_sch,
+                                                                                   "wd": 0.000001,
+                                                                                   "beta1": 0.9,
+                                                                                   "beta2": 0.999,
+                                                                                   'multi_precision': False},
+                                update_on_kvstore=False if AMP else None)  # for Dynamic loss scaling
+    elif optimizer.upper() == "RMSPROP":
+        trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
+                                                                                   "lr_scheduler": lr_sch,
+                                                                                   "wd": 0.000001,
+                                                                                   "gamma1": 0.9,
+                                                                                   "gamma2": 0.999,
+                                                                                   'multi_precision': False},
+                                update_on_kvstore=False if AMP else None)  # for Dynamic loss scaling
+    elif optimizer.upper() == "SGD":
+        trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
+                                                                                   "lr_scheduler": lr_sch,
+                                                                                   "wd": 0.000001,
+                                                                                   "momentum": 0.9,
+                                                                                   'multi_precision': False},
+                                update_on_kvstore=False if AMP else None)  # for Dynamic loss scaling
     else:
-        if optimizer.upper() == "ADAM":
-            trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
-                                                                                       "lr_scheduler": lr_sch,
-                                                                                       "wd": 0.000001,
-                                                                                       "beta1": 0.9,
-                                                                                       "beta2": 0.999,
-                                                                                       'multi_precision': False})
-        elif optimizer.upper() == "RMSPROP":
-            trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
-                                                                                       "lr_scheduler": lr_sch,
-                                                                                       "wd": 0.000001,
-                                                                                       "gamma1": 0.9,
-                                                                                       "gamma2": 0.999,
-                                                                                       'multi_precision': False})
-        elif optimizer.upper() == "SGD":
-            trainer = gluon.Trainer(net.collect_params(), optimizer, optimizer_params={"learning_rate": learning_rate,
-                                                                                       "lr_scheduler": lr_sch,
-                                                                                       "wd": 0.000001,
-                                                                                       "momentum": 0.9,
-                                                                                       'multi_precision': False})
+        logging.error("optimizer not selected")
+        exit(0)
 
-        else:
-            logging.error("optimizer not selected")
-            exit(0)
+    if AMP:
+        amp.init_trainer(trainer)
 
     # optimizer weight 불러오기
     if os.path.exists(optimizer_path):
