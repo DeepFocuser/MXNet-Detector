@@ -270,8 +270,12 @@ def run(mean=[0.485, 0.456, 0.406],
 
     # optimizer weight 불러오기
     if os.path.exists(optimizer_path):
-        logging.info(f"loading {os.path.basename(optimizer_path)}\n")
-        trainer.load_states(optimizer_path)
+        try:
+            trainer.load_states(optimizer_path)
+        except Exception as E:
+            logging.info(E)
+        else:
+            logging.info(f"loading {os.path.basename(optimizer_path)}\n")
 
     loss = Yolov3Loss(sparse_label=True,
                       from_sigmoid=False,
