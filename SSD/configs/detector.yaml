@@ -54,6 +54,7 @@ hyperparameters:
   data_augmentation: True
   num_workers: 4 # the number of multiprocessing workers to use for data preprocessing.
   optimizer: ADAM # ADAM, RMSPROP, SGD
+  weight_decay : 0.000001
   classHardNegativeMining: True
   boxHardNegativeMining: False
   learning_rate: 0.0001

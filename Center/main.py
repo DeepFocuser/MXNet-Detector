@@ -71,6 +71,7 @@ factor_scale = parser["factor_scale"]
 data_augmentation = parser["data_augmentation"]
 num_workers = parser["num_workers"]
 optimizer = parser["optimizer"]
+weight_decay = parser["weight_decay"]
 lambda_off = parser["lambda_off"]
 lambda_size = parser["lambda_size"]
 learning_rate = parser["learning_rate"]
@@ -125,6 +126,7 @@ if __name__ == "__main__":
             ml.log_param("factor_scale", factor_scale)
             ml.log_param("data augmentation", data_augmentation)
             ml.log_param("optimizer", optimizer)
+            ml.log_param("weight decay", weight_decay)
             ml.log_param("num_workers", num_workers)
 
             ml.log_param("lambda_off", lambda_off)
@@ -159,6 +161,7 @@ if __name__ == "__main__":
                   data_augmentation=data_augmentation,
                   num_workers=num_workers,
                   optimizer=optimizer,
+                  weight_decay = weight_decay,
                   lambda_off=lambda_off,
                   lambda_size=lambda_size,
                   save_period=save_period,

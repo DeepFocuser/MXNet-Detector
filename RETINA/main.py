@@ -78,6 +78,7 @@ background_iou_thresh = parser["background_iou_thresh"]
 data_augmentation = parser["data_augmentation"]
 num_workers = parser["num_workers"]
 optimizer = parser["optimizer"]
+weight_decay = parser["weight_decay"]
 learning_rate = parser["learning_rate"]
 decay_lr = parser["decay_lr"]
 decay_step = parser["decay_step"]
@@ -138,6 +139,7 @@ if __name__ == "__main__":
             ml.log_param("background iou thresh", background_iou_thresh)
             ml.log_param("data augmentation", data_augmentation)
             ml.log_param("optimizer", optimizer)
+            ml.log_param("weight decay", weight_decay)
             ml.log_param("num_workers", num_workers)
 
             ml.log_param("learning rate", learning_rate)
@@ -176,6 +178,7 @@ if __name__ == "__main__":
                   data_augmentation=data_augmentation,
                   num_workers=num_workers,
                   optimizer=optimizer,
+                  weight_decay=weight_decay,
                   save_period=save_period,
                   load_period=load_period,
                   learning_rate=learning_rate,

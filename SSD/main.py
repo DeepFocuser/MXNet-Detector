@@ -77,6 +77,7 @@ foreground_iou_thresh = parser["foreground_iou_thresh"]
 data_augmentation = parser["data_augmentation"]
 num_workers = parser["num_workers"]
 optimizer = parser["optimizer"]
+weight_decay = parser["weight_decay"]
 classHardNegativeMining = parser["classHardNegativeMining"]
 boxHardNegativeMining = parser["boxHardNegativeMining"]
 learning_rate = parser["learning_rate"]
@@ -146,6 +147,7 @@ if __name__ == "__main__":
             ml.log_param("foreground iou thresh", foreground_iou_thresh)
             ml.log_param("data augmentation", data_augmentation)
             ml.log_param("optimizer", optimizer)
+            ml.log_param("weight decay", weight_decay)
             ml.log_param("classHardNegativeMining", classHardNegativeMining)
             ml.log_param("boxHardNegativeMining", boxHardNegativeMining)
             ml.log_param("num_workers", num_workers)
@@ -183,6 +185,7 @@ if __name__ == "__main__":
                   data_augmentation=data_augmentation,
                   num_workers=num_workers,
                   optimizer=optimizer,
+                  weight_decay=weight_decay,
                   save_period=save_period,
                   load_period=load_period,
                   learning_rate=learning_rate,
