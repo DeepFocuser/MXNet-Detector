@@ -151,6 +151,10 @@ def run(video_list=True,
                             cv2.imshow(name, result)
                             cv2.waitKey(1)
 
+                cap.release()
+                out.release()
+                cv2.destroyAllWindows()
+
         else:
             raise FileNotFoundError
     else:
@@ -189,9 +193,9 @@ def run(video_list=True,
                     cv2.imshow(name, result)
                     cv2.waitKey(1)
 
-    cap.release()
-    out.release()
-    cv2.destroyAllWindows()
+        cap.release()
+        out.release()
+        cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":

@@ -151,6 +151,10 @@ def run(video_list=True,
                             cv2.imshow(name, result)
                             cv2.waitKey(1)
 
+                cap.release()
+                out.release()
+                cv2.destroyAllWindows()
+
         else:
             raise FileNotFoundError
     else:
@@ -188,10 +192,9 @@ def run(video_list=True,
                     cv2.imshow(name, result)
                     cv2.waitKey(1)
 
-    cap.release()
-    out.release()
-    cv2.destroyAllWindows()
-
+        cap.release()
+        out.release()
+        cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     run(video_list=True,  # True일 때, 폴더에 있는 비디오(mp4)들 전부다 평가 / False일 때, 비디오 한개 평가

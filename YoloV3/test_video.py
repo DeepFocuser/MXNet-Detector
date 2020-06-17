@@ -6,12 +6,11 @@ import platform
 import cv2
 import mxnet as mx
 import mxnet.gluon as gluon
-from tqdm import tqdm
-
 from core import Prediction
 from core import box_resize
 from core import plot_bbox, export_block_for_cplusplus
 from core import testdataloader
+from tqdm import tqdm
 
 logfilepath = ""  # 따로 지정하지 않으면 terminal에 뜸
 if os.path.isfile(logfilepath):
@@ -155,6 +154,10 @@ def run(video_list=True,
                             cv2.imshow(name, result)
                             cv2.waitKey(1)
 
+                cap.release()
+                out.release()
+                cv2.destroyAllWindows()
+
         else:
             raise FileNotFoundError
     else:
@@ -197,9 +200,9 @@ def run(video_list=True,
                     cv2.imshow(name, result)
                     cv2.waitKey(1)
 
-    cap.release()
-    out.release()
-    cv2.destroyAllWindows()
+        cap.release()
+        out.release()
+        cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
