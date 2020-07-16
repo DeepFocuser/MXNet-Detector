@@ -74,7 +74,8 @@ def plot_bbox(img, bboxes, scores=None, labels=None, thresh=0.5,
     img = img.astype(np.uint8)
 
     if len(bboxes) < 1:
-        img = img.asnumpy()
+        if isinstance(img, mx.nd.NDArray):
+            img = img.asnumpy()
         if image_save:
             cv2.imwrite(os.path.join(image_save_path, image_name + ".jpg"), img)
         if image_show:
