@@ -273,6 +273,8 @@ def run(mean=[0.485, 0.456, 0.406],
     prediction = Prediction(batch_size=valid_size, topk=topk, scale=scale_factor, nms=nms, except_class_thresh=except_class_thresh, nms_thresh=nms_thresh)
     precision_recall = Voc_2007_AP(iou_thresh=iou_thresh, class_names=name_classes)
 
+    ctx_list = ctx if isinstance(ctx, (list, tuple)) else [ctx]
+
     start_time = time.time()
     for i in tqdm(range(start_epoch + 1, epoch + 1, 1), initial=start_epoch + 1, total=epoch):
 
@@ -319,18 +321,11 @@ def run(mean=[0.485, 0.456, 0.406],
                                                                                                           wh_target_split,
                                                                                                           mask_target_split):
 
-                    if GPU_COUNT <= 1:
-                        image_part = gluon.utils.split_and_load(image_part, [ctx], even_split=False)
-                        heatmap_part = gluon.utils.split_and_load(heatmap_part, [ctx], even_split=False)
-                        offset_target_part = gluon.utils.split_and_load(offset_target_part, [ctx], even_split=False)
-                        wh_target_part = gluon.utils.split_and_load(wh_target_part, [ctx], even_split=False)
-                        mask_target_part = gluon.utils.split_and_load(mask_target_part, [ctx], even_split=False)
-                    else:
-                        image_part = gluon.utils.split_and_load(image_part, ctx, even_split=False)
-                        heatmap_part = gluon.utils.split_and_load(heatmap_part, ctx, even_split=False)
-                        offset_target_part = gluon.utils.split_and_load(offset_target_part, ctx, even_split=False)
-                        wh_target_part = gluon.utils.split_and_load(wh_target_part, ctx, even_split=False)
-                        mask_target_part = gluon.utils.split_and_load(mask_target_part, ctx, even_split=False)
+                    image_part = gluon.utils.split_and_load(image_part, ctx_list, even_split=False)
+                    heatmap_part = gluon.utils.split_and_load(heatmap_part, ctx_list, even_split=False)
+                    offset_target_part = gluon.utils.split_and_load(offset_target_part, ctx_list, even_split=False)
+                    wh_target_part = gluon.utils.split_and_load(wh_target_part, ctx_list, even_split=False)
+                    mask_target_part = gluon.utils.split_and_load(mask_target_part, ctx_list, even_split=False)
 
                     # prediction, target space for Data Parallelism
                     heatmap_losses = []
@@ -456,20 +451,12 @@ def run(mean=[0.485, 0.456, 0.406],
             for image, label, heatmap_all, offset_target_all, wh_target_all, mask_target_all, _ in valid_dataloader:
                 vd_batch_size = image.shape[0]
 
-                if GPU_COUNT <= 1:
-                    image = gluon.utils.split_and_load(image, [ctx], even_split=False)
-                    label = gluon.utils.split_and_load(label, [ctx], even_split=False)
-                    heatmap_split = gluon.utils.split_and_load(heatmap_all, [ctx], even_split=False)
-                    offset_target_split = gluon.utils.split_and_load(offset_target_all, [ctx], even_split=False)
-                    wh_target_split = gluon.utils.split_and_load(wh_target_all, [ctx], even_split=False)
-                    mask_target_split = gluon.utils.split_and_load(mask_target_all, [ctx], even_split=False)
-                else:
-                    image = gluon.utils.split_and_load(image, ctx, even_split=False)
-                    label = gluon.utils.split_and_load(label, ctx, even_split=False)
-                    heatmap_split = gluon.utils.split_and_load(heatmap_all, ctx, even_split=False)
-                    offset_target_split = gluon.utils.split_and_load(offset_target_all, ctx, even_split=False)
-                    wh_target_split = gluon.utils.split_and_load(wh_target_all, ctx, even_split=False)
-                    mask_target_split = gluon.utils.split_and_load(mask_target_all, ctx, even_split=False)
+                image = gluon.utils.split_and_load(image, ctx_list, even_split=False)
+                label = gluon.utils.split_and_load(label, ctx_list, even_split=False)
+                heatmap_split = gluon.utils.split_and_load(heatmap_all, ctx_list, even_split=False)
+                offset_target_split = gluon.utils.split_and_load(offset_target_all, ctx_list, even_split=False)
+                wh_target_split = gluon.utils.split_and_load(wh_target_all, ctx_list, even_split=False)
+                mask_target_split = gluon.utils.split_and_load(mask_target_all, ctx_list, even_split=False)
 
                 # prediction, target space for Data Parallelism
                 heatmap_losses = []
@@ -535,19 +522,14 @@ def run(mean=[0.485, 0.456, 0.406],
                 dataloader_iter = iter(valid_dataloader)
                 image, label, _, _, _, _, _ = next(dataloader_iter)
 
-                if GPU_COUNT <= 1:
-                    image = gluon.utils.split_and_load(image, [ctx], even_split=False)
-                    label = gluon.utils.split_and_load(label, [ctx], even_split=False)
-                else:
-                    image = gluon.utils.split_and_load(image, ctx, even_split=False)
-                    label = gluon.utils.split_and_load(label, ctx, even_split=False)
+                image = gluon.utils.split_and_load(image, ctx_list, even_split=False)
+                label = gluon.utils.split_and_load(label, ctx_list, even_split=False)
 
                 ground_truth_colors = {}
                 for k in range(num_classes):
                     ground_truth_colors[k] = (0, 0, 1)
 
                 batch_image = []
-                heatmap_image = []
                 for img, lb in zip(image, label):
                     gt_boxes = lb[:, :, :4]
                     gt_ids = lb[:, :, 4:5]
@@ -559,6 +541,7 @@ def run(mean=[0.485, 0.456, 0.406],
                         ig = ig.transpose(
                             (1, 2, 0)) * mx.nd.array(std, ctx=ig.context) + mx.nd.array(mean, ctx=ig.context)
                         ig = (ig * 255).clip(0, 255)
+                        ig = ig.astype(np.uint8)
 
                         # heatmap 그리기
                         heatmap = mx.nd.multiply(heatmap, 255.0)  # 0 ~ 255 범위로 바꾸기
@@ -569,8 +552,6 @@ def run(mean=[0.485, 0.456, 0.406],
                         heatmap = heatmap.astype("uint8")  # float32 -> uint8
                         heatmap = cv2.resize(heatmap, dsize=(input_size[1], input_size[0]))  # 사이즈 원복
                         heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
-                        heatmap[:, :, (0, 1, 2)] = heatmap[:, :, (2, 1, 0)]  # BGR -> RGB
-                        heatmap = np.transpose(heatmap, axes=(2, 0, 1))  # (channel=3, height, width)
 
                         # ground truth box 그리기
                         ground_truth = plot_bbox(ig, gt_box * scale_factor, scores=None, labels=gt_id, thresh=None,
@@ -581,17 +562,15 @@ def run(mean=[0.485, 0.456, 0.406],
                         prediction_box = plot_bbox(ground_truth, bbox, scores=score, labels=id,
                                                    thresh=plot_class_thresh,
                                                    reverse_rgb=False,
-                                                   class_names=valid_dataset.classes, absolute_coordinates=True)
+                                                   class_names=valid_dataset.classes, absolute_coordinates=True, heatmap=heatmap)
 
                         # Tensorboard에 그리기 위해 BGR -> RGB / (height, width, channel) -> (channel, height, width) 를한다.
                         prediction_box = cv2.cvtColor(prediction_box, cv2.COLOR_BGR2RGB)
                         prediction_box = np.transpose(prediction_box,
                                                       axes=(2, 0, 1))
                         batch_image.append(prediction_box)  # (batch, channel, height, width)
-                        heatmap_image.append(heatmap)
 
-                all_image = np.concatenate([np.array(batch_image), np.array(heatmap_image)], axis=-1)
-                summary.add_image(tag="valid_result", image=all_image, global_step=i)
+                summary.add_image(tag="valid_result", image=np.array(batch_image), global_step=i)
                 summary.add_scalar(tag="heatmap_loss", value={"train_heatmap_loss_mean": train_heatmap_loss_mean,
                                                               "valid_heatmap_loss_mean": valid_heatmap_loss_mean},
                                    global_step=i)
@@ -609,14 +588,8 @@ def run(mean=[0.485, 0.456, 0.406],
                     "valid_total_loss": valid_total_loss_mean},
                                    global_step=i)
 
-                params = net.collect_params().values()
-                if GPU_COUNT > 1:
-                    for c in ctx:
-                        for p in params:
-                            summary.add_histogram(tag=p.name, values=p.data(ctx=c), global_step=i, bins='default')
-                else:
-                    for p in params:
-                        summary.add_histogram(tag=p.name, values=p.data(), global_step=i, bins='default')
+                for p in net.collect_params().values():
+                    summary.add_histogram(tag=p.name, values=p.data(ctx=ctx_list[0]), global_step=i, bins='default')
 
     end_time = time.time()
     learning_time = end_time - start_time

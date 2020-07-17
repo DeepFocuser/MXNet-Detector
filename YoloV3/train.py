@@ -295,6 +295,7 @@ def run(mean=[0.485, 0.456, 0.406],
 
     precision_recall = Voc_2007_AP(iou_thresh=iou_thresh, class_names=name_classes)
 
+    ctx_list = ctx if isinstance(ctx, (list, tuple)) else [ctx]
     start_time = time.time()
     for i in tqdm(range(start_epoch + 1, epoch + 1, 1), initial=start_epoch + 1, total=epoch):
 
@@ -340,20 +341,12 @@ def run(mean=[0.485, 0.456, 0.406],
                                                                                                            class_all,
                                                                                                            weights_all):
 
-                    if GPU_COUNT <= 1:
-                        image_split = gluon.utils.split_and_load(image_split, [ctx], even_split=False)
-                        xcyc_split = gluon.utils.split_and_load(xcyc_split, [ctx], even_split=False)
-                        wh_split = gluon.utils.split_and_load(wh_split, [ctx], even_split=False)
-                        objectness_split = gluon.utils.split_and_load(objectness_split, [ctx], even_split=False)
-                        class_split = gluon.utils.split_and_load(class_split, [ctx], even_split=False)
-                        weights_split = gluon.utils.split_and_load(weights_split, [ctx], even_split=False)
-                    else:
-                        image_split = gluon.utils.split_and_load(image_split, ctx, even_split=False)
-                        xcyc_split = gluon.utils.split_and_load(xcyc_split, ctx, even_split=False)
-                        wh_split = gluon.utils.split_and_load(wh_split, ctx, even_split=False)
-                        objectness_split = gluon.utils.split_and_load(objectness_split, ctx, even_split=False)
-                        class_split = gluon.utils.split_and_load(class_split, ctx, even_split=False)
-                        weights_split = gluon.utils.split_and_load(weights_split, ctx, even_split=False)
+                    image_split = gluon.utils.split_and_load(image_split, ctx_list, even_split=False)
+                    xcyc_split = gluon.utils.split_and_load(xcyc_split, ctx_list, even_split=False)
+                    wh_split = gluon.utils.split_and_load(wh_split, ctx_list, even_split=False)
+                    objectness_split = gluon.utils.split_and_load(objectness_split, ctx_list, even_split=False)
+                    class_split = gluon.utils.split_and_load(class_split, ctx_list, even_split=False)
+                    weights_split = gluon.utils.split_and_load(weights_split, ctx_list, even_split=False)
 
                     xcyc_losses = []
                     wh_losses = []
@@ -492,24 +485,15 @@ def run(mean=[0.485, 0.456, 0.406],
 
             # loss 구하기
             for image, label, xcyc_all, wh_all, objectness_all, class_all, weights_all, _ in valid_dataloader:
-                vd_batch_size, _, height, width = image.shape
+                vd_batch_size = image.shape[0]
 
-                if GPU_COUNT <= 1:
-                    image = gluon.utils.split_and_load(image, [ctx], even_split=False)
-                    label = gluon.utils.split_and_load(label, [ctx], even_split=False)
-                    xcyc_all = gluon.utils.split_and_load(xcyc_all, [ctx], even_split=False)
-                    wh_all = gluon.utils.split_and_load(wh_all, [ctx], even_split=False)
-                    objectness_all = gluon.utils.split_and_load(objectness_all, [ctx], even_split=False)
-                    class_all = gluon.utils.split_and_load(class_all, [ctx], even_split=False)
-                    weights_all = gluon.utils.split_and_load(weights_all, [ctx], even_split=False)
-                else:
-                    image = gluon.utils.split_and_load(image, ctx, even_split=False)
-                    label = gluon.utils.split_and_load(label, ctx, even_split=False)
-                    xcyc_all = gluon.utils.split_and_load(xcyc_all, ctx, even_split=False)
-                    wh_all = gluon.utils.split_and_load(wh_all, ctx, even_split=False)
-                    objectness_all = gluon.utils.split_and_load(objectness_all, ctx, even_split=False)
-                    class_all = gluon.utils.split_and_load(class_all, ctx, even_split=False)
-                    weights_all = gluon.utils.split_and_load(weights_all, ctx, even_split=False)
+                image = gluon.utils.split_and_load(image, ctx_list, even_split=False)
+                label = gluon.utils.split_and_load(label, ctx_list, even_split=False)
+                xcyc_all = gluon.utils.split_and_load(xcyc_all, ctx_list, even_split=False)
+                wh_all = gluon.utils.split_and_load(wh_all, ctx_list, even_split=False)
+                objectness_all = gluon.utils.split_and_load(objectness_all, ctx_list, even_split=False)
+                class_all = gluon.utils.split_and_load(class_all, ctx_list, even_split=False)
+                weights_all = gluon.utils.split_and_load(weights_all, ctx_list, even_split=False)
 
                 xcyc_losses = []
                 wh_losses = []
@@ -585,12 +569,9 @@ def run(mean=[0.485, 0.456, 0.406],
                 # gpu N 개를 대비한 코드 (Data Parallelism)
                 dataloader_iter = iter(valid_dataloader)
                 image, label, _, _, _, _, _, _ = next(dataloader_iter)
-                if GPU_COUNT <= 1:
-                    image = gluon.utils.split_and_load(image, [ctx], even_split=False)
-                    label = gluon.utils.split_and_load(label, [ctx], even_split=False)
-                else:
-                    image = gluon.utils.split_and_load(image, ctx, even_split=False)
-                    label = gluon.utils.split_and_load(label, ctx, even_split=False)
+
+                image = gluon.utils.split_and_load(image, ctx_list, even_split=False)
+                label = gluon.utils.split_and_load(label, ctx_list, even_split=False)
 
                 ground_truth_colors = {}
                 for k in range(num_classes):
@@ -609,6 +590,7 @@ def run(mean=[0.485, 0.456, 0.406],
                         ig = ig.transpose(
                             (1, 2, 0)) * mx.nd.array(std, ctx=ig.context) + mx.nd.array(mean, ctx=ig.context)
                         ig = (ig * 255).clip(0, 255)
+                        ig = ig.astype(np.uint8)
 
                         # ground truth box 그리기
                         ground_truth = plot_bbox(ig, gt_box, scores=None, labels=gt_id, thresh=None,
@@ -644,14 +626,8 @@ def run(mean=[0.485, 0.456, 0.406],
                     "valid_total_loss": valid_total_loss_mean},
                                    global_step=i)
 
-                params = net.collect_params().values()
-                if GPU_COUNT > 1:
-                    for c in ctx:
-                        for p in params:
-                            summary.add_histogram(tag=p.name, values=p.data(ctx=c), global_step=i, bins='default')
-                else:
-                    for p in params:
-                        summary.add_histogram(tag=p.name, values=p.data(), global_step=i, bins='default')
+                for p in net.collect_params().values():
+                    summary.add_histogram(tag=p.name, values=p.data(ctx=ctx_list[0]), global_step=i, bins='default')
 
     end_time = time.time()
     learning_time = end_time - start_time
