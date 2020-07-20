@@ -97,7 +97,24 @@ class Prediction(HybridBlock):
             bboxes = F.slice_axis(results, axis=-1, begin=2, end=6)
             return ids, scores, bboxes
         else:
+            # valid_thresh 적용
+            except_class_thresh_mask = scores > self._except_class_thresh
+            ids = F.where(except_class_thresh_mask, ids, F.ones_like(ids) * -1)
+            scores = F.where(except_class_thresh_mask, scores, F.ones_like(scores) * -1)
+
+            # box 추출
+            slice_xmin = F.slice_axis(data=bboxes, axis=-1, begin=0, end=1)
+            slice_ymin = F.slice_axis(data=bboxes, axis=-1, begin=1, end=2)
+            slice_xmax = F.slice_axis(data=bboxes, axis=-1, begin=2, end=3)
+            slice_ymax = F.slice_axis(data=bboxes, axis=-1, begin=3, end=4)
+            xmin = F.where(except_class_thresh_mask, slice_xmin, F.ones_like(slice_xmin) * -1)
+            ymin = F.where(except_class_thresh_mask, slice_ymin, F.ones_like(slice_ymin) * -1)
+            xmax = F.where(except_class_thresh_mask, slice_xmax, F.ones_like(slice_xmax) * -1)
+            ymax = F.where(except_class_thresh_mask, slice_ymax, F.ones_like(slice_ymax) * -1)
+
+            bboxes = F.concat(xmin, ymin, xmax, ymax, dim=-1)
             return ids, scores, bboxes * self._scale
+
 
 
 # test
