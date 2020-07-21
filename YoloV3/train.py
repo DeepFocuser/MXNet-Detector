@@ -4,7 +4,6 @@ import os
 import platform
 import time
 
-import cv2
 import gluoncv
 import mlflow as ml
 import mxnet as mx
@@ -12,14 +11,13 @@ import mxnet.autograd as autograd
 import mxnet.contrib.amp as amp
 import mxnet.gluon as gluon
 import numpy as np
-from mxboard import SummaryWriter
-from tqdm import tqdm
-
 from core import TargetGenerator
 from core import Voc_2007_AP
 from core import Yolov3, Yolov3Loss, Prediction
 from core import plot_bbox, export_block_for_cplusplus, PostNet
 from core import traindataloader, validdataloader
+from mxboard import SummaryWriter
+from tqdm import tqdm
 
 logfilepath = ""
 if os.path.isfile(logfilepath):
@@ -561,7 +559,7 @@ def run(mean=[0.485, 0.456, 0.406],
 
                 ground_truth_colors = {}
                 for k in range(num_classes):
-                    ground_truth_colors[k] = (0, 0, 1)
+                    ground_truth_colors[k] = (0, 1, 0) # RGB
 
                 batch_image = []
                 for img, lb in zip(image, label):
@@ -580,7 +578,7 @@ def run(mean=[0.485, 0.456, 0.406],
 
                         # ground truth box 그리기
                         ground_truth = plot_bbox(ig, gt_box, scores=None, labels=gt_id, thresh=None,
-                                                 reverse_rgb=True,
+                                                 reverse_rgb=False,
                                                  class_names=valid_dataset.classes, absolute_coordinates=True,
                                                  colors=ground_truth_colors)
                         # prediction box 그리기
@@ -589,8 +587,7 @@ def run(mean=[0.485, 0.456, 0.406],
                                                    reverse_rgb=False,
                                                    class_names=valid_dataset.classes, absolute_coordinates=True)
 
-                        # Tensorboard에 그리기 위해 BGR -> RGB / (height, width, channel) -> (channel, height, width) 를한다.
-                        prediction_box = cv2.cvtColor(prediction_box, cv2.COLOR_BGR2RGB)
+                        # Tensorboard에 (height, width, channel) -> (channel, height, width) 를한다.
                         prediction_box = np.transpose(prediction_box,
                                                       axes=(2, 0, 1))
                         batch_image.append(prediction_box)  # (batch, channel, height, width)

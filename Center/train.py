@@ -527,7 +527,7 @@ def run(mean=[0.485, 0.456, 0.406],
 
                 ground_truth_colors = {}
                 for k in range(num_classes):
-                    ground_truth_colors[k] = (0, 0, 1)
+                    ground_truth_colors[k] = (0, 1, 0)
 
                 batch_image = []
                 for img, lb in zip(image, label):
@@ -552,10 +552,11 @@ def run(mean=[0.485, 0.456, 0.406],
                         heatmap = heatmap.astype("uint8")  # float32 -> uint8
                         heatmap = cv2.resize(heatmap, dsize=(input_size[1], input_size[0]))  # 사이즈 원복
                         heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+                        heatmap = cv2.cvtColor(heatmap, cv2.COLOR_BGR2RGB)
 
                         # ground truth box 그리기
                         ground_truth = plot_bbox(ig, gt_box * scale_factor, scores=None, labels=gt_id, thresh=None,
-                                                 reverse_rgb=True,
+                                                 reverse_rgb=False,
                                                  class_names=valid_dataset.classes, absolute_coordinates=True,
                                                  colors=ground_truth_colors)
                         # prediction box 그리기
@@ -564,8 +565,7 @@ def run(mean=[0.485, 0.456, 0.406],
                                                    reverse_rgb=False,
                                                    class_names=valid_dataset.classes, absolute_coordinates=True, heatmap=heatmap)
 
-                        # Tensorboard에 그리기 위해 BGR -> RGB / (height, width, channel) -> (channel, height, width) 를한다.
-                        prediction_box = cv2.cvtColor(prediction_box, cv2.COLOR_BGR2RGB)
+                        # Tensorboard에 그리기 위해 (height, width, channel) -> (channel, height, width) 를한다.
                         prediction_box = np.transpose(prediction_box,
                                                       axes=(2, 0, 1))
                         batch_image.append(prediction_box)  # (batch, channel, height, width)
