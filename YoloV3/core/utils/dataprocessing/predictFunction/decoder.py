@@ -125,7 +125,7 @@ if __name__ == "__main__":
                  pretrained_path=os.path.join(root, "modelparam"),
                  ctx=mx.cpu())
 
-    # net.hybridize(active=True, static_alloc=True, static_shape=True)
+    net.hybridize(active=True, static_alloc=True, static_shape=True)
 
     # batch 형태로 만들기
     image = image.expand_dims(axis=0)
