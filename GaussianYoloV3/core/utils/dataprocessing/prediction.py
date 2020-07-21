@@ -49,7 +49,7 @@ class Prediction(HybridBlock):
             '''
             results = F.contrib.box_nms(
                 results,
-                valid_thresh = self._except_class_thresh,
+                valid_thresh=self._except_class_thresh,
                 overlap_thresh=self._nms_thresh,
                 topk=self._nms_topk,
                 id_index=0, score_index=1, coord_start=2,
@@ -68,12 +68,11 @@ if __name__ == "__main__":
 
     input_size = (416, 416)
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    transform = YoloTrainTransform(input_size[0], input_size[1], make_target=False)
+    transform = YoloTrainTransform(input_size[0], input_size[1])
     dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), transform=transform)
     num_classes = dataset.num_class
 
-    image, label, _, _, _ = dataset[0]
-    label = mx.nd.array(label)
+    image, label, _ = dataset[0]
 
     net = Yolov3(Darknetlayer=53,
                  input_size=input_size,
@@ -90,7 +89,7 @@ if __name__ == "__main__":
         from_sigmoid=False,
         num_classes=num_classes,
         nms_thresh=0.5,
-        nms_topk=100,
+        nms_topk=-1,
         except_class_thresh=0.05,
         multiperclass=True)
 

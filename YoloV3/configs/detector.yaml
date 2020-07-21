@@ -40,14 +40,14 @@ hyperparameters:
   # 학습 관련
   epoch: 100
   batch_log: 10
-  batch_size: 6
+  batch_size: 4
   batch_interval: 10 # multiscale을 몇 배치마다 할껀지?
   subdivision: 1
   multiscale: True
   factor_scale: [10, 9] # (10 ~ 19)*32 / 직사각형 데이터 학습시 dataloader.py 에가서 multiscale전략을 바꿔야한다.
   ignore_threshold: 0.7
   dynamic: True
-  data_augmentation: True
+  data_augmentation: False
   num_workers: 4 # the number of multiprocessing workers to use for data preprocessing.
   optimizer: ADAM # ADAM, RMSPROP, SGD
   weight_decay : 0.000001
@@ -59,7 +59,7 @@ context:
   using_cuda: True
 validation:
   valid_size: 4
-  eval_period: 10
+  eval_period: 1
   tensorboard: True
   valid_graph_path: valid_Graph
   valid_html_auto_open: True

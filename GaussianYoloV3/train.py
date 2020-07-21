@@ -12,12 +12,14 @@ import mxnet.autograd as autograd
 import mxnet.contrib.amp as amp
 import mxnet.gluon as gluon
 import numpy as np
+from mxboard import SummaryWriter
+from tqdm import tqdm
+
+from core import TargetGenerator
 from core import Voc_2007_AP
 from core import Yolov3, GaussianYolov3Loss, Prediction
 from core import plot_bbox, export_block_for_cplusplus, PostNet
 from core import traindataloader, validdataloader
-from mxboard import SummaryWriter
-from tqdm import tqdm
 
 logfilepath = ""
 if os.path.isfile(logfilepath):
@@ -120,11 +122,6 @@ def run(mean=[0.485, 0.456, 0.406],
     logging.info("training Gaussian YoloV3 Detector")
     input_shape = (1, 3) + tuple(input_size)
 
-
-    net = Yolov3(Darknetlayer=Darknetlayer,
-                 anchors=anchors,
-                 pretrained=False,
-                 ctx=mx.cpu())
     train_dataloader, train_dataset = traindataloader(multiscale=multiscale,
                                                       factor_scale=factor_scale,
                                                       augmentation=data_augmentation,
@@ -133,9 +130,7 @@ def run(mean=[0.485, 0.456, 0.406],
                                                       batch_size=batch_size,
                                                       batch_interval=batch_interval,
                                                       num_workers=num_workers,
-                                                      shuffle=True, mean=mean, std=std,
-                                                      net=net, ignore_threshold=ignore_threshold, dynamic=dynamic,
-                                                      from_sigmoid=False, make_target=True)
+                                                      shuffle=True, mean=mean, std=std)
 
     train_update_number_per_epoch = len(train_dataloader)
     if train_update_number_per_epoch < 1:
@@ -148,9 +143,7 @@ def run(mean=[0.485, 0.456, 0.406],
                                                           input_size=input_size,
                                                           batch_size=valid_size,
                                                           num_workers=num_workers,
-                                                          shuffle=True, mean=mean, std=std,
-                                                          net=net, ignore_threshold=ignore_threshold, dynamic=dynamic,
-                                                          from_sigmoid=False, make_target=True)
+                                                          shuffle=True, mean=mean, std=std)
         valid_update_number_per_epoch = len(valid_dataloader)
         if valid_update_number_per_epoch < 1:
             logging.warning("valid batch size가 데이터 수보다 큼")
@@ -280,6 +273,8 @@ def run(mean=[0.485, 0.456, 0.406],
         else:
             logging.info(f"loading {os.path.basename(optimizer_path)}\n")
 
+    targetgenerator = TargetGenerator(ignore_threshold=ignore_threshold, dynamic=dynamic, from_sigmoid=False)
+
     loss = GaussianYolov3Loss(sparse_label=True,
                               from_sigmoid=False,
                               batch_axis=None,
@@ -308,24 +303,20 @@ def run(mean=[0.485, 0.456, 0.406],
         class_loss_sum = 0
         time_stamp = time.time()
 
-        for batch_count, (image, _, xcyc_all, wh_all, objectness_all, class_all, weights_all, _) in enumerate(
+        for batch_count, (image, label, _) in enumerate(
                 train_dataloader, start=1):
-            td_batch_size = image.shape[0]
+
+            td_batch_size, _, height, width = image.shape
 
             image = mx.nd.split(data=image, num_outputs=subdivision, axis=0)
-            xcyc_all = mx.nd.split(data=xcyc_all, num_outputs=subdivision, axis=0)
-            wh_all = mx.nd.split(data=wh_all, num_outputs=subdivision, axis=0)
-            objectness_all = mx.nd.split(data=objectness_all, num_outputs=subdivision, axis=0)
-            class_all = mx.nd.split(data=class_all, num_outputs=subdivision, axis=0)
-            weights_all = mx.nd.split(data=weights_all, num_outputs=subdivision, axis=0)
+            gt_boxes = mx.nd.split(data=label[:, :, :4], num_outputs=subdivision, axis=0)
+            gt_ids = mx.nd.split(data=label[:, :, 4:5], num_outputs=subdivision, axis=0)
 
             if subdivision == 1:
                 image = [image]
-                xcyc_all = [xcyc_all]
-                wh_all = [wh_all]
-                objectness_all = [objectness_all]
-                class_all = [class_all]
-                weights_all = [weights_all]
+                gt_boxes = [gt_boxes]
+                gt_ids = [gt_ids]
+
             '''
             autograd 설명
             https://mxnet.apache.org/api/python/docs/tutorials/getting-started/crash-course/3-autograd.html
@@ -337,19 +328,11 @@ def run(mean=[0.485, 0.456, 0.406],
                 object_all_losses = []
                 class_all_losses = []
 
-                for image_split, xcyc_split, wh_split, objectness_split, class_split, weights_split in zip(image,
-                                                                                                           xcyc_all,
-                                                                                                           wh_all,
-                                                                                                           objectness_all,
-                                                                                                           class_all,
-                                                                                                           weights_all):
+                for image_split, gt_boxes_split, gt_ids_split in zip(image, gt_boxes, gt_ids):
 
                     image_split = gluon.utils.split_and_load(image_split, ctx_list, even_split=False)
-                    xcyc_split = gluon.utils.split_and_load(xcyc_split, ctx_list, even_split=False)
-                    wh_split = gluon.utils.split_and_load(wh_split, ctx_list, even_split=False)
-                    objectness_split = gluon.utils.split_and_load(objectness_split, ctx_list, even_split=False)
-                    class_split = gluon.utils.split_and_load(class_split, ctx_list, even_split=False)
-                    weights_split = gluon.utils.split_and_load(weights_split, ctx_list, even_split=False)
+                    gt_boxes_split = gluon.utils.split_and_load(gt_boxes_split, ctx_list, even_split=False)
+                    gt_ids_split = gluon.utils.split_and_load(gt_ids_split, ctx_list, even_split=False)
 
                     xcyc_losses = []
                     wh_losses = []
@@ -358,13 +341,17 @@ def run(mean=[0.485, 0.456, 0.406],
                     total_loss = []
 
                     # gpu N 개를 대비한 코드 (Data Parallelism)
-                    for img, xcyc_target, wh_target, objectness, class_target, weights in zip(image_split, xcyc_split,
-                                                                                              wh_split,
-                                                                                              objectness_split,
-                                                                                              class_split,
-                                                                                              weights_split):
+                    for img, gt_box, gt_id in zip(image_split, gt_boxes_split, gt_ids_split):
+
                         output1, output2, output3, anchor1, anchor2, anchor3, offset1, offset2, offset3, stride1, stride2, stride3 = net(
                             img)
+
+                        xcyc_target, wh_target, objectness, class_target, weights = targetgenerator(
+                            [output1, output2, output3],
+                            [anchor1, anchor2, anchor3],
+                            gt_box,
+                            gt_id, (height, width))
+
                         xcyc_loss, wh_loss, object_loss, class_loss = loss(output1, output2, output3, xcyc_target,
                                                                            wh_target, objectness,
                                                                            class_target, weights)
@@ -488,16 +475,13 @@ def run(mean=[0.485, 0.456, 0.406],
             class_loss_sum = 0
 
             # loss 구하기
-            for image, label, xcyc_all, wh_all, objectness_all, class_all, weights_all, _ in valid_dataloader:
-                vd_batch_size = image.shape[0]
+            for image, label, _ in valid_dataloader:
+
+                vd_batch_size, _, height, width = image.shape
 
                 image = gluon.utils.split_and_load(image, ctx_list, even_split=False)
-                label = gluon.utils.split_and_load(label, ctx_list, even_split=False)
-                xcyc_all = gluon.utils.split_and_load(xcyc_all, ctx_list, even_split=False)
-                wh_all = gluon.utils.split_and_load(wh_all, ctx_list, even_split=False)
-                objectness_all = gluon.utils.split_and_load(objectness_all, ctx_list, even_split=False)
-                class_all = gluon.utils.split_and_load(class_all, ctx_list, even_split=False)
-                weights_all = gluon.utils.split_and_load(weights_all, ctx_list, even_split=False)
+                gt_boxes = gluon.utils.split_and_load(label[:, :, :4], ctx_list, even_split=False)
+                gt_ids = gluon.utils.split_and_load(label[:, :, 4:5], ctx_list, even_split=False)
 
                 xcyc_losses = []
                 wh_losses = []
@@ -506,14 +490,17 @@ def run(mean=[0.485, 0.456, 0.406],
                 total_loss = []
 
                 # gpu N 개를 대비한 코드 (Data Parallelism)
-                for img, lb, xcyc_target, wh_target, objectness, class_target, weights in zip(image, label, xcyc_all,
-                                                                                              wh_all, objectness_all,
-                                                                                              class_all, weights_all):
-                    gt_box = lb[:, :, :4]
-                    gt_id = lb[:, :, 4:5]
+                for img, gt_box, gt_id in zip(image, gt_boxes, gt_ids):
 
                     output1, output2, output3, anchor1, anchor2, anchor3, offset1, offset2, offset3, stride1, stride2, stride3 = net(
                         img)
+
+                    xcyc_target, wh_target, objectness, class_target, weights = targetgenerator(
+                        [output1, output2, output3],
+                        [anchor1, anchor2, anchor3],
+                        gt_box,
+                        gt_id, (height, width))
+
                     id, score, bbox = prediction(output1, output2, output3, anchor1, anchor2, anchor3, offset1, offset2,
                                                  offset3, stride1, stride2, stride3)
 
@@ -572,7 +559,7 @@ def run(mean=[0.485, 0.456, 0.406],
             if tensorboard:
                 # gpu N 개를 대비한 코드 (Data Parallelism)
                 dataloader_iter = iter(valid_dataloader)
-                image, label, _, _, _, _, _, _ = next(dataloader_iter)
+                image, label, _ = next(dataloader_iter)
 
                 image = gluon.utils.split_and_load(image, ctx_list, even_split=False)
                 label = gluon.utils.split_and_load(label, ctx_list, even_split=False)

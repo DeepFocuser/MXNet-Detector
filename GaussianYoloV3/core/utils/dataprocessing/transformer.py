@@ -2,31 +2,20 @@ import os
 
 import cv2
 
-from core.utils.dataprocessing.target import TargetGenerator
 from core.utils.util.box_utils import *
 from core.utils.util.image_utils import *
 
 
 class YoloTrainTransform(object):
 
-    def __init__(self, height, width, net=None, mean=[0.485, 0.456, 0.406],
-                 std=[0.229, 0.224, 0.225], ignore_threshold=0.5, dynamic=True, from_sigmoid=False, augmentation=False,
-                 make_target=False):
+    def __init__(self, height, width, mean=[0.485, 0.456, 0.406],
+                 std=[0.229, 0.224, 0.225], augmentation=False):
 
         self._height = height
         self._width = width
         self._mean = mean
         self._std = std
         self._augmentation = augmentation
-        self._make_target = make_target
-        if self._make_target:
-            self._output1, self._output2, self._output3, self._anchor1, self._anchor2, self._anchor3, _, _, _, _, _, _ = net(
-                mx.nd.zeros((1, 3, height, width)))
-            self._target_generator = TargetGenerator(ignore_threshold=ignore_threshold,
-                                                     dynamic=dynamic,
-                                                     from_sigmoid=from_sigmoid)
-        else:
-            self._target_generator = None
 
     def __call__(self, img, bbox, name):
 
@@ -91,38 +80,18 @@ class YoloTrainTransform(object):
 
         img = mx.nd.image.to_tensor(img)  # 0 ~ 1 로 바꾸기
         img = mx.nd.image.normalize(img, mean=self._mean, std=self._std)
+        bbox = mx.nd.array(bbox)
 
-        if self._make_target:
-            bbox = bbox[np.newaxis, :, :]
-            bbox = mx.nd.array(bbox)
-            xcyc_target, wh_target, objectness, class_target, weights = self._target_generator(
-                [self._output1, self._output2, self._output3],
-                [self._anchor1, self._anchor2, self._anchor3],
-                bbox[:, :, :4],
-                bbox[:, :, 4:5],
-                (self._height, self._width))
-            return img, bbox[0], xcyc_target[0], wh_target[0], objectness[0], class_target[0], weights[0], name
-        else:
-            return img, bbox, name
-
+        return img, bbox, name
 
 class YoloValidTransform(object):
 
-    def __init__(self, height, width, net=None, mean=[0.485, 0.456, 0.406],
-                 std=[0.229, 0.224, 0.225], ignore_threshold=0.5, dynamic=True, from_sigmoid=False, make_target=False):
+    def __init__(self, height, width, mean=[0.485, 0.456, 0.406],
+                 std=[0.229, 0.224, 0.225]):
         self._height = height
         self._width = width
         self._mean = mean
         self._std = std
-        self._make_target = make_target
-        if self._make_target:
-            self._output1, self._output2, self._output3, self._anchor1, self._anchor2, self._anchor3, _, _, _, _, _, _ = net(
-                mx.nd.zeros((1, 3, height, width)))
-            self._target_generator = TargetGenerator(ignore_threshold=ignore_threshold,
-                                                     dynamic=dynamic,
-                                                     from_sigmoid=from_sigmoid)
-        else:
-            self._target_generator = None
 
     def __call__(self, img, bbox, name):
         # resize with random interpolation
@@ -132,20 +101,9 @@ class YoloValidTransform(object):
 
         img = mx.nd.image.to_tensor(img)  # 0 ~ 1 로 바꾸기
         img = mx.nd.image.normalize(img, mean=self._mean, std=self._std)
+        bbox = mx.nd.array(bbox)
 
-        if self._make_target:
-            bbox = bbox[np.newaxis, :, :]
-            bbox = mx.nd.array(bbox)
-            xcyc_target, wh_target, objectness, class_target, weights = self._target_generator(
-                [self._output1, self._output2, self._output3],
-                [self._anchor1, self._anchor2, self._anchor3],
-                bbox[:, :, :4],
-                bbox[:, :, 4:5],
-                (self._height, self._width))
-            return img, bbox[0], xcyc_target[0], wh_target[0], objectness[0], class_target[0], weights[0], name
-        else:
-            return img, bbox, name
-
+        return img, bbox, name
 
 # test
 if __name__ == "__main__":
@@ -154,11 +112,11 @@ if __name__ == "__main__":
 
     input_size = (320, 640)
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    transform = YoloTrainTransform(input_size[0], input_size[1], make_target=False)
+    transform = YoloTrainTransform(input_size[0], input_size[1])
     dataset = DetectionDataset(path=os.path.join(root, 'Dataset', 'train'), transform=transform)
 
     length = len(dataset)
-    image, label, _, _, _ = dataset[random.randint(0, length - 1)]
+    image, label, _ = dataset[random.randint(0, length - 1)]
     print('images length:', length)
     print('image shape:', image.shape)
     print('label shape:', label.shape)

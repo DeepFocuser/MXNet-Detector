@@ -22,11 +22,12 @@ class DetectionDataset(Dataset):
     """
     CLASSES = ['meerkat', 'otter', 'panda', 'raccoon', 'pomeranian']
 
-    def __init__(self, path='Dataset/train', transform=None):
+    def __init__(self, path='Dataset/train', transform=None, test=False):
         super(DetectionDataset, self).__init__()
         self._name = os.path.basename(path)
         self._image_path_List = glob.glob(os.path.join(path, "*.jpg"))
         self._transform = transform
+        self._test = test
         self._items = []
         self.itemname = []
         self._make_item_list()
@@ -55,11 +56,12 @@ class DetectionDataset(Dataset):
 
         if self._transform:
             result = self._transform(image, label, self.itemname[idx])
-            if len(result) == 3:
+            if self._test:
+                # test - batch size = 1 일 때를 위함
                 return result[0], result[1], result[2], origin_image, origin_label
             else:
-                return result[0], result[1], result[2], result[3], result[4], result[5], result[
-                    6], result[7]
+                # train, valid를 위함
+                return result[0], result[1], result[2]
         else:
             return image, label, self.itemname[idx]
 

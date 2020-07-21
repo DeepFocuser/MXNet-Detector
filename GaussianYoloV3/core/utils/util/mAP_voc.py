@@ -399,8 +399,7 @@ if __name__ == "__main__":
     num_classes = dataset.num_class
     name_classes = dataset.classes
     length = len(dataset)
-    image, label, _, _, _ = dataset[random.randint(0, length - 1)]
-    label = mx.nd.array(label)
+    image, label, _ = dataset[random.randint(0, length - 1)]
 
     net = Yolov3(Darknetlayer=53,
                  input_size=input_size,
