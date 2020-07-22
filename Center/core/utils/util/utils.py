@@ -79,6 +79,7 @@ def plot_bbox(img, bboxes, scores=None, labels=None, thresh=0.5,
         if image_show:
             cv2.imshow(image_name, img)
             cv2.waitKey(0)
+        return img
     else:
         if isinstance(img, mx.nd.NDArray):
             img = img.asnumpy()
