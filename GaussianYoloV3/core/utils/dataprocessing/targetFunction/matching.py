@@ -57,8 +57,8 @@ class Matcher(Block):
         '''
         anchor는 width, height를 알고 있으니 중심점이 0, 0 을 가리키도록 한다. 
         '''
-        all_anchors = mx.nd.concat(*[a.reshape(-1, 2) for a in anchors], dim=0)
-        anchor_boxes = mx.nd.concat(0 * all_anchors, all_anchors, dim=-1)  # zero center anchors / (9, 4)
+        all_anchors = F.concat(*[a.reshape(-1, 2) for a in anchors], dim=0)
+        anchor_boxes = F.concat(0 * all_anchors, all_anchors, dim=-1)  # zero center anchors / (9, 4)
         anchor_boxes = self._centertocorner(anchor_boxes)
 
         # anchor_boxes : (9, 4) / gt_boxes : (Batch, N, 4) -> (9, Batch, N) -> (Batch, 9, N)
