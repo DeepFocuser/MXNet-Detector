@@ -53,7 +53,7 @@ class Matcher(Block):
          anchor와 gt의 중심점은 공유된다.
         '''
         gtx, gty, gtw, gth = self._cornertocenter(gt_boxes)  # 1. gt를 corner -> center로 변경하기
-        shift_gt_boxes = mx.nd.concat(-0.5 * gtw, -0.5 * gth, 0.5 * gtw, 0.5 * gth, dim=-1)  # 중심점이 0,0인 corner로 바꾸기
+        shift_gt_boxes = F.concat(-0.5 * gtw, -0.5 * gth, 0.5 * gtw, 0.5 * gth, dim=-1)  # 중심점이 0,0인 corner로 바꾸기
         '''
         anchor는 width, height를 알고 있으니 중심점이 0, 0 을 가리키도록 한다. 
         '''
