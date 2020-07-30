@@ -53,12 +53,12 @@ class Matcher(Block):
          anchor와 gt의 중심점은 공유된다.
         '''
         gtx, gty, gtw, gth = self._cornertocenter(gt_boxes)  # 1. gt를 corner -> center로 변경하기
-        shift_gt_boxes = mx.nd.concat(-0.5 * gtw, -0.5 * gth, 0.5 * gtw, 0.5 * gth, dim=-1)  # 중심점이 0,0인 corner로 바꾸기
+        shift_gt_boxes = F.concat(-0.5 * gtw, -0.5 * gth, 0.5 * gtw, 0.5 * gth, dim=-1)  # 중심점이 0,0인 corner로 바꾸기
         '''
         anchor는 width, height를 알고 있으니 중심점이 0, 0 을 가리키도록 한다. 
         '''
-        all_anchors = mx.nd.concat(*[a.reshape(-1, 2) for a in anchors], dim=0)
-        anchor_boxes = mx.nd.concat(0 * all_anchors, all_anchors, dim=-1)  # zero center anchors / (9, 4)
+        all_anchors = F.concat(*[a.reshape(-1, 2) for a in anchors], dim=0)
+        anchor_boxes = F.concat(0 * all_anchors, all_anchors, dim=-1)  # zero center anchors / (9, 4)
         anchor_boxes = self._centertocorner(anchor_boxes)
 
         # anchor_boxes : (9, 4) / gt_boxes : (Batch, N, 4) -> (9, Batch, N) -> (Batch, 9, N)
