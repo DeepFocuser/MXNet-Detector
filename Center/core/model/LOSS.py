@@ -17,8 +17,8 @@ class HeatmapFocalLoss(HybridBlock):
         # a penalty-reduced pixelwise logistic regression with focal loss
         condition = label == 1
         loss = F.where(condition=condition,
-                       x=F.power(1 - pred, self._alpha) * F.log(pred),
-                       y=F.power(1 - label, self._beta) * F.power(pred, self._alpha) * F.log(1 - pred))
+                       x=F.power(1 - pred, self._alpha) * F.log(pred + 1e-7),
+                       y=F.power(1 - label, self._beta) * F.power(pred, self._alpha) * F.log((1 - pred)+1e-7))
 
         norm = F.sum(condition).clip(1, 1e30)
         return -F.sum(loss) / norm
