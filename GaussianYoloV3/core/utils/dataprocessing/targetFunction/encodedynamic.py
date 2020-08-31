@@ -102,7 +102,7 @@ class Encoderdynamic(Block):
 
         self._num_pred = np.divide(ac, a).astype(int)
         all_anchors = F.concat(*[anchor.reshape(-1, 2) for anchor in anchors], dim=0)
-        num_anchors = np.cumsum([anchor_size for anchor_size in anchor_size])  # ex) (3, 6, 9)
+        num_anchors = np.cumsum(anchor_size)  # ex) (3, 6, 9)
         num_offsets = np.cumsum([np.prod(feature) for feature in feature_size])  # ex) (338, 1690, 3549)
         offsets = [0] + num_offsets.tolist()
 
