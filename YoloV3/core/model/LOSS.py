@@ -30,10 +30,10 @@ class Yolov3Loss(HybridBlock):
                               reduction=reduction,
                               exclude=exclude)
 
-    def hybrid_forward(self, F, output1, output2, outptut3, xcyc_target, wh_target, objectness, class_target, weights):
+    def hybrid_forward(self, F, output1, output2, output3, xcyc_target, wh_target, objectness, class_target, weights):
 
         #1. prediction 쪼개기
-        pred = F.concat(*[out.reshape(0, -1, self._num_pred) for out in [output1, output2, outptut3]], dim=1)
+        pred = F.concat(*[out.reshape(0, -1, self._num_pred) for out in [output1, output2, output3]], dim=1)
         xcyc_pred = F.slice_axis(data=pred, axis=-1, begin=0, end=2)
         wh_pred = F.slice_axis(data=pred, axis=-1, begin=2, end=4)
         objectness_pred = F.slice_axis(data=pred, axis=-1, begin=4, end=5)
