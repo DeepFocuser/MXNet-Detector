@@ -105,7 +105,7 @@ class SigmoidBinaryCrossEntropyLoss(HybridBlock):
                 loss = pred - pred * label + log_weight * \
                        (F.Activation(-F.abs(pred), act_type='softrelu') + F.relu(-pred))
         else:
-            eps = 1e-12
+            eps = 1e-7
             if pos_weight is None:
                 loss = -(F.log(pred + eps) * label
                          + F.log(1. - pred + eps) * (1. - label))
