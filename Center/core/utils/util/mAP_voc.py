@@ -220,9 +220,9 @@ class Voc_base_PR(object):
         order = AP.argsort()[::-1]  # Average Precision에 따른 내림 차순 정렬
 
         name = np.array(name)[order]
-        precision = np.array(precision)[order]
-        recall = np.array(recall)[order]
-        threshold = np.array(threshold)[order]
+        precision = np.array(precision, dtype=np.object)[order]
+        recall = np.array(recall, dtype=np.object)[order]
+        threshold = np.array(threshold, dtype=np.object)[order]
         AP = np.around(AP[order] * 100, ceil_position)
 
         for n, p, r, t, ap in zip(name, precision, recall, threshold, AP):
