@@ -159,17 +159,18 @@ class Yolov3(HybridBlock):
                 self._transition.add(BatchNorm(epsilon=1e-5, momentum=0.9))
                 self._transition.add(LeakyReLU(0.1))
 
-            # for deconvolution upsampleing
-            for i in range(len(anchors) - 1):
-                if i == 0:
-                    factor = 1
-                else:
-                    factor = 2
-                trans_init_num_channel = trans_init_num_channel // factor
-                self._upsampleconv.add(Conv2DTranspose(trans_init_num_channel, kernel_size=3, strides=2, padding=1,
-                                                       output_padding=1, use_bias=True, in_channels=0))
-                self._upsampleconv.add(BatchNorm(epsilon=1e-5, momentum=0.9))
-                self._upsampleconv.add(LeakyReLU(0.1))
+            # trans_init_num_channel = 256
+            # # for deconvolution upsampleing
+            # for i in range(len(anchors) - 1):
+            #     if i == 0:
+            #         factor = 1
+            #     else:
+            #         factor = 2
+            #     trans_init_num_channel = trans_init_num_channel // factor
+            #     self._upsampleconv.add(Conv2DTranspose(trans_init_num_channel, kernel_size=3, strides=2, padding=1,
+            #                                            output_padding=1, use_bias=True, in_channels=0))
+            #     self._upsampleconv.add(BatchNorm(epsilon=1e-5, momentum=0.9))
+            #     self._upsampleconv.add(LeakyReLU(0.1))
 
         for i, anchor, feature, stride in zip(range(len(anchors)), anchors, features, strides):
             self._anchor_generators.add(
@@ -192,9 +193,9 @@ class Yolov3(HybridBlock):
         # second
         transition = self._transition[0:3](transition)
 
-        # transition = F.UpSampling(transition, scale=2,
-        #                           sample_type='nearest')  # or sample_type = "bilinear" , 후에 deconvolution으로 대체
-        transition = self._upsampleconv[0:3](transition)
+        transition = F.UpSampling(transition, scale=2,
+                                  sample_type='nearest')  # or sample_type = "bilinear" , 후에 deconvolution으로 대체
+        # transition = self._upsampleconv[0:3](transition)
 
         transition = F.concat(transition, feature_61, dim=1)
 
@@ -204,9 +205,9 @@ class Yolov3(HybridBlock):
         # third
         transition = self._transition[3:](transition)
 
-        # transition = F.UpSampling(transition, scale=2,
-        #                           sample_type='nearest')  # or sample_type = "bilinear" , 후에 deconvolution으로 대체
-        transition = self._upsampleconv[3:](transition)
+        transition = F.UpSampling(transition, scale=2,
+                                  sample_type='nearest')  # or sample_type = "bilinear" , 후에 deconvolution으로 대체
+        #transition = self._upsampleconv[3:](transition)
 
         transition = F.concat(transition, feature_36, dim=1)
         output106 = self._head[38:](transition)  # darknet 기준 91 ~ 106
