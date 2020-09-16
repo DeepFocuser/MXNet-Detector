@@ -1,7 +1,6 @@
 from collections import OrderedDict
 
 import numpy as np
-from mxnet.gluon.nn import Conv2DTranspose
 
 from core.model.backbone.Darknet import *
 
@@ -155,17 +154,18 @@ class Yolov3(HybridBlock):
                 self._transition.add(BatchNorm(epsilon=1e-5, momentum=0.9))
                 self._transition.add(LeakyReLU(0.1))
 
-            # for deconvolution upsampleing
-            for i in range(len(anchors) - 1):
-                if i == 0:
-                    factor = 1
-                else:
-                    factor = 2
-                trans_init_num_channel = trans_init_num_channel // factor
-                self._upsampleconv.add(Conv2DTranspose(trans_init_num_channel, kernel_size=3, strides=2, padding=1,
-                                                       output_padding=1, use_bias=True, in_channels=0))
-                self._upsampleconv.add(BatchNorm(epsilon=1e-5, momentum=0.9))
-                self._upsampleconv.add(LeakyReLU(0.1))
+            # trans_init_num_channel = 256
+            # # for deconvolution upsampleing
+            # for i in range(len(anchors) - 1):
+            #     if i == 0:
+            #         factor = 1
+            #     else:
+            #         factor = 2
+            #     trans_init_num_channel = trans_init_num_channel // factor
+            #     self._upsampleconv.add(Conv2DTranspose(trans_init_num_channel, kernel_size=3, strides=2, padding=1,
+            #                                            output_padding=1, use_bias=True, in_channels=0))
+            #     self._upsampleconv.add(BatchNorm(epsilon=1e-5, momentum=0.9))
+            #     self._upsampleconv.add(LeakyReLU(0.1))
 
         for i, anchor, feature, stride in zip(range(len(anchors)), anchors, features, strides):
             self._anchor_generators.add(
@@ -180,7 +180,6 @@ class Yolov3(HybridBlock):
     def hybrid_forward(self, F, x):
 
         feature_36, feature_61, feature_74 = self._darkenet(x)
-
         # first
         transition = self._head[:15](feature_74)  # darknet 기준 75 ~ 79
         output82 = self._head[15:19](transition)  # darknet 기준 79 ~ 82
@@ -188,23 +187,23 @@ class Yolov3(HybridBlock):
         # second
         transition = self._transition[0:3](transition)
 
-        # transition = F.UpSampling(transition, scale=2,
-        #                           sample_type='nearest')  # or sample_type = "bilinear" , 후에 deconvolution으로 대체
-        transition = self._upsampleconv[0:3](transition)
+        transition = F.UpSampling(transition, scale=2,
+                                  sample_type='nearest')  # or sample_type = "bilinear" , 후에 deconvolution으로 대체
+        # transition = self._upsampleconv[0:3](transition)
 
         transition = F.concat(transition, feature_61, dim=1)
-
         transition = self._head[19:34](transition)  # darknet 기준 75 ~ 91
         output94 = self._head[34:38](transition)  # darknet 기준 91 ~ 82
 
         # third
         transition = self._transition[3:](transition)
 
-        # transition = F.UpSampling(transition, scale=2,
-        #                           sample_type='nearest')  # or sample_type = "bilinear" , 후에 deconvolution으로 대체
-        transition = self._upsampleconv[3:](transition)
+        transition = F.UpSampling(transition, scale=2,
+                                  sample_type='nearest')  # or sample_type = "bilinear" , 후에 deconvolution으로 대체
+        # transition = self._upsampleconv[3:](transition)
 
         transition = F.concat(transition, feature_36, dim=1)
+
         output106 = self._head[38:](transition)  # darknet 기준 91 ~ 106
 
         output82 = F.transpose(output82,
@@ -242,10 +241,10 @@ if __name__ == "__main__":
                  pretrained=False,
                  pretrained_path=os.path.join(root, "modelparam"),
                  alloc_size=(64, 64),
-                 ctx=mx.cpu())
+                 ctx=mx.gpu(0))
     net.hybridize(active=True, static_alloc=True, static_shape=True)
     output1, output2, output3, anchor1, anchor2, anchor3, offset1, offset2, offset3, stride1, stride2, stride3 = net(
-        mx.nd.random_uniform(low=0, high=1, shape=(1, 3, input_size[0], input_size[1]), ctx=mx.cpu()))
+        mx.nd.random_uniform(low=0, high=1, shape=(16, 3, input_size[0], input_size[1]), ctx=mx.gpu(0)))
 
     print(f"< input size(height, width) : {input_size} >")
     for i, pred in enumerate([output1, output2, output3]):
