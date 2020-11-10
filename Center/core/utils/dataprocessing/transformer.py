@@ -90,10 +90,10 @@ class CenterTrainTransform(object):
             bbox = box_resize(bbox, (w, h), (output_w, output_h))
 
         # heatmap 기반이기 때문에 제한 해줘야 한다.
-        bbox[:, 0] = np.clip(bbox[:, 0], 0, output_w)
-        bbox[:, 1] = np.clip(bbox[:, 1], 0, output_h)
-        bbox[:, 2] = np.clip(bbox[:, 2], 0, output_w)
-        bbox[:, 3] = np.clip(bbox[:, 3], 0, output_h)
+        bbox[:, 0] = np.clip(bbox[:, 0], 0, output_w-1)
+        bbox[:, 1] = np.clip(bbox[:, 1], 0, output_h-1)
+        bbox[:, 2] = np.clip(bbox[:, 2], 0, output_w-1)
+        bbox[:, 3] = np.clip(bbox[:, 3], 0, output_h-1)
 
         img = mx.nd.image.to_tensor(img)  # 0 ~ 1 로 바꾸기
         img = mx.nd.image.normalize(img, mean=self._mean, std=self._std)
@@ -135,10 +135,10 @@ class CenterValidTransform(object):
         img = mx.nd.image.normalize(img, mean=self._mean, std=self._std)
 
         # heatmap 기반이기 때문에 제한 해줘야 한다.
-        bbox[:, 0] = np.clip(bbox[:, 0], 0, output_w)
-        bbox[:, 1] = np.clip(bbox[:, 1], 0, output_h)
-        bbox[:, 2] = np.clip(bbox[:, 2], 0, output_w)
-        bbox[:, 3] = np.clip(bbox[:, 3], 0, output_h)
+        bbox[:, 0] = np.clip(bbox[:, 0], 0, output_w-1)
+        bbox[:, 1] = np.clip(bbox[:, 1], 0, output_h-1)
+        bbox[:, 2] = np.clip(bbox[:, 2], 0, output_w-1)
+        bbox[:, 3] = np.clip(bbox[:, 3], 0, output_h-1)
 
         if self._make_target:
             bbox = bbox[np.newaxis, :, :]
