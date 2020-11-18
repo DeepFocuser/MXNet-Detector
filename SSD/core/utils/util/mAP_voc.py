@@ -9,9 +9,7 @@ from collections import defaultdict
 
 import mxnet as mx
 import numpy as np
-# https://plot.ly/python/v3/
 import plotly.graph_objs as go
-from plotly.offline import plot
 
 COLOR = defaultdict(lambda: (0, 0, 0))
 COLOR[0] = (134, 229, 127)
@@ -210,14 +208,15 @@ class Voc_base_PR(object):
     def get_PR_curve(self, name=None, precision=None, recall=None, threshold=None, AP=None, mAP=None, root="",
                      folder_name="test_graph", epoch=None, auto_open=False):
 
-        graph = []
         ceil_position = 2
 
         graph_save_path = os.path.join(root, folder_name)
         if not os.path.exists(graph_save_path):
             os.makedirs(graph_save_path)
 
-        AP = np.array(AP)
+        AP = np.nan_to_num(AP)
+        mAP = np.nan_to_num(mAP)
+
         order = AP.argsort()[::-1]  # Average Precision에 따른 내림 차순 정렬
 
         name = np.array(name)[order]
@@ -226,51 +225,80 @@ class Voc_base_PR(object):
         threshold = np.array(threshold, dtype=np.object)[order]
         AP = np.around(AP[order] * 100, ceil_position)
 
+        fig = go.Figure()
+        index = 0
         for n, p, r, t, ap in zip(name, precision, recall, threshold, AP):
-            graph.append(go.Scatter(
+
+            # t가 비어있는 경우
+            if not t.tolist():
+                p = []
+                r = []
+                t = []
+                p.append(0.0)
+                r.append(0.0)
+                t.append(0.0)
+
+            # t는 있는데, p,r이 None인 경우
+            try:
+                p = p.tolist()
+                r = r.tolist()
+            except Exception as E:
+                p = [0]*len(t)
+                r = [0]*len(t)
+
+            fig.add_trace(go.Scatter(
                 x=r,
                 y=p,
+                mode="lines",
                 name=f"{n}({ap}%)",
-                text=[f"score : {round(score * 100, ceil_position)}" for score in t]))
+                text=[f"score : {round(score * 100, ceil_position)}" for score in t],
+                marker=dict(
+                    color=f'rgb{COLOR[index]}'),
+            ))
+            index+=1
 
-        # Edit the layout
-        layout = dict(title=f'Mean Average Precision : {round(mAP * 100, ceil_position)}%',
-                      xaxis=dict(title='Recall', range=[0, 1]),
-                      yaxis=dict(title='precision', range=[0, 1]),
-                      legend=dict(
-                          y=0.5,
-                          font=dict(
-                              size=20
+        fig.update_layout(title=f'Mean Average Precision : {round(mAP * 100, ceil_position)}%',
+                          xaxis_title='Recall',
+                          yaxis_title='Precision',
+                          xaxis=dict(range=[0, 1]),
+                          yaxis=dict(range=[0, 1]),
+                          legend=dict(
+                              y=0.5,
+                              font=dict(
+                                  size=20
+                              )
                           )
-                      )
-                      )
-        fig = dict(data=graph, layout=layout)
+                          )
+
         if isinstance(epoch, int):
-            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_{epoch}epoch_line.html'),
-                 auto_open=auto_open)
+            fig.write_html(file=os.path.join(graph_save_path, f'{self.__repr__()}mAP_{epoch}epoch_line.html'),
+                           auto_open=auto_open)
         else:
-            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_line.html'), auto_open=auto_open)
+            fig.write_html(file=os.path.join(graph_save_path, f'{self.__repr__()}mAP_line.html'),
+                           auto_open=auto_open)
+
 
         # vertical bar
-        graph = go.Bar(
+        fig = go.Figure(data=[go.Bar(
             x=[n for n in name],
             y=[ap for ap in AP],
             text=[f'{str(ap)}%' for ap in AP],
-            textposition='auto',
+            textposition = 'auto',
             marker=dict(
                 color=[f'rgb{COLOR[i]}' for i in range(len(name))]),
-        )
+        )])
 
-        layout = dict(title=f'Mean Average Precision : {round(mAP * 100, ceil_position)}%',
-                      xaxis=dict(title='class'),
-                      yaxis=dict(title='AP', range=[0, 100]))
+        fig.update_layout(title=f'Mean Average Precision : {round(mAP * 100, ceil_position)}%',
+                          xaxis_title='class',
+                          yaxis_title='AP',
+                          yaxis=dict(range=[0, 100]))
 
-        fig = dict(data=[graph], layout=layout)
         if isinstance(epoch, int):
-            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_{epoch}epoch_vbar.html'),
-                 auto_open=auto_open)
+            fig.write_html(file=os.path.join(graph_save_path, f'{self.__repr__()}mAP_{epoch}epoch_vbar.html'),
+                           auto_open=auto_open)
         else:
-            plot(fig, filename=os.path.join(graph_save_path, f'{self.__repr__()}mAP_vbar.html'), auto_open=auto_open)
+            fig.write_html(file=os.path.join(graph_save_path, f'{self.__repr__()}mAP_vbar.html'),
+                           auto_open=auto_open)
 
     def reset(self):
 

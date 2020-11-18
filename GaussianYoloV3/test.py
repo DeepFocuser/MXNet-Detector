@@ -201,6 +201,8 @@ def run(mean=[0.485, 0.456, 0.406],
         name, AP = precision_recall.get_AP(c, p, r)
         logging.info(f"class {j}'s {name} AP : {round(AP * 100, round_position)}%")
         AP_appender.append(AP)
+
+    AP_appender = np.nan_to_num(AP_appender)
     mAP_result = np.mean(AP_appender)
 
     logging.info(f"mAP : {round(mAP_result * 100, round_position)}%")
