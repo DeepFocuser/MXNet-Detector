@@ -341,7 +341,7 @@ class Voc_2007_AP(Voc_base_PR):
             Average Precision per class
         """
         if precision is None or recall is None:
-            return name, np.nan
+            return name, 0.0 #np.nan
 
         AP = 0.
         for t in np.arange(0.0, 1.1, 1 / (self._point - 1)):
@@ -386,7 +386,7 @@ class Voc_2010_AP(Voc_base_PR):
             Average Precision per class
         """
         if precision is None or recall is None:
-            return name, np.nan
+            return name, 0.0 #np.nan
 
         # precision, recall 양 끝에, start, end 값 채워주기
         precision = np.concatenate(([0.], precision, [0.]))
