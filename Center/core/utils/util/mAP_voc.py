@@ -266,7 +266,8 @@ class Voc_base_PR(object):
                               font=dict(
                                   size=20
                               )
-                          )
+                          ),
+                          showlegend=True
                           )
 
         if isinstance(epoch, int):
