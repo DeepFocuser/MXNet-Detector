@@ -111,8 +111,8 @@ if __name__ == "__main__":
     if training:
         if using_mlflow:
             ml.set_tracking_uri("./mlruns")  # mlruns가 기본 트래킹이다.
-            ex_id = ml.set_experiment("RETINA_" + "RES" + str(base))
-            ml.start_run(run_name=run_name, experiment_id=ex_id)
+            ml.set_experiment("RETINA_" + "RES" + str(base))
+            ml.start_run(run_name=run_name)
 
             ml.log_param("image order", "RGB")
             ml.log_param("image range before normalization", "0~1")
